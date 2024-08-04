@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/base.css">
+    <link rel="stylesheet" href="./style/grid.css">
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./style/login-signup-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style/responsive.css">
+    <title>ログイン-TS-shop</title>
+</head>
+<body>
+    <header class="header header-only">
+        <div class="grid wide">
+            <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
+        </div> 
+    </header>
+
+    <div class="container">
+        <div class="grid wide">
+            <div class="login-container">
+                <div class="login-form">
+                    <form action="" method="get" id="login-form">
+                        <div class="row">  
+                            <p class="login-form-title">ログイン</p>
+                        </div>
+                        <div class="row">
+                            <div class="col l-6 c-12 m-6 login-container-main">
+                                <div class="login-id-box input-group">
+                                    <label for="login-id" class="login-id">ユーザー名</label>
+                                    <input type="text" class="login-form-input login-form-input_userid" name="login-id" id="login-id">
+                                    <span class="form-message"></span>
+                                </div>
+                                
+                                <div class="login-password-box input-group">
+                                    <label for="login-password" class="login-password">パスワード</label>
+                                    <input type="password" id="login-password" class="login-form-input login-form-input_userpassword" name="login-password">
+                                    <span class="pass-hide hidden">表示</span>
+                                    <span class="form-message"></span>
+                                </div>
+                                <div class="pass-loss-box">
+                                <a href="#" class="pass-lose">パスワードを忘れた方（再設定）</a>                                   
+                                </div>   
+
+                                <div class="login-form-button-box">
+                                    <button class="login-form-button" type="submit">ログイン</button>
+                                </div>
+                            </div>
+                            <div class="col l-6 c-12 m-6 login-container-orther">
+                                <div class="login-container-orther-line">
+                                    <a href="http://">
+                                        <i class="fa-brands fa-line"></i>
+                                        <p>LINEでログイン</p>
+                                    </a>
+                                </div>
+                                <div class="login-container-orther-yahoo">
+                                    <a href="http://">
+                                        <i class="fa-brands fa-yahoo"></i>
+                                        <p>Yahoo! JAPAN IDでログイン</p>
+                                    </a>
+                                </div>
+                                <div class="login-container-orther-apple">
+                                    <a href="">
+                                        <i class="fa-brands fa-apple"></i>
+                                        <p>Appleでサインイン</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>               
+                </div>
+    
+            </div>
+
+            <div class="regist-container">
+                <div class="regist-container_text">はじめてご利用の方</div>
+                <a href="/signup" class="regist-container_button">新規会員登録</a>
+            </div>
+        </div>
+    </div>
+
+<!-- Footer Start -->
+<div class="footer">
+    <div class="grid wide">
+        <div class="row">
+            <div class="col l-3 c-6">
+                <h1 class="shop-infor-title">会社情報</h1>
+                <div class="shop-infor-list"><a href="">TS-Shopについて</a></div>
+                <div class="shop-infor-list"><a href="">お問い合わせ</a></div>
+                <div class="shop-infor-list"><a href="">採用情報</a></div>
+                <div class="shop-infor-list"><a href="">TS-Shopが取り組む環境活動</a></div>
+            </div>
+            <div class="col l-3 c-6">
+                <h1 class="shop-poricy-title">カスタマーサービス</h1>
+                <div class="shop-poricy-list"><a href="">返品・返金ポリシー</a></div>
+                <div class="shop-poricy-list"><a href="">配送について</a></div>
+            </div>
+            <div class="col l-3 c-6">
+                <h1 class="shop-help-title">へプル</h1>
+                <div class="shop-help-list"><a href="">サポートセンター＆FAQ</a></div>
+            </div>
+            <div class="col l-3 c-6">
+                <h1 class="shop-media-title">TS-SHOPとつながる</h1>
+                <ul class="row shop-media-list">
+                    <li class="col l-4"><a href="https://instagram.com" class="shop-media-list_insta"><i class="fa-brands fa-instagram"></i></a></li>
+                    <li class="col l-4"><a href="https://facebook.com" class="shop-media-list_fb"><i class="fa-brands fa-facebook"></i></a></li>
+                    <li class="col l-4"><a href="https://twitter.com/" class="shop-media-list_tw"><i class="fa-brands fa-x-twitter"></i></a></li>
+                    <li class="col l-4"><a href="https://tiktok.com" class="shop-media-list_tiktok"><i class="fa-brands fa-tiktok"></i></a></li>
+                    <li class="col l-4"><a href="https://youtube.com" class="shop-media-list_ytb"><i class="fa-brands fa-youtube"></i></a></li>
+                    <li class="col l-4"><a href="https://www.pinterest.jp/" class="shop-media-list_pinterest"><i class="fa-brands fa-pinterest"></i></a></li>
+                    
+            </div>
+        </div>
+        <div class="row shop-detail">
+                TS-SHOP（ティィエスショップ）とは<br>
+TS-SHOPはレディースからメンズ・キッズまで、幅広いジャンルのファストファッションアイテムをまとめて購入できるファッション通販サイトです。最新のファストファッションアイテムを取り揃え、様々なお支払い方法にてお買い求めいただけます。お得なセールやイベントも365日毎日開催しておりますので、是非ファッション通販サイトTS-SHOPでのお買い物をお楽しみください！
+        </div>
+    </div>
+    <div class="footer-index">© THANHSON TS-SHOP, ALL RIGHTS RESERVED</div>
+</div>
+<!-- Footer End -->
+<script src="./script/script-loginup.js"></script>
+<script src="./script/validation.js"></script>
+<script>
+
+    Validator({
+        form:'#login-form',
+        formGroupSelector:'.input-group',
+        errorSelector:'.form-message',
+        rules:[
+            Validator.isRequired('#login-id','ユーザー名を入力してください。'),
+            Validator.isRequired('#login-password','パスワードを入力してください。'),
+        ],
+        onSubmit: function (data) {
+            console.log(data);
+        }
+    });
+
+
+</script>
+</body>
+</html>

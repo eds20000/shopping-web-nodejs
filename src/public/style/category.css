@@ -1,0 +1,124 @@
+.over-play {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    z-index: 8;
+    display: none;
+}
+.category-box {
+    background-color: var(--white-color);
+    z-index: 11;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 85%;
+    transform: translateX(-150%);
+    transition: transform .3s ease;
+}
+
+.category-box.unhide-active{
+    transform: translateX(0);
+}
+.swiper.tab{
+    height: auto;
+    width: 100%;
+    font-size: var(--font-size);
+    padding: 0 125px;
+    box-shadow: 0px 5px 6px -6px #999999;
+}
+.swiper.tab .swiper-slide{
+    padding: 10px 0;
+    text-align: center;
+}
+.swiper.tab .swiper-slide:hover{
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--primary-color);
+}
+
+.content_body{
+    min-height: 900px;
+}
+/* RESPONSIVE  */
+
+/* Tablet and Mobile */
+@media (max-width:1023px){
+    .container .grid.wide{
+        padding: 10px;
+    }
+    .content__body{
+        display: none;
+    }
+    /* Footer */
+    .footer .grid.wide{
+        padding: 10px;
+    }
+    .bar-page{
+        padding: 0 20px;
+    }
+    .header__logo{
+        display: none;
+    }
+    .header__search{
+        display: flex;
+    }
+}
+/* Tablet */
+
+@media(min-width :740px) and (max-width :1023px){
+    .container .grid .wide{
+        padding:10px;
+    }
+    .container .category__list{
+        display: none;
+    }
+    .content__title{
+        padding: 0 20px;
+    }
+    .sort__item-list{
+        margin: 20px 0;
+    }
+    .sort__item{
+        padding: 0;
+    }
+    .content_body{
+        width: 100%;
+    }
+    
+}
+/*  mobile */
+@media (max-width: 739px) {
+    .swiper.tab {
+        padding: 0 5px;
+        background-color: var(--white-color);
+    }
+    .sort__item-list{
+        margin: 30px 5px;
+    }
+    .content__title{
+        padding:0 20px
+    }
+
+    /* Category */
+    .container .category__list{
+        display: none;
+    }
+    /* pagination */
+
+    .bar-page_list{
+        font-size: 1.5rem;
+    }
+    .bar-page_list-item{
+        padding: 5px 11px;
+    }
+
+    /* SORT tab */
+    .content__title-sort-selected{
+        width: 100px;
+    }
+    .sort__tab{
+        z-index: 2;
+    }
+}

@@ -216,6 +216,9 @@ body.over{
     display: none;
     overflow-y: auto;
 }
+.header__navbar-cart i{
+    margin-right: 0;
+}
 .header__navbar-cart::after{
     content: "";
     display: block;

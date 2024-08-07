@@ -132,9 +132,9 @@
     /* Take cart box */
     .header__navbar-cart-box-container{
         display: block;
-        top:0;
-        right:0;
-        width: 100%;
+        top: -22px;
+        right: -11px;
+        width: 396%;
         padding: 10px;
         background-color: var(--white-color);
         padding-top: 50px;
@@ -216,7 +216,7 @@
     }
     .header__navbar{
         font-size: 1.5rem;
-        gap:0;      
+        gap:0; 
     }
     .header .grid.wide{
         height: 60px;

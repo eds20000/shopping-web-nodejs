@@ -2,7 +2,8 @@ import express from 'express';
 import configViewEngine from './configs/viewEngine';
 import initWebRoute from './route/web';
 import initAPIRoute from './route/api';
-// import connection from './configs/connectDB';
+import pool from './configs/connectDB';
+
 
 require('dotenv').config();
 var morgan = require('morgan')
@@ -32,6 +33,7 @@ initWebRoute(app);
 
 // init api route
 initAPIRoute(app);
+
 
 //handle 404 not found
 app.use((req, res) => {

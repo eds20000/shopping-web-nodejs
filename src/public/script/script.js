@@ -1,6 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const list_item = list_items
 //HEADER TAB HIDE //
 let lastScrollTop = 0;
 const header = $('.header');
@@ -81,131 +82,6 @@ Array.from(pageButton).forEach(function (item) {
 
 //Item
 
-var list_item = [
-    {
-        id: 0,
-        brand: 'SHEIN',
-        name: 'Manfinity EMRG メンズシャツ バギー クルーネック 半袖 グラフィックティー 夏用',
-        price: 1023,
-        size: ['M', 'L'],
-        category: 'トップス',
-        color_img: [
-            {
-                color_nameEng: 'black',
-                color_name: 'ブラック',
-                color_size: ['M', 'L'],
-                img: ['./image/item-image/item1-img1.jpg',
-                    './image/item-image/item1-img2.webp',
-                    './image/item-image/item1-img3.webp',
-                    './image/item-image/item1-img4.webp',
-                    './image/item-image/item1-img5.webp']
-            },
-            {
-                color_nameEng: 'red',
-                color_name: 'レッド',
-                color_size: ['M', 'L'],
-                img: ['./image/item-image/item1-img7.webp',
-                    './image/item-image/item1-img8.webp',
-                    './image/item-image/item1-img9.webp',
-                    './image/item-image/item1-img10.webp',
-                    './image/item-image/item1-img11.webp']
-            },
-            {
-                color_nameEng: 'blue',
-                color_name: 'ブルー',
-                color_size: ['M', 'L'],
-                img: ['./image/item-image/item1-img12.webp',
-                    './image/item-image/item1-img13.webp',
-                    './image/item-image/item1-img14.webp',
-                    './image/item-image/item1-img15.webp',
-                    './image/item-image/item1-img16.webp']
-            }]
-    },
-    {
-        id: 1,
-        brand: 'SHEIN',
-        name: 'Manfinity EMRG メンズ カジュアルなルーズフィット カーゴパンツ フラップポケットとドローストリングウエスト付き',
-        price: 2099,
-        size: ['S', 'M', 'L'],
-        category: 'パンツ',
-        color_img: [
-            {
-                color_nameEng: 'black',
-                color_name: 'ブラック',
-                color_size: ['S', 'M', 'L'],
-                img: [
-                    './image/item-image/item2-black-2.webp',
-                    './image/item-image/item2-black-3.webp',
-                    './image/item-image/item2-black-4.webp',
-                    './image/item-image/item2-black-5.webp']
-            },
-            {
-                color_nameEng: '#433F2F',
-                color_name: 'アーミーグリーン',
-                color_size: ['S', 'M', 'L'],
-                img: ['./image/item-image/item2-color2-1.webp',
-                    './image/item-image/item2-color2-2.webp',
-                    './image/item-image/item2-color2-3.webp',
-                    './image/item-image/item2-color2-4.webp']
-            },
-            {
-                color_nameEng: '#868986',
-                color_name: 'ダックグレー',
-                color_size: ['S', 'M', 'L'],
-                img: ['./image/item-image/item2-color3-1.webp',
-                    './image/item-image/item2-color3-2.webp',
-                    './image/item-image/item2-color3-3.webp',
-                    './image/item-image/item2-color3-4.webp']
-            }
-        ]
-    },
-    {
-        id: 2,
-        brand: 'SHEIN',
-        name: 'Manfinity Hypemode メンズ ボンバージャケット ローズフィットファッションウェア アウター',
-        price: 2651,
-        size: ['S', 'M', 'L'],
-        category: 'ジャケット/アウター',
-        color_img: [
-            {
-                color_nameEng: '#4F5332',
-                color_name: 'アーミーグリーン',
-                color_size: ['S', 'M', 'L'],
-                img: [
-                    './image/item-image/item3-color1-1.webp',
-                    './image/item-image/item3-color1-2.webp',
-                    './image/item-image/item3-color1-3.webp',
-                    './image/item-image/item3-color1-4.webp']
-
-            },
-            {
-                color_nameEng: 'black',
-                color_name: 'ブラック',
-                color_size: ['S', 'M', 'L'],
-                img: [
-                    './image/item-image/item3-color2-1.webp',
-                    './image/item-image/item3-color2-2.webp',
-                    './image/item-image/item3-color2-3.webp',
-                    './image/item-image/item3-color2-4.webp',
-                    './image/item-image/item3-color2-5.webp',
-                    './image/item-image/item3-color2-6.webp']
-
-            },
-            {
-                color_nameEng: '#B55958',
-                color_name: 'ワインレッド',
-                color_size: ['S', 'M', 'L'],
-                img: [
-                    './image/item-image/item3-color3-1.webp',
-                    './image/item-image/item3-color3-2.webp',
-                    './image/item-image/item3-color3-3.webp',
-                    './image/item-image/item3-color3-4.webp']
-
-            }
-        ]
-    }
-]
-export default list_item;
 var sort__item_list = $('.sort__item-list')
 var recommendList = $('.section__recommend-list')
 if (sort__item_list) {
@@ -244,7 +120,7 @@ function exportItem(itemList, column) {
             <div class="sort__item" item-index = "${i}">
                 <a class="sort__item-link" data-id="${list_item[i].id}" >
                     <div class="sort__item-img">
-                        <img src="${list_item[i].color_img[0].img[0]}" alt="">
+                        <img src="/image/item-image/${list_item[i].color_img[0].img[0]}" alt="">
                     </div>
                     <div class="sort__item-brand">${list_item[i].brand}</div>
                     <div class="sort__item-text">${list_item[i].name}</div>
@@ -318,7 +194,7 @@ function CreatItemSelectBox() {
 
 }
 
-export function getItemParent(element, parentAdress) {
+function getItemParent(element, parentAdress) {
     while (element.parentElement) {
         if (element.parentElement.matches(parentAdress)) {
             return element.parentElement;
@@ -441,7 +317,7 @@ function takeCart() {
                     `<div class="row header__navbar-cart-item" data-key="${key}">
                     <div class="col l-3 c-3 m-3 header__navbar-cart-item_img">
                         <a href="http://" class="item-link">
-                            <img src="${a.img}" alt="">
+                            <img src="/image/item-image/${a.img}" alt="">
                         </a> 
                     </div>
             
@@ -603,10 +479,10 @@ function takeCart() {
                     itemChecklistImg.innerHTML = "";
                     for (var i = 0; i < itemColorCurrent.img.length; ++i) {
                         itemChecklistImg.innerHTML +=
-                            `<li class="item-checklist-imglist-item"><img src="${itemColorCurrent.img[i]}" alt=""></li>
+                            `<li class="item-checklist-imglist-item"><img src="/image/item-image/${itemColorCurrent.img[i]}" alt=""></li>
                         `
                         $('.item-checklist-img-main').innerHTML =
-                            `<img src="${itemColorCurrent.img[0]}" alt="">`;
+                            `<img src="/image/item-image/${itemColorCurrent.img[0]}" alt="">`;
                     }
                 }
 
@@ -692,7 +568,7 @@ function productRedirect() {
     $$('.sort__item-link').forEach(function (item) {
         item.onclick = function () {
             const productId = this.dataset.id;
-            window.location.href = `product.html?id=${productId}`;
+            window.location.href = `product/${productId}`;
         }
 
     })
@@ -779,7 +655,7 @@ function searchItemIp() {
             <div class="sort__item" item-index = "${item.id}">
                 <a class="sort__item-link" data-id="${item.id}" >
                     <div class="sort__item-img">
-                        <img src="${item.color_img[0].img[0]}" alt="">
+                        <img src="/image/item-image/${item.color_img[0].img[0]}" alt="">
                     </div>
                     <div class="sort__item-brand">${item.brand}</div>
                     <div class="sort__item-text">${item.name}</div>
@@ -898,3 +774,6 @@ categoryBoxBtnClose.onclick = function () {
     $('.over-play').style.display = 'none'
     document.body.style.position = ''
 }
+
+console.log(list_item)
+export default list_item;

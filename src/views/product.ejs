@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style/base.css">
-    <link rel="stylesheet" href="./style/grid.css">
-    <link rel="stylesheet" href="./style/main.css">
-    <link rel="stylesheet" href="./style/product-style.css">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/product-style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="./style/responsive.css">
+    <link rel="stylesheet" href="/style/responsive.css">
+    <script>
+        const productId = Number('<%= itemId %>');
+        const list_item = JSON.parse('<%- JSON.stringify(items) %>');
+    </script>
+    
+    <script type ="module" src="/script/script-product.js"defer></script>
     
     <title>ログイン-TS-shop</title>
 </head>
@@ -25,8 +31,8 @@
                 <div class="header-category-box">
                     <i class="fa-solid fa-bars"></i>
                 </div>
-                <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
-                <form class="header__search" method="get" action="./category.html">
+                <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+                <form class="header__search" method="get" action="/category.html">
                     <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
                     <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
                     <div class="header__search-box">
@@ -122,6 +128,5 @@ SHOPLISTはレディースからメンズ・キッズまで、幅広いジャン
     <div class="footer-index">© THANHSON SHOPLIST, ALL RIGHTS RESERVED</div>
 </div>
 <!-- Footer End -->
-<script type ="module" src="./script/script-product.js"></script>
 </body>
 </html>

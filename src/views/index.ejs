@@ -17,9 +17,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <script type ="module" src="./script/script.js" defer></script>
     <script  src="./script/home.js" defer></script>
     <link rel="stylesheet" href="./style/responsive.css">
+    <script>
+        const list_items = JSON.parse('<%- JSON.stringify(items) %>');
+    </script>
+    <script type ="module" src="./script/script.js" defer></script>
     <title>TS-shop</title>
 </head>
 <body>
@@ -243,8 +246,9 @@
                 </div>
 
                 <div id ="section__recommend" class="row section__recommend">
-                    <div class="section_title section__recommend-title ">おすすめ</div>
+                    <div class="section_title section__recommend-title ">おすすめ </div>
                     <div class="row section__recommend-list">
+                        
                     </div>
                 </div>
                 <div id ="section__new" class="row section__new">

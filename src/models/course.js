@@ -3,7 +3,7 @@ import pool from '../configs/connectDB';
 const getItems = async () => {
     try {
         const [rows] = await pool.execute(`
-            SELECT items.id, brand, name, price, category,zaiko, sizes.size, colors.color_nameEng, colors.color_name, color_sizes.size AS color_size, images.img_url
+            SELECT items.id, brand, name, price, category,items.zaiko, sizes.size, colors.color_nameEng, colors.color_name, color_sizes.size AS color_size, images.img_url
             FROM items
             LEFT JOIN sizes ON items.id = sizes.item_id
             LEFT JOIN colors ON items.id = colors.item_id

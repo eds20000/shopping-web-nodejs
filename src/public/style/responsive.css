@@ -228,6 +228,13 @@
         padding: 0px 5px;
         top:-12px;
     }
+
+    .user-image{
+        width: 30px;
+    }
+    .header__navbar li:first-child a{
+        padding: 0;
+    }
     
    
     /* Sort Item */

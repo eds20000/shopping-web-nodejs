@@ -1,9 +1,9 @@
 
-function Validator(options){
+function Validator(options) {
 
-    function getParent(element,selector){
-        while(element.parentElement){
-            if(element.parentElement.matches(selector)){
+    function getParent(element, selector) {
+        while (element.parentElement) {
+            if (element.parentElement.matches(selector)) {
                 return element.parentElement;
             }
             element = element.parentElement;
@@ -12,16 +12,16 @@ function Validator(options){
 
     var selectedRules = {};
 
-    function validate(inputElement,rule){
+    function validate(inputElement, rule) {
         var errorElement = getParent(inputElement,
             options.formGroupSelector).querySelector(options.errorSelector);
         var errorMessage;
-        
+
         //ルールを取り出し、チェック
         var rules = selectedRules[rule.selector];
 
-        for (var i =0; i < rules.length; ++i){
-            switch(inputElement.type){
+        for (var i = 0; i < rules.length; ++i) {
+            switch (inputElement.type) {
                 case 'radio':
                 case 'checkbox':
                     errorMessage = rules[i](
@@ -31,43 +31,41 @@ function Validator(options){
                 default:
                     errorMessage = rules[i](inputElement.value);
             }
-            if(errorMessage) break;
-            
+            if (errorMessage) break;
+
         }
-        if(errorMessage){
+        if (errorMessage) {
             errorElement.innerText = errorMessage;
-            getParent(inputElement,options.formGroupSelector).classList.add('invalid')
-        }else{
+            getParent(inputElement, options.formGroupSelector).classList.add('invalid')
+        } else {
             errorElement.innerText = '';
-            getParent(inputElement,options.formGroupSelector).classList.remove('invalid')
+            getParent(inputElement, options.formGroupSelector).classList.remove('invalid')
         }
 
-            return !errorMessage;
+        return !errorMessage;
     }
 
     var formElement = document.querySelector(options.form);
-    
-    if(formElement){
 
-        formElement.onsubmit = function(e){
+    if (formElement) {
 
+        formElement.onsubmit = function (e) {
             e.preventDefault();
             var isFormValid = true;
-        
-            options.rules.forEach(function(rule){
+
+            options.rules.forEach(function (rule) {
                 var inputElement = formElement.querySelector(rule.selector);
-                var isValid = validate(inputElement,rule);
-                if (!isValid){
+                var isValid = validate(inputElement, rule);
+                if (!isValid) {
                     isFormValid = false;
                 }
             });
-            
 
-            if (isFormValid){
-                if (typeof options.onSubmit === 'function'){
+            if (isFormValid) {
+                if (typeof options.onSubmit === 'function') {
                     var enableInputs = formElement.querySelectorAll('[name]');
-                    var formValues = Array.from(enableInputs).reduce(function(values,input){
-                        switch(input.type){
+                    var formValues = Array.from(enableInputs).reduce(function (values, input) {
+                        switch (input.type) {
                             case 'radio':
                                 values[input.name] = formElement.querySelector('input[name="' + input.name + '"]:checked').value;
                                 break;
@@ -86,49 +84,50 @@ function Validator(options){
                                 break;
                             default:
                                 values[input.name] = input.value;
-                        
                         }
                         return values;
-                    },{});
-                    console.log(formValues)
+                    }, {});
+
                     options.onSubmit(formValues);
+                } else {
+
+                    formElement.submit();
                 }
+            } else {
             }
-            // else{
-            //     formElement.submit()
-            // }
-        }
-        options.rules.forEach(function(rule){
+        };
+
+        options.rules.forEach(function (rule) {
             // ルールの保存
-            if(Array.isArray(selectedRules[rule.selector])){
+            if (Array.isArray(selectedRules[rule.selector])) {
                 selectedRules[rule.selector].push(rule.test);
             }
-            else{
+            else {
                 selectedRules[rule.selector] = [rule.test];
             }
 
-            
+
             var inputElements = formElement.querySelectorAll(rule.selector);
             Array.from(inputElements).forEach(function (inputElement) {
                 // Xử lý trường hợp blur khỏi input
-                 inputElement.onblur = function () {
-                     validate(inputElement, rule);
-                 }
- 
-                 // Xử lý mỗi khi người dùng nhập vào input
-                 inputElement.oninput = function () {
-                     var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
-                     errorElement.innerText = '';
-                     getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
-                 } 
-             });
+                inputElement.onblur = function () {
+                    validate(inputElement, rule);
+                }
+
+                // Xử lý mỗi khi người dùng nhập vào input
+                inputElement.oninput = function () {
+                    var errorElement = getParent(inputElement, options.formGroupSelector).querySelector(options.errorSelector);
+                    errorElement.innerText = '';
+                    getParent(inputElement, options.formGroupSelector).classList.remove('invalid');
+                }
+            });
 
         });
     }
 }
 
-Validator.isRequired = function(selector,message){
-  return {
+Validator.isRequired = function (selector, message) {
+    return {
         selector: selector,
         test: function (value) {
             return value ? undefined : message || 'ユーザー名を入力してください。'
@@ -136,42 +135,42 @@ Validator.isRequired = function(selector,message){
 
     };
 }
-Validator.isEmail = function(selector,message){
+Validator.isEmail = function (selector, message) {
     return {
         selector: selector,
         test: function (value) {
             var regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            return regex.test(value) ? undefined :  message || '正しいメールアドレスを入力してください。';
+            return regex.test(value) ? undefined : message || '正しいメールアドレスを入力してください。';
         }
 
     };
 }
-Validator.isPhoneNumber = function(selector,message){
+Validator.isPhoneNumber = function (selector, message) {
     return {
         selector: selector,
         test: function (value) {
             var regex = /^[0-9-]{10,13}$/i;
-            return regex.test(value) ? undefined :  message || '正しい電話番号を入力してください。';
+            return regex.test(value) ? undefined : message || '正しい電話番号を入力してください。';
         }
 
     };
 }
 
-Validator.minLength = function (selector,min,max){
-    return{
-        selector:selector,
-        test: function (value){
-            return value.length >=min &&value.length <=max ? undefined : `パスワードは${min}〜${max}文字の間で入力してください`;
+Validator.minLength = function (selector, min, max) {
+    return {
+        selector: selector,
+        test: function (value) {
+            return value.length >= min && value.length <= max ? undefined : `パスワードは${min}〜${max}文字の間で入力してください`;
         }
     }
 
 }
 
-Validator.isConfirmed = function (selector,getConfirmValue,message) {
-    return{
+Validator.isConfirmed = function (selector, getConfirmValue, message) {
+    return {
         selector: selector,
-        test:function (value){
-            return value === getConfirmValue() ? undefined : message ||'確認パスワードが一致しません。'
+        test: function (value) {
+            return value === getConfirmValue() ? undefined : message || '確認パスワードが一致しません。'
         }
     }
 }

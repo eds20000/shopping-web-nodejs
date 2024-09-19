@@ -18,7 +18,7 @@
 <body>
     <header class="header header-only">
         <div class="grid wide">
-            <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
+            <a href="/" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
         </div> 
     </header>
 
@@ -26,7 +26,7 @@
         <div class="grid wide">
             <div class="login-container">
                 <div class="login-form">
-                    <form action="" method="POST" class="form" id="signup-form">
+                    <form action="/signup/user" method="POST" class="form" id="signup-form">
                         <div class="row">  
                             <p class="login-form-title">新規会員登録</p>
                         </div>
@@ -35,16 +35,16 @@
 
                                 <div class="form-group row">
                                     <div class="col l-4 c-4">
-                                        <label for="signup-sex-radio" class="signup-sex-label">性別</label>
+                                        <label for="user_sex" class="signup-sex-label">性別</label>
                                     </div>
                                     <div class="col l-8 c-8">
                                         <div class="signup-sex-content">
                                             <div class="signup-form">
-                                                <input type="radio" name="signup-sex-radio" id="male" value="male">
+                                                <input type="radio" name="user_sex" id="male" value="male">
                                                 <label for="male">女性</label>
                                             </div>
                                             <div class="signup-form">
-                                                <input type="radio" name="signup-sex-radio" id="female" value="female">
+                                                <input type="radio" name="user_sex" id="female" value="female">
                                                 <label for="female">男性</label>
                                             </div>
                                         </div>
@@ -60,20 +60,20 @@
                                     <div class="col l-8 c-12">
                                         <div class="signup-born-year_input">
                                             <div class="signup-born-year_content">
-                                                <select id="signup-born-year" name="year" class="signup-born-year-select">
+                                                <select id="signup-born-year" class="signup-born-year-select" name="user_birth_year">
                                                 <option value="">-</option>
                                                 </select>
                                                 <label for="signup-born-year" class="signup-born-year-label">年</label>
                                             </div>
     
                                             <div class="signup-born-year_content">
-                                                <select id="signup-born-month" name="month" class="signup-born-month-select">
+                                                <select id="signup-born-month" class="signup-born-month-select" name="user_birth_month">
                                                 <option value="">-</option>
                                                 </select>
                                                 <label for="signup-born-month" class="signup-born-year-label">月</label>
                                             </div>
                                             <div class="signup-born-year_content">
-                                                <select id="signup-born-day" name="day" class="signup-born-day-select">
+                                                <select id="signup-born-day" class="signup-born-day-select" name="user_birth_day">
                                                 <option value="">-</option>
                                                 </select>
                                                 <label for="signup-born-day" class="signup-born-year-label">日</label>
@@ -93,7 +93,7 @@
                                         <span class="required_label">必須</span>
                                     </div>
                                     <div class="col l-8 c-12">
-                                        <input type="text" id="signup-id" class="signup-input signup-input-id" name="signup-id">
+                                        <input type="text" id="signup-id" class="signup-input signup-input-id" name="user_name">
                                         <span class="form-message"></span>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
                                         <span class="required_label">必須</span>
                                     </div>
                                     <div class="col l-8 c-12">
-                                        <input type="text" id="signup-email" class="signup-input signup-input-id" name="signup-email">
+                                        <input type="text" id="signup-email" class="signup-input signup-input-id" name="user_email">
                                         <span class="form-message"></span>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
                                         <span class="required_label">必須</span>
                                     </div>
                                     <div class="col l-8 c-12 signup-password-input">
-                                        <input id ="signup-password" type="password" class="signup-input signup-input-pass" name="signup-password">
+                                        <input id ="signup-password" type="password" class="signup-input signup-input-pass" name="user_password">
                                         <span class="pass-hide hidden">表示</span>
                                         <span class="form-message"></span>
                                     </div>
@@ -152,7 +152,7 @@
                                 </div>
                                 <p class="signup-agreement-errorcontent">規約を確認し同意するにチェックしてください</p>
                                 <div class="login-form-button-box">
-                                    <button class="login-form-button">この内容で新規会員登録する</button>
+                                    <button class="login-form-button" type="submit">この内容で新規会員登録する</button>
                                 </div>
                             </div>
                         </div>
@@ -236,7 +236,7 @@ SHOPLISTはレディースからメンズ・キッズまで、幅広いジャン
         formGroupSelector:'.form-group',
         errorSelector:'.form-message',
         rules:[
-            Validator.isRequired('input[name="signup-sex-radio"]','性別を選択してください。'),
+            Validator.isRequired('input[name="user_sex"]','性別を選択してください。'),
 
             Validator.isRequired('#signup-born-year','誕生日の入力が必要です。'),
             Validator.isRequired('#signup-born-month','誕生日の入力が必要です。'),
@@ -256,9 +256,9 @@ SHOPLISTはレディースからメンズ・キッズまで、幅広いジャン
                 return document.querySelector('#signup-form #signup-password').value;
             },'確認パスワードが一致しません。')
         ],
-        onSubmit: function(data) {
-            console.log(data);
-        }
+        // onSubmit: function(data) {
+        //     console.log(data);
+        // }
     });
 
 </script>

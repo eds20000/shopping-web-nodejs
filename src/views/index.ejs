@@ -17,12 +17,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
-    <script  src="./script/home.js" defer></script>
     <link rel="stylesheet" href="./style/responsive.css">
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
     </script>
     <script type ="module" src="./script/script.js" defer></script>
+    <script  src="./script/home.js" defer></script>
     <title>TS-shop</title>
 </head>
 <body>
@@ -43,11 +43,31 @@
                     </div>
                 </form>
                 <ul class="header__navbar">
-                    <li class="header__navbar-user"><a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a></li>
+                    <li class="header__navbar-user">
+                        <!-- ログインしてないとき -->
+                        <% if (!user) { %>
+                        <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
+                        <!-- ログインしたとき -->
+                        <% } else{ %>
+                        <a href="/user/infor"><img class="user-image" src="/image/user-image/default.jpg" alt=""></a>
+                        <div class="user_navbar">
+                            <div class="dropdown-username"><%= user.user_name %></div>
+                            <% if(user.user_role === 'admin'){ %>
+                                <a href="/admin-page" class="dropdown-account">管理ページ</a>
+                            <% } %>
+                            <a href="" class="dropdown-account">プロフィール</a>
+                            <a href="" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/logout" class="dropdown-logout">サインアウト</a>
+                        </div>
+                        <% } %>
+
+                    </li>
                     <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
                     <div class="navbar-cart">
                         <li class="header__navbar-cart icon-center">
-                            <i class="fa-solid fa-cart-shopping"></i>
+                            <a href="">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
                         </li>
                         <div class="header__navbar-cart-count"></div>
                     </div>
@@ -106,10 +126,10 @@
                     <div class="swiper swiper-homepage">
                         <div class="swiper-wrapper">
                             <!-- Slides -->
-                            <div class="swiper-slide"><img src="./image/homepage/homepage-slide/homepage-slide1.webp" alt=""></div>
-                            <div class="swiper-slide"><img src="./image/homepage/homepage-slide/homepage-slide2.webp" alt=""></div>
-                            <div class="swiper-slide"><img src="./image/homepage/homepage-slide/homepage-slide3.webp" alt=""></div>
-                            <div class="swiper-slide"><img src="./image/homepage/homepage-slide/homepage-slide4.webp" alt=""></div>
+                            <div class="swiper-slide"><img src="/image/homepage/homepage-slide/homepage-slide1.webp" alt=""></div>
+                            <div class="swiper-slide"><img src="/image/homepage/homepage-slide/homepage-slide2.webp" alt=""></div>
+                            <div class="swiper-slide"><img src="/image/homepage/homepage-slide/homepage-slide3.webp" alt=""></div>
+                            <div class="swiper-slide"><img src="/image/homepage/homepage-slide/homepage-slide4.webp" alt=""></div>
                         </div>
                         <!-- Nếu cần pagination -->
                         <div class="swiper-pagination"></div>

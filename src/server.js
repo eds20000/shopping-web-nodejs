@@ -2,8 +2,7 @@ import express from 'express';
 import configViewEngine from './configs/viewEngine';
 import initWebRoute from './route/web';
 import initAPIRoute from './route/api';
-import pool from './configs/connectDB';
-
+import session from 'express-session';
 
 require('dotenv').config();
 var morgan = require('morgan')
@@ -24,6 +23,14 @@ app.use(morgan('combined'))
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(session({
+    secret: 'user',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+
 
 // setup view engine
 configViewEngine(app);

@@ -18,7 +18,7 @@
 <body>
     <header class="header header-only">
         <div class="grid wide">
-            <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
+            <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
         </div> 
     </header>
 
@@ -26,7 +26,7 @@
         <div class="grid wide">
             <div class="login-container">
                 <div class="login-form">
-                    <form action="" method="get" id="login-form">
+                    <form action="/login/user-check" method="post" id="login-form">
                         <div class="row">  
                             <p class="login-form-title">ログイン</p>
                         </div>
@@ -34,13 +34,13 @@
                             <div class="col l-6 c-12 m-6 login-container-main">
                                 <div class="login-id-box input-group">
                                     <label for="login-id" class="login-id">ユーザー名</label>
-                                    <input type="text" class="login-form-input login-form-input_userid" name="login-id" id="login-id">
+                                    <input type="text" class="login-form-input login-form-input_userid" name="user_name" id="login-id">
                                     <span class="form-message"></span>
                                 </div>
                                 
                                 <div class="login-password-box input-group">
                                     <label for="login-password" class="login-password">パスワード</label>
-                                    <input type="password" id="login-password" class="login-form-input login-form-input_userpassword" name="login-password">
+                                    <input type="password" id="login-password" class="login-form-input login-form-input_userpassword" name="user_password">
                                     <span class="pass-hide hidden">表示</span>
                                     <span class="form-message"></span>
                                 </div>
@@ -137,9 +137,7 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
             Validator.isRequired('#login-id','ユーザー名を入力してください。'),
             Validator.isRequired('#login-password','パスワードを入力してください。'),
         ],
-        onSubmit: function (data) {
-            console.log(data);
-        }
+        // onSubmit: {}
     });
 
 

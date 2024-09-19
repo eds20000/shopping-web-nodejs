@@ -1,7 +1,7 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const list_item = list_items
+
 //HEADER TAB HIDE //
 let lastScrollTop = 0;
 const header = $('.header');
@@ -44,7 +44,7 @@ if (window.innerWidth < 1023) {
 
 // <!---------------Page-bar--------Start--> 
 
-
+const list_item = list_items
 $$('.sort__tab-list').forEach(function (a) {
     a.onclick = function () {
         $(".content__title-sort-selected").value = this.innerHTML;
@@ -213,7 +213,7 @@ function changeImage() {
                 index = list_item[itemId].color_img[0].img.length + index
             }
 
-            item.querySelector('.sort__item-img img').src = list_item[itemId].color_img[0].img[index]
+            item.querySelector('.sort__item-img img').src = '/image/item-image/' + list_item[itemId].color_img[0].img[index]
         }
 
         item.querySelector('.sort__item-img_btn-right').onclick = function () {
@@ -222,7 +222,7 @@ function changeImage() {
                 index = 0
             }
 
-            item.querySelector('.sort__item-img img').src = list_item[itemId].color_img[0].img[index]
+            item.querySelector('.sort__item-img img').src = '/image/item-image/' + list_item[itemId].color_img[0].img[index]
         }
     })
 }

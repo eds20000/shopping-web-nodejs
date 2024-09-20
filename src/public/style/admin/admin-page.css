@@ -99,6 +99,9 @@
 .ad_page-content table .action-edit:hover, .ad_page-content table .action-delete:hover {
   opacity: 0.7;
 }
+.ad_page-content table .action-edit a, .ad_page-content table .action-delete a {
+  text-wrap: nowrap;
+}
 .ad_page-content table .item-img {
   width: 50px;
 }
@@ -117,6 +120,10 @@
 }
 .ad_page-content .item-course {
   display: none;
+}
+.ad_page-content .bar-page {
+  margin-right: 10px;
+  margin-top: 10px;
 }
 
 .warning-delete-box-background {
@@ -204,6 +211,28 @@
 
 .ad-product-edit-text input {
   width: 100%;
+}
+
+.ad-product-edit-colorImg .ad-product-edit-color {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .color-push {
+  font-size: 1.5rem;
+  color: white;
+  background-color: rgb(51, 0, 255);
+  padding: 10px;
+  border-radius: 10px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .color-list {
+  display: flex;
+  gap: 10px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .color-list .colorSelected {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
 }
 
 /*# sourceMappingURL=admin-page.css.map */

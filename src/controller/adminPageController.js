@@ -1,4 +1,4 @@
-import models from '../models/course'
+import models from '../models/admin/adminPage.model'
 
 
 let getadminPage = async (req, res) => {
@@ -13,6 +13,17 @@ let productEdit = async (req, res) => {
     return res.render('admin/product-edit.ejs', { item })
 
 }
+let DeleteItem = async (req, res) => {
+    const itemId = req.params.id
+    models.deleteItemById(itemId)
+    return res.redirect('/admin-page')
+}
+let DeleteItemColorSize = async (req, res) => {
+    const itemId = req.params.itemid
+    const colorId = req.params.colorid
+    const colorSize = req.params.colorsize
+    models.deleteItemByColorsize(itemId, colorId, colorSize)
+    return res.redirect('/admin-page')
+}
 
-
-module.exports = { getadminPage, productEdit }
+module.exports = { getadminPage, productEdit, DeleteItem, DeleteItemColorSize }

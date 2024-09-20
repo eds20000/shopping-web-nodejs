@@ -22,6 +22,10 @@ const initWebRoute = (app) => {
     router.get('/admin-page', adminPageController.getadminPage)
     router.get('/product-edit/:id', adminPageController.productEdit)
 
+    router.get('/item-delete/:id', adminPageController.DeleteItem)
+    router.get('/item-colorsize-delete/:itemid/:colorid/:colorsize', adminPageController.DeleteItemColorSize)
+
+
 
     return app.use('/', router)
 }

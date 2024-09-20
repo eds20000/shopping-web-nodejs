@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="/style/responsive.css">
     <link rel="stylesheet" href="/style/admin/admin-page.css">
     <title>Admin-page</title>
-    <script src="/script/admin/category_admin.js" defer></script>
 </head>
 
 <body>
@@ -44,9 +43,9 @@
                             <div class="ad-content-title-checked">更新</div>
                         </div>
                     </div>
-                    <div class="row">
-                        <form action="" class="col l-6">          
-                            <div class="ad-product-edit-text">
+                    <div class="grid wide">
+                        <form action="" style="width: 100%;" class="row">          
+                            <div class="ad-product-edit-text col l-6">
                                 <div class="item-name">
                                     <label for="item-name">商品名</label>
                                     <input type="text" name ="item-name" value="<%=item.name %>">
@@ -59,17 +58,25 @@
                                     <label for="item-category">カテゴリー</label>
                                     <input type="text" name ="item-category" value="<%=item.category %>">
                                 </div>
-                                <div class="item-size"></div>
+                                <div class="item-size">
                                     <label for="item-size">サイズ</label>
                                     <input type="text" name ="item-size" value="<%=item.size %>">
                                 </div>
-                                <div class="item-price"></div>
+                                <div class="item-price">
                                     <label for="item-price">値段</label>
                                     <input type="text" name ="item-price" value="<%=item.price %>">￥
                                 </div>
-                                <div class="item-zaiko"></div>
+                                <div class="item-zaiko">
                                     <label for="item-price">在庫</label>
                                     <input type="text" name ="item-zaiko" value="<%=item.zaiko %>">
+                                </div>
+                            </div>
+                            <div class="ad-product-edit-colorImg col l-6">
+                                <div class="ad-product-edit-color">
+                                    <label for="item-color">カラー：</label>
+                                    <input type="color" name ="item-color" id="item-color">
+                                    <div class="color-push" onclick="addColor()"> + 追加</div>
+                                    <div class="color-list"></div>
                                 </div>
                             </div>
                         </form>
@@ -81,7 +88,7 @@
     </div>
     
 <script> 
-const $ = document.querySelector.bind(document);
+    const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     
     
@@ -119,6 +126,29 @@ const $ = document.querySelector.bind(document);
                 $('.header__logo').style.display = 'block'
             }
         });
-    }</script>
+    }
+    function addColor() { 
+    // Get the selected color value
+    const colorInput = document.getElementById('item-color').value;   
+    const colorSelect = document.createElement('div');
+    colorSelect.classList.add('colorSelected');
+    colorSelect.style.backgroundColor = colorInput;
+
+    const colorList =$('.color-list');
+    let colorExists = false;
+    if((colorList.querySelectorAll('.colorSelected'))){
+        colorList.querySelectorAll('.colorSelected').forEach(colorSelected => {
+            
+            if(colorSelected.style.backgroundColor == colorSelect.style.backgroundColor){
+                colorExists = true
+                return false
+             }
+        })   
+    }
+    if(!colorExists){
+        colorList.appendChild(colorSelect)
+    }
+    }
+</script>
 </body>
 </html>

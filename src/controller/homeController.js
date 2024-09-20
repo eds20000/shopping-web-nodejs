@@ -1,4 +1,4 @@
-import models from '../models/course'
+import models from '../models/admin/adminPage.model'
 
 
 let getHomepage = async (req, res) => {

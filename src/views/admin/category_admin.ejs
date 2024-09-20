@@ -16,7 +16,6 @@ S<html lang="ja">
     <title>Admin-page</title>
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
-        console.log(list_items)
     </script>
     <script src="/script/admin/category_admin.js" defer></script>
 </head>
@@ -54,8 +53,8 @@ S<html lang="ja">
                         </div>
                     </div>
                     <div class="row">
-                        <table>
-                            <thead>
+                        <table class="list-items">
+                            <!-- <thead>
                                 <th>ID</th>
                                 <th>商品名</th>
                                 <th>ブランド</th>
@@ -93,7 +92,7 @@ S<html lang="ja">
                                         </td>
                                         <td><%=item.size %></td>
                                         <td><%=item.price %>￥</td>
-                                        <td><%=item.zaiko %></td>
+                                        <td class="zaiko-total"><%=item.zaiko %></td>
                                         <td>
                                             <div class="action-box" style="display: flex; gap: 10px; height:100%;">
                                                 <div class="action-edit"><a href="/product-edit/<%=item.id %>">更新</a></div>
@@ -132,13 +131,13 @@ S<html lang="ja">
                                                     </div>
                                                 </div>               
                                             </td>
-                                            <td><%=itemColor_size %></td>
+                                            <td><%=itemColor_size.size %></td>
                                             <td><%=item.price %>￥</td>
-                                            <td><%=item.zaiko %></td>
+                                            <td class="item-zaiko"><%=itemColor_size.zaiko %></td>
                                             <td>
                                                 <div class="action-box" style="display: flex; gap: 10px; height:100%;">
                                                     <div class="action-edit"><a href="/product-edit/<%=item.id %>">更新</a></div>
-                                                    <div class="action-delete"><a href="#" onclick="deleteItemColor(<%=item.id%>,'<%=itemColor.color_nameEng%>','<%=itemColor_size %>')">削除</a></div>
+                                                    <div class="action-delete"><a href="#" onclick="deleteItemColor(<%=item.id%>,'<%=itemColor.color_nameEng%>','<%=itemColor_size.size %>')">削除</a></div>
                                                 </div>
                                                 
                                             </td>
@@ -146,11 +145,17 @@ S<html lang="ja">
                                         <% }) %>
                                     <% }) %>
                                     </tbody>
-                            <% }) %>
+                            <% }) %> -->
                                 </table>
+                                <div class="bar-page">
+                                    <div class="bar-page_list">
+                                        
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
     </div>
     <div class="warning-delete-box-background">

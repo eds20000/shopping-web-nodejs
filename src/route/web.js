@@ -2,6 +2,7 @@ import express from "express";
 import homeController from '../controller/homeController';
 import loginController from '../controller/loginController';
 import adminPageController from '../controller/adminPageController';
+import { upload } from '../middleware/userInfor-updateimg'
 let router = express.Router();
 
 
@@ -24,6 +25,16 @@ const initWebRoute = (app) => {
 
     router.get('/item-delete/:id', adminPageController.DeleteItem)
     router.get('/item-colorsize-delete/:itemid/:colorid/:colorsize', adminPageController.DeleteItemColorSize)
+
+    //admin-user-page
+    router.get('/admin-users', adminPageController.getUsersPage)
+    //user-edit
+    router.get('/users-edit/:userId', adminPageController.getUsersEditPage)
+    router.get('/users-delete/:userId', adminPageController.DeleteUserById)
+
+    router.post('/users-edit/upload', upload.single('user_avatar'), adminPageController.userInforUpdate)
+
+
 
 
 

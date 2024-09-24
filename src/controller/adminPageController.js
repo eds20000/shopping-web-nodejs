@@ -1,4 +1,5 @@
 import models from '../models/admin/adminPage.model'
+import usersEdit from '../models/admin/userEdit.model'
 
 
 let getadminPage = async (req, res) => {
@@ -15,7 +16,7 @@ let productEdit = async (req, res) => {
 }
 let DeleteItem = async (req, res) => {
     const itemId = req.params.id
-    models.deleteItemById(itemId)
+    await models.deleteItemById(itemId)
     return res.redirect('/admin-page')
 }
 let DeleteItemColorSize = async (req, res) => {
@@ -25,5 +26,35 @@ let DeleteItemColorSize = async (req, res) => {
     models.deleteItemByColorsize(itemId, colorId, colorSize)
     return res.redirect('/admin-page')
 }
+//User-Page
+let getUsersPage = async (req, res) => {
+    const users = await usersEdit.getUsers()
+    return res.render('admin/users-edit.ejs', { users })
+}
+let getUsersEditPage = async (req, res) => {
+    const user = (await usersEdit.getUserById(req.params.userId))[0]
+    return res.render('admin/userInfor-edit.ejs', { user })
+}
 
-module.exports = { getadminPage, productEdit, DeleteItem, DeleteItemColorSize }
+let DeleteUserById = async (req, res) => {
+    const userId = req.params.userId
+    await usersEdit.DeleteUserById(userId)
+    return res.redirect('/admin-users')
+}
+
+let userInforUpdate = async (req, res) => {
+    const userName = req.body.user_name
+    const userEmail = req.body.user_email
+    const userSex = req.body.user_sex
+    const userBirth = req.body.user_birth
+    const userRole = req.body.user_role
+    const userImg = req.file ? req.file.filename : null;
+    await usersEdit.DeleteUserById(userId)
+
+    return res.redirect('/admin-users')
+}
+
+module.exports = {
+    getadminPage, productEdit, DeleteItem, DeleteItemColorSize,
+    getUsersPage, getUsersEditPage, DeleteUserById, userInforUpdate
+}

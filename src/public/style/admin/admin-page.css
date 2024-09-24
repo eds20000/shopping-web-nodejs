@@ -49,6 +49,9 @@
   padding: 10px;
   display: flex;
 }
+.ad_page-content .content-title a:hover {
+  text-decoration: underline;
+}
 .ad_page-content .content-title .ad-content-title-checked {
   font-size: 3rem;
   font-weight: 600;
@@ -209,21 +212,41 @@
   cursor: pointer;
 }
 
+.ad-product-edit-text {
+  padding: 0 10px;
+  margin: 50px 0;
+  font-size: 1.5rem;
+}
 .ad-product-edit-text input {
   width: 100%;
+  margin: 5px 0 10px;
+}
+.ad-product-edit-text label {
+  font-weight: 600;
 }
 
-.ad-product-edit-colorImg .ad-product-edit-color {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.ad-product-edit-colorImg {
+  font-size: 1.5rem;
+  padding: 0 10px;
+  margin: 50px 0;
 }
-.ad-product-edit-colorImg .ad-product-edit-color .color-push {
+.ad-product-edit-colorImg label {
+  font-weight: 600;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .color-push-box {
+  margin: 20px 0;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .color-push-box .color-push {
   font-size: 1.5rem;
   color: white;
-  background-color: rgb(51, 0, 255);
+  background-color: rgb(0, 123, 255);
   padding: 10px;
   border-radius: 10px;
+  display: inline-block;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .color-push-box .color-push:hover {
+  cursor: pointer;
+  background-color: rgba(0, 123, 255, 0.838);
 }
 .ad-product-edit-colorImg .ad-product-edit-color .color-list {
   display: flex;
@@ -233,6 +256,77 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImg-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-color-box .colorSelected {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .item-colorImg {
+  width: 50px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label {
+  font-size: 1.5rem;
+  color: white;
+  background-color: rgb(0, 123, 255);
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label:hover {
+  cursor: pointer;
+  background-color: rgba(0, 123, 255, 0.838);
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-remove {
+  background-color: rgb(229, 87, 85);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  display: inline-block;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-remove:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-size {
+  width: 100px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box div {
+  margin: 10px 10px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImg-size-list label {
+  margin: 0 10px;
+}
+
+.user-nameImg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.user-nameImg .user-img img {
+  width: 50px;
+}
+
+.user_info-img .material-symbols-rounded {
+  font-size: 1.5rem;
+  color: white;
+  background-color: var(--primary-color);
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.user_info-img .material-symbols-rounded:hover {
+  background-color: var(--primary-color-hover);
 }
 
 /*# sourceMappingURL=admin-page.css.map */

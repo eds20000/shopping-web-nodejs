@@ -13,6 +13,9 @@
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>  
     <link rel="stylesheet" href="/style/responsive.css">
     <link rel="stylesheet" href="/style/admin/admin-page.css">
+    <script>
+        console.log(JSON.parse('<%- JSON.stringify(item) %>'))
+    </script>
     <title>Admin-page</title>
 </head>
 
@@ -32,7 +35,7 @@
                         <li class="ad_category"><a href="http://">カテゴリー</a></li>
                         <li class="ad_item ad-checked"><a href="/admin-page">製品</a></li>
                         <li class="ad_order"><a href="http://">注文</a></li>
-                        <li class="ad_cutomer"><a href="http://">観客</a></li>
+                        <li class="ad_cutomer"><a href="/admin-users">顧客</a></li>
                         <li class="ad_review"><a href="http://">レビュー</a></li>
                     </ul>
                 </div>
@@ -44,7 +47,7 @@
                         </div>
                     </div>
                     <div class="grid wide">
-                        <form action="" style="width: 100%;" class="row">          
+                        <form action="" style="width: 100%;" class="row ad-product-edit">          
                             <div class="ad-product-edit-text col l-6">
                                 <div class="item-name">
                                     <label for="item-name">商品名</label>
@@ -58,25 +61,56 @@
                                     <label for="item-category">カテゴリー</label>
                                     <input type="text" name ="item-category" value="<%=item.category %>">
                                 </div>
-                                <div class="item-size">
-                                    <label for="item-size">サイズ</label>
-                                    <input type="text" name ="item-size" value="<%=item.size %>">
-                                </div>
                                 <div class="item-price">
-                                    <label for="item-price">値段</label>
-                                    <input type="text" name ="item-price" value="<%=item.price %>">￥
+                                    <label for="item-price">値段(￥)</label>
+                                    <input type="text" name ="item-price" value="<%=item.price %>">
                                 </div>
                                 <div class="item-zaiko">
                                     <label for="item-price">在庫</label>
                                     <input type="text" name ="item-zaiko" value="<%=item.zaiko %>">
                                 </div>
+                                <div class="item-info">
+                                    <label for="item-info" style="display: block; margin-bottom: 10px;">商品情報</label>
+                                    <textarea name="item-info" style="width: 100%;" rows="30" id="item-info" ><%=item.infor %></textarea>
+                                </div>
                             </div>
                             <div class="ad-product-edit-colorImg col l-6">
                                 <div class="ad-product-edit-color">
-                                    <label for="item-color">カラー：</label>
-                                    <input type="color" name ="item-color" id="item-color">
-                                    <div class="color-push" onclick="addColor()"> + 追加</div>
-                                    <div class="color-list"></div>
+                                    <label for="item-color">
+                                        カラー：
+                                    </label>    
+                                    <div class="color-push-box">新しい色を選ぶ
+                                        <input type="color" name ="item-color" id="item-color">
+                                        <div class="color-push" onclick="addColor()"> + 追加</div>
+                                    </div>
+                                    <div class="item-color-list-box">
+                                        <% item.color_img.forEach(colorImg => { %>
+                                        <div class="item-color-list">
+                                            <div class="itemColorImg-box">
+                                                <div class="item-color-box">
+                                                    <div class="colorSelected" style ="background-color:<%=colorImg.color_nameEng %>;"></div>                                    
+                                                </div>
+                                                <div class="item-colorImg-box">
+                                                    <% colorImg.img.forEach(imgUrl => { %>
+                                                    <img src="/image/item-image/<%=imgUrl %>" alt="" class="item-colorImg">
+                                                    <% }) %>
+                                                </div>
+                                            </div>
+                                            <div class="itemColorImgSize-box">
+                                                
+                                                <% colorImg.color_size.forEach(colorSize => { %>
+                                                    <div class="item-colorImg-size-list">
+                                                        <label for="item-colorImg-size">サイズ</label>
+                                                        <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value="<%= colorSize.size %>"></input>                                           
+                                                        <label for="item-colorImgSize-stock">在庫</label>                                                      
+                                                        <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value="<%= colorSize.zaiko %>"></input>     
+                                                    </div>
+                                                <% }) %>
+                                                <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -87,68 +121,6 @@
         </div>
     </div>
     
-<script> 
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-    
-    
-    //HEADER TAB HIDE //
-    let lastScrollTop = 0;
-    const header = $('.header');
-    const headerHeight = header.clientHeight; // Chiều cao của header
-    const scrollThreshold = headerHeight; // Giá trị ngưỡng cuộn
-    const headerSearch = $('.header__search')
-    
-    if (window.innerWidth > 1023) {
-        window.addEventListener('scroll', function () {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
-                // Cuộn xuống và vượt ngưỡng
-                header.style.transform = 'translateY(-100%)';
-            } else {
-                // Cuộn lên hoặc chưa vượt ngưỡng
-                header.style.transform = 'translateY(0)';
-            }
-    
-            lastScrollTop = scrollTop;
-        });
-    }
-    if (window.innerWidth < 1023) {
-        window.addEventListener('scroll', function () {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
-                headerSearch.style.display = 'flex'
-                $('.header__logo').style.display = 'none'
-            } else {
-                headerSearch.style.display = 'none'
-                $('.header__logo').style.display = 'block'
-            }
-        });
-    }
-    function addColor() { 
-    // Get the selected color value
-    const colorInput = document.getElementById('item-color').value;   
-    const colorSelect = document.createElement('div');
-    colorSelect.classList.add('colorSelected');
-    colorSelect.style.backgroundColor = colorInput;
-
-    const colorList =$('.color-list');
-    let colorExists = false;
-    if((colorList.querySelectorAll('.colorSelected'))){
-        colorList.querySelectorAll('.colorSelected').forEach(colorSelected => {
-            
-            if(colorSelected.style.backgroundColor == colorSelect.style.backgroundColor){
-                colorExists = true
-                return false
-             }
-        })   
-    }
-    if(!colorExists){
-        colorList.appendChild(colorSelect)
-    }
-    }
-</script>
+<script src="/script/admin/product-edit.js"></script>
 </body>
 </html>

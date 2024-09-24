@@ -3,7 +3,7 @@ import pool from '../../configs/connectDB';
 const getItems = async () => {
     try {
         const [rows] = await pool.execute(`
-            SELECT items.id, brand, name, price, category, sizes.size,colors.id AS color_id, colors.color_nameEng, colors.color_name, color_sizes.size AS color_size, images.img_url, color_sizes.zaiko AS zaiko
+            SELECT items.id, brand, name, price, category,infor, sizes.size,colors.id AS color_id, colors.color_nameEng, colors.color_name, color_sizes.size AS color_size, images.img_url, color_sizes.zaiko AS zaiko
             FROM items
             LEFT JOIN sizes ON items.id = sizes.item_id
             LEFT JOIN colors ON items.id = colors.item_id
@@ -24,6 +24,7 @@ const getItems = async () => {
                     size: [],
                     category: row.category,
                     color_img: [],
+                    infor: row.infor
                 };
                 acc.push(item);
             }
@@ -76,7 +77,7 @@ const getItems = async () => {
 const getItemById = async (id) => {
     try {
         const [rows] = await pool.execute(`
-            SELECT items.id, brand, name, price, category, 
+            SELECT items.id, brand, name, price, category, infor,
             sizes.size,
             colors.id AS color_id, colors.color_nameEng, colors.color_name, color_sizes.size AS color_size, images.img_url, color_sizes.zaiko AS zaiko
             FROM items
@@ -102,6 +103,7 @@ const getItemById = async (id) => {
                     size: [],
                     category: row.category,
                     zaiko: row.zaiko,
+                    infor: row.infor,
                     color_img: []
                 };
                 acc.push(item);
@@ -127,8 +129,20 @@ const getItemById = async (id) => {
                 }
 
                 // Add sizes for this color
-                if (row.color_size && !color.color_size.includes(row.color_size)) {
-                    color.color_size.push(row.color_size);
+                if (row.color_size) {
+                    let colorSize = color.color_size.find(size => size.size === row.color_size);
+                    if (!colorSize) {
+                        colorSize = {
+                            size: row.color_size,
+                            zaiko: row.zaiko
+                        };
+                        color.color_size.push(colorSize);
+                    }
+                }
+
+                // Add images for this color
+                if (row.img_url && !color.img.includes(row.img_url)) {
+                    color.img.push(row.img_url);
                 }
 
                 // Add images for this color

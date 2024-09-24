@@ -6,6 +6,7 @@ userImgInput.addEventListener('change', (event) => {
     reader.onload = function () {
         // Cập nhật src của thẻ img bằng ảnh mới
         avatarPreview.src = reader.result;
+        avatarPreview.style.display = 'block'
     }
 
     // Đọc file ảnh được chọn

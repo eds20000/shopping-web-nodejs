@@ -34,6 +34,10 @@ const initWebRoute = (app) => {
 
     router.post('/users-edit/upload', upload.single('user_avatar'), adminPageController.userInforUpdate)
 
+    router.get('/user-add', adminPageController.addUserPage)
+    router.post('/users-edit/add', upload.single('user_avatar'), adminPageController.addUser)
+
+
 
 
 

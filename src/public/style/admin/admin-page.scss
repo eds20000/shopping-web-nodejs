@@ -16,9 +16,11 @@
     .ad_category-img{
         img{
             width: 100px;
+            height: 100px;
             border-radius: 50%;
             border: 2px solid var(--primary-color);
             margin: 10px;
+            object-fit: cover;
         }
     }
     .ad_category-name{
@@ -49,13 +51,14 @@
         font-size: 2rem;
         padding: 10px;
         display: flex;
+        margin: 20px 0;
         a {
              &:hover{
                 text-decoration: underline;
              }
         }
         .ad-content-title-checked{
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 600;
         }
     }
@@ -222,7 +225,7 @@
 }
 
 // product-edit page
-.ad-product-edit{}
+
 .ad-product-edit-text{
     padding:0 10px ;
     margin: 50px 0 ;
@@ -349,6 +352,35 @@
         cursor: pointer;
         &:hover{
             background-color: var(--primary-color-hover)
+        }
+    }
+}
+.user_infor{
+    margin: 20px 0;
+    label{
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+    .user_infor-text{
+        label{
+            width: 100px;
+            display: inline-block;
+        }
+    }
+    div{
+        margin-bottom: 20px;
+    }
+    input{
+        font-size: 1.5rem;
+        padding: 5px;
+    }
+    .user_info-img {
+        .user_avatar{
+            margin: 20px 10px;
+        }
+        .user_info-img-label{
+            margin: 20px 0;
+            display: block;
         }
     }
 }

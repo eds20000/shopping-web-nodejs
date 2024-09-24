@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="./style/base.css">
+    <link rel="stylesheet" href="./style/grid.css">
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./style/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
+    
+    <!-- swiper -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    
+    <link rel="stylesheet" href="./style/responsive.css">
+    <script>
+        const list_items = JSON.parse('<%- JSON.stringify(items) %>');
+    </script>
+    <script type ="module" src="./script/script.js" defer></script>
+    <script  src="./script/home.js" defer></script>
+    <title>TS-shop</title>
+</head>
+<body>
+    <!-- Container start -->
+    <div class="app">
+        <div class="over-play"></div>
+        <!-- Header start1-->
+        <header class="header">
+            <div class="grid wide">
+                <div class="header-category-box">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
+                <form class="header__search" method="get" action="./category.html">
+                    <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
+                    <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <div class="header__search-box">
+                    </div>
+                </form>
+                <ul class="header__navbar">
+                    <li class="header__navbar-user">
+                        <!-- ログインしてないとき -->
+                        <% if (!user) { %>
+                        <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
+                        <!-- ログインしたとき -->
+                        <% } else{ %>
+                        <a href="/user/infor"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                        <div class="user_navbar">
+                            <div class="dropdown-username"><%= user.user_name %></div>
+                            <% if(user.user_role === 'admin'){ %>
+                                <a href="/admin-page" class="dropdown-account">管理ページ</a>
+                            <% } %>
+                            <a href="" class="dropdown-account">プロフィール</a>
+                            <a href="" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/logout" class="dropdown-logout">サインアウト</a>
+                        </div>
+                        <% } %>
+
+                    </li>
+                    <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
+                    <div class="navbar-cart">
+                        <li class="header__navbar-cart icon-center">
+                            <a href="">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
+                        </li>
+                        <div class="header__navbar-cart-count"></div>
+                    </div>
+                    <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
+                    <div class="header__navbar-cart-box-container">
+                        <div class="header__navbar-cart-box">
+                        </div>
+                        <div class="row header__navbar-cart-box-closeBtn">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            
+            <div class="swiper tab">  
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide tab__list-start"><a href="">すべて</a></div>
+                    <div class="swiper-slide"><a href="#section__recommend">おすすめ</a></div>
+                    <div class="swiper-slide"><a href="#section__new">新着</a></div>
+                    <div class="swiper-slide"><a href="">マイリスト</a></div>
+                    <div class="swiper-slide"><a href="">ベストセラ</a></div>
+                    <div class="swiper-slide"><a href="">メンズ</a></div>
+                    <div class="swiper-slide"><a href="">レディース</a></div>
+                    <div class="swiper-slide"><a href="">コスメ</a></div>
+                </div>
+            </div>
+            
+        </header>
+        <!-- Header end -->
+
+        <!-- Container start -->
+        <div class="container">
+            <div class="grid wide">
+                <div class="row">
+                    <ul class="col l-4 user-profile__category">
+                        <li class="user-profile__category--myacount">プロフィール</li>
+                        <li class="user-profile__category--favor">お気に入り</li>
+                        <li class="user-profile__category--cart">買い物かご</li>
+                        <li class="user-profile__category--hitory">注文履歴</li>
+                        <li class="user-profile__category--signout">サインアウト</li>
+                    </ul>
+                    <div class="col l-8 user-profile__content">
+                        <div class="user-profile__content--title">プロフィール</div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container end -->
+
+        <!-- Footer Start -->
+        <div class="footer">
+            <div class="grid wide">
+                <div class="row">
+                    <div class="col l-3 c-6">
+                        <h1 class="shop-infor-title">会社情報</h1>
+                        <div class="shop-infor-list"><a href="">TS-Shopについて</a></div>
+                        <div class="shop-infor-list"><a href="">お問い合わせ</a></div>
+                        <div class="shop-infor-list"><a href="">採用情報</a></div>
+                        <div class="shop-infor-list"><a href="">TS-Shopが取り組む環境活動</a></div>
+                    </div>
+                    <div class="col l-3 c-6">
+                        <h1 class="shop-poricy-title">カスタマーサービス</h1>
+                        <div class="shop-poricy-list"><a href="">返品・返金ポリシー</a></div>
+                        <div class="shop-poricy-list"><a href="">配送について</a></div>
+                    </div>
+                    <div class="col l-3 c-6">
+                        <h1 class="shop-help-title">へプル</h1>
+                        <div class="shop-help-list"><a href="">サポートセンター＆FAQ</a></div>
+                    </div>
+                    <div class="col l-3 c-6">
+                        <h1 class="shop-media-title">TS-SHOPとつながる</h1>
+                        <ul class="row shop-media-list">
+                            <li class="col l-4"><a href="https://instagram.com" class="shop-media-list_insta"><i class="fa-brands fa-instagram"></i></a></li>
+                            <li class="col l-4"><a href="https://facebook.com" class="shop-media-list_fb"><i class="fa-brands fa-facebook"></i></a></li>
+                            <li class="col l-4"><a href="https://twitter.com/" class="shop-media-list_tw"><i class="fa-brands fa-x-twitter"></i></a></li>
+                            <li class="col l-4"><a href="https://tiktok.com" class="shop-media-list_tiktok"><i class="fa-brands fa-tiktok"></i></a></li>
+                            <li class="col l-4"><a href="https://youtube.com" class="shop-media-list_ytb"><i class="fa-brands fa-youtube"></i></a></li>
+                            <li class="col l-4"><a href="https://www.pinterest.jp/" class="shop-media-list_pinterest"><i class="fa-brands fa-pinterest"></i></a></li>
+                            
+                    </div>
+                </div>
+                <div class="row shop-detail">
+                        TS-SHOP（ティィエスショップ）とは<br>
+TS-SHOPはレディースからメンズ・キッズまで、幅広いジャンルのファストファッションアイテムをまとめて購入できるファッション通販サイトです。最新のファストファッションアイテムを取り揃え、様々なお支払い方法にてお買い求めいただけます。お得なセールやイベントも365日毎日開催しておりますので、是非ファッション通販サイトTS-SHOPでのお買い物をお楽しみください！
+                </div>
+            </div>
+            <div class="footer-index">© THANHSON TS-SHOP, ALL RIGHTS RESERVED</div>
+        </div>
+        <!-- Footer End -->
+    </div>
+</body>
+</html>

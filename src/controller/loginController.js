@@ -16,10 +16,8 @@ let userCheck = async (req, res) => {
         // Kiểm tra nếu người dùng tồn tại
         if (rows.length > 0) {
             let user = rows[0];
-            console.log(req.body.user_password, user.user_password)
             // So sánh mật khẩu băm
             const isMatch = bcrypt.compareSync(req.body.user_password, user.user_password);
-            console.log(isMatch)
             if (isMatch) {
                 // Lưu thông tin người dùng vào session và chuyển hướng
                 req.session.user = user;

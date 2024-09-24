@@ -29,8 +29,12 @@
         <div class="grid wide">
             <div class="row">
                 <div class="col l-2 ad_page-category">
-                    <div class="ad_category-img"><img src="/image/user-image/default.png" alt="user-image"></div>
-                    <div class="ad_category-name">Thanhson</div>
+                    <% users.forEach(user => { %>
+                        <% if(user.user_role == 'admin'){ %>
+                    <div class="ad_category-img"><img src="/image/user-image/<%=user.user_img %>" alt="user-image"></div>
+                    <div class="ad_category-name"><%=user.user_name %></div>
+                        <% } %>
+                    <% }) %>
                     <ul class="ad_page-category-content">
                         <li class="ad_category"><a href="http://">カテゴリー</a></li>
                         <li class="ad_item ad-checked"><a href="/admin-page">製品</a></li>

@@ -1,7 +1,7 @@
 
 //Pagination ------------------------------------------
 let currentPage = 1 //元のページ
-let perPage = 1 //so trang di chuyen 
+let perPage = 5 //so trang di chuyen 
 let totalPage = 0// ページの数
 let perItem = [] //アイテムが表示される
 function getItem() {

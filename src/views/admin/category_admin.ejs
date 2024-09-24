@@ -30,8 +30,12 @@ S<html lang="ja">
         <div class="grid wide">
             <div class="row">
                 <div class="col l-2 ad_page-category">
-                    <div class="ad_category-img"><img src="/image/user-image/default.png" alt="user-image"></div>
-                    <div class="ad_category-name">Thanhson</div>
+                    <% users.forEach(user => { %>
+                        <% if(user.user_role == 'admin'){ %>
+                    <div class="ad_category-img"><img src="/image/user-image/<%=user.user_img %>" alt="user-image"></div>
+                    <div class="ad_category-name"><%=user.user_name %></div>
+                        <% } %>
+                    <% }) %>
                     <ul class="ad_page-category-content">
                         <li class="ad_category"><a href="http://">カテゴリー</a></li>
                         <li class="ad_item ad-checked"><a href="/admin-page">製品</a></li>
@@ -67,19 +71,6 @@ S<html lang="ja">
     </div>
     <div class="warning-delete-box-background">
         <div class="warning-delete-box">
-            <div class="warning-delete-title">
-                <h2>Delete Item</h2>
-                <div class="warning-delete-box-close"><i class="fa-solid fa-xmark"></i></div>
-            </div>
-            <div class="warning-delete-content">
-                Are you sure to delete item:<br>
-                <div class="warning-delete-content-item"></div>
-                
-            </div>
-            <div class="warning-delete-action">
-                <div class="warning-delete-cancel">キャンセル</div>
-                <div class="warning-delete-sure">削除</div>
-            </div>
         </div>
     </div>
     </div>
@@ -123,6 +114,7 @@ const $ = document.querySelector.bind(document);
                 $('.header__logo').style.display = 'block'
             }
         });
-    }</script>
+    }
+</script>
 </body>
 </html>

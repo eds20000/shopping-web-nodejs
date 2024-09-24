@@ -244,9 +244,10 @@ body.over{
     padding-left: 0;
 }
 .user-image{
-    height: 100%;
+    height: 30px;
     border-radius: 50%;
-    width: 40px;
+    width: 30px;
+    object-fit: cover;
 }
 .header__navbar-like i{
     margin-right: 0;

@@ -49,7 +49,7 @@
                         <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
                         <!-- ログインしたとき -->
                         <% } else{ %>
-                        <a href="/user/infor"><img class="user-image" src="/image/user-image/default.jpg" alt=""></a>
+                        <a href="/user/infor"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
                         <div class="user_navbar">
                             <div class="dropdown-username"><%= user.user_name %></div>
                             <% if(user.user_role === 'admin'){ %>

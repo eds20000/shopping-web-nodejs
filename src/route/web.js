@@ -37,6 +37,8 @@ const initWebRoute = (app) => {
     router.get('/user-add', adminPageController.addUserPage)
     router.post('/users-edit/add', upload.single('user_avatar'), adminPageController.addUser)
 
+    //Profile
+    router.get('/user-profile', homeController.getProfilePage)
 
 
 

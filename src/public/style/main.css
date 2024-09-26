@@ -452,7 +452,7 @@ body.over{
     border-bottom: 3px solid var(--primary-color);
 }
 .container{
-    padding-top: calc(var(--header-height) + 40px) ;
+    padding: calc(var(--header-height) + 40px) 0 ;
     font-size: var(--font-size);
 }
 .category__list{
@@ -915,7 +915,6 @@ body.overlay-open_select-cart-box{
 .footer{
     font-size: var(--font-size);
     background-color: var(--hover-color);
-    margin-top: 70px;
     padding-top: 30px;
     border-top: 3px solid var(--primary-color);
     .col.l-3{

@@ -12,17 +12,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
-    
-    <!-- swiper -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    
     <link rel="stylesheet" href="./style/responsive.css">
+    <link rel="stylesheet" href="/style/profile.css">
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
     </script>
     <script type ="module" src="./script/script.js" defer></script>
-    <script  src="./script/home.js" defer></script>
     <title>TS-shop</title>
 </head>
 <body>
@@ -30,12 +25,12 @@
     <div class="app">
         <div class="over-play"></div>
         <!-- Header start1-->
-        <header class="header">
+        <header class="header header-only">
             <div class="grid wide">
                 <div class="header-category-box">
                     <i class="fa-solid fa-bars"></i>
                 </div>
-                <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
+                <a href="/" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
                 <form class="header__search" method="get" action="./category.html">
                     <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
                     <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -80,21 +75,7 @@
                         </div>
                     </div>
                 </ul>
-            </div>
-            
-            <div class="swiper tab">  
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide tab__list-start"><a href="">すべて</a></div>
-                    <div class="swiper-slide"><a href="#section__recommend">おすすめ</a></div>
-                    <div class="swiper-slide"><a href="#section__new">新着</a></div>
-                    <div class="swiper-slide"><a href="">マイリスト</a></div>
-                    <div class="swiper-slide"><a href="">ベストセラ</a></div>
-                    <div class="swiper-slide"><a href="">メンズ</a></div>
-                    <div class="swiper-slide"><a href="">レディース</a></div>
-                    <div class="swiper-slide"><a href="">コスメ</a></div>
-                </div>
-            </div>
-            
+            </div>   
         </header>
         <!-- Header end -->
 
@@ -102,15 +83,80 @@
         <div class="container">
             <div class="grid wide">
                 <div class="row">
-                    <ul class="col l-4 user-profile__category">
-                        <li class="user-profile__category--myacount">プロフィール</li>
-                        <li class="user-profile__category--favor">お気に入り</li>
-                        <li class="user-profile__category--cart">買い物かご</li>
-                        <li class="user-profile__category--hitory">注文履歴</li>
-                        <li class="user-profile__category--signout">サインアウト</li>
+                    <ul class="col l-3 user-profile__category">
+                        <li class="user-profile__category--myacount profile__category--checked"><i class="fa-solid fa-file-invoice"></i>アカウント管理</li>
+                        <li class="user-profile__category--favor"><i class="fa-solid fa-heart"></i>お気に入り</li>
+                        <li class="user-profile__category--cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</li>
+                        <li class="user-profile__category--hitory"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</li>
+                        <li class="user-profile__category--signout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</li>
                     </ul>
-                    <div class="col l-8 user-profile__content">
-                        <div class="user-profile__content--title">プロフィール</div>
+                    <div class="col l-9 user-profile__content">
+                        <div class="user-profile__content--title">アカウント管理</div>
+                        <div class="row user-profile__content--profile">
+                            <div class="col l-6">
+                                <div class="user-profile__content--name">
+                                    <div class=" profile__content--label user-profile__content--name-label">ユーザー名 : </div> 
+                                    <div class="profile__content--value user-profile__content--name-value">
+                                        <%= user.user_name %> 
+                                        <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--name')">変更</div>
+                                    </div>
+                                    <form action="" class="user-profile__content--name-form" style="display: none;">
+                                        <input type="text" name="user_name" id="user_name" style="display: inline-block;width: auto; "value=" <%= user.user_name %>">
+                                        <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                    </form>
+                                </div>
+                                <div class="user-profile__content--birth">
+                                    <div class=" profile__content--label user-profile__content--birth-label">誕生日 : </div>
+                                    <div class="profile__content--value user-profile__content--birth-value">
+                                        <%= user.user_birth %>
+                                        <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--birth')">変更</div>
+                                    </div>
+                                    <form action="" class="user-profile__content--birth-form" style="display: none;">
+                                        <input type="date" name="user_birth" id="user_birth" style="display: inline-block;width: auto; " value=<%= user.user_birth %>>
+                                        <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                    </form>
+                                </div>
+                                <div class="user-profile__content--sex">
+                                    <div class="profile__content--label user-profile__content--sex-label  ">性別 : </div>
+                                    <div class="profile__content--value user-profile__content--sex-value ">
+                                        <%= user.user_sex == 'male' ? '男' : '女' %>
+                                        <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--sex')">変更</div>
+                                    </div>
+                                    <form action="" class="user-profile__content--sex-form" style="display: none;">
+                                        <select name="user_sex" id="user_sex">
+                                            <option value="male" <%= user.user_sex == 'male' ? 'selected' : '' %>>男</option>
+                                            <option value="female" <%= user.user_sex == 'female' ? 'selected' : '' %>>女</option>
+                                        </select>
+                                        <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col l-6">
+                                <div class="user-profile__content--avatar">
+                                    <div class="profile__content--label">プロフィール写真:</div> 
+                                    <img src="image/user-image/<%=user.user_img %>" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col l-12 user-profile__content--account">
+                            <div class="user-profile__content--email">
+                                <div class="profile__content--label user-profile__content--email-label">メールアドレス : </div>
+                                <div class="profile__content--value user-profile__content--email-value">
+                                    <%= user.user_email %>
+                                    <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--email')">変更</div>
+                                    </div>
+                                    <form action="" class="user-profile__content--email-form" style="display: none;">
+                                        <input type="text" name="user_email" id="user_email" style="display: inline-block; " value=<%= user.user_email %>>
+                                        <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="user-profile__content--password">
+                                <span>*********</span>
+                                <div class="user-profile__content--password-resetBtn">変更</div>
+                            </div>
+                        </div>
                         
                     </div>
                 </div>
@@ -160,5 +206,11 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
         </div>
         <!-- Footer End -->
     </div>
+    <script>
+        function userProfileReset(section){
+            document.querySelector('.' + section + '-value').style.display = 'none'
+            document.querySelector('.' + section + '-form').style.display = 'block'
+        }
+    </script>
 </body>
 </html>

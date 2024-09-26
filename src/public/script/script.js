@@ -159,37 +159,35 @@ function CreatItemSelectBox() {
             <div class="select-cart-box-close"><i class="fa-solid fa-xmark"></i></div>
             <div class="select-cart-box-content">
                 <div class="row">
-                                                <ul class="item-checklist-imglist col l-1 c-6">
-                                        
+                  <ul class="item-checklist-imglist col l-1 c-6">
+        
                                                 </ul>
-                                                <div class="item-checklist-img-main col l-5 c-6"></div>
-                                                <div class="item-checklist-content col l-6 c-12">
-                                                    <div class="item-checklist-name"></div>
-                                                    <div class="item-checklist-brand"></div>
-                                                    <div class="item-checklist-price">￥<span></span></div>
-                                                    <div class="item-checklist-color">
-                                                        <div class="checklist-color-name"><strong>カラー：</strong><span>ブラック</span></div>
-                                                        <ul class="checklist-color-list">
-                                                            
-                                                        </ul>
-                                                    </div>
-                                                    <div class="item-checklist-size">
-                                                        <div class="checklist-size-name">サイズ:</div>
-                                                        <ul class="checklist-size-list">
-                                                        </ul>
-                                                    </div>
-                                                    <div class="item-checklist-btn">
-                                                        <div class="item-checklist-takecart-btn primary-btn">                          
-                                                            買い物かごに追加
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
+                   <div class="item-checklist-img-main col l-5 c-6"></div>
+                   <div class="item-checklist-content col l-6 c-12">
+                    <div class="item-checklist-name"></div>
+                    <div class="item-checklist-brand"></div>
+                    <div class="item-checklist-price">￥<span></span></div>
+                    <div class="item-checklist-color">
+                        <div class="checklist-color-name"><strong>カラー：</strong><span>ブラック</span></div>
+                        <ul class="checklist-color-list">
+                            
+                        </ul>
+                    </div>
+                    <div class="item-checklist-size">
+                        <div class="checklist-size-name">サイズ:</div>
+                           <ul class="checklist-size-list">
+                         </ul>
+                    </div>
+                    <div class="item-checklist-btn">
+                        <div class="item-checklist-takecart-btn primary-btn">                          
+                            買い物かごに追加
+                        </div>
+                    </div>                                  
+                </div>
+            </div>            
+         </div>
+      </div>
+   </div>
     `
 
 }
@@ -762,18 +760,19 @@ searchItemIp();
 var categoryBoxBtn = $('.header-category-box i');
 var categoryBoxBtnClose = $('.category-box-closeBtn')
 var categoryBox = $('.category-box');
-categoryBoxBtn.onclick = function () {
-    categoryBox.classList.toggle('unhide-active')
-    document.body.classList.add('over')
-    $('.over-play').style.display = 'block'
-    document.body.style.position = 'fixed'
+if (categoryBox) {
+    categoryBoxBtn.onclick = function () {
+        categoryBox.classList.toggle('unhide-active')
+        document.body.classList.add('over')
+        $('.over-play').style.display = 'block'
+        document.body.style.position = 'fixed'
+    }
 }
-categoryBoxBtnClose.onclick = function () {
-    categoryBox.classList.remove('unhide-active')
-    document.body.classList.remove('over')
-    $('.over-play').style.display = 'none'
-    document.body.style.position = ''
+if (categoryBoxBtnClose) {
+    categoryBoxBtnClose.onclick = function () {
+        categoryBox.classList.remove('unhide-active')
+        document.body.classList.remove('over')
+        $('.over-play').style.display = 'none'
+        document.body.style.position = ''
+    }
 }
-
-console.log(list_item)
-export default list_item;

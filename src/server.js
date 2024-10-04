@@ -3,6 +3,7 @@ import configViewEngine from './configs/viewEngine';
 import initWebRoute from './route/web';
 import initAPIRoute from './route/api';
 import session from 'express-session';
+import flash from 'connect-flash';
 
 require('dotenv').config();
 var morgan = require('morgan')
@@ -31,6 +32,15 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+// Sử dụng flash
+app.use(flash());
+
+// Cấu hình middleware để truyền flash messages vào response locals
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 // setup view engine
 configViewEngine(app);

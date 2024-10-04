@@ -32,10 +32,13 @@
     font-weight: 600;
     margin-bottom: 10px;
 }
+.user-profile__content--profile{
+    margin-left: 12px;
+}
 .user-profile__content--profile .col>div{
     margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
     padding: 10px;
+
 }
 .user-profile__content--avatar img{
     width: 200px;
@@ -48,7 +51,7 @@
     background-color: var(--primary-color);
     color:white;
     cursor: pointer;
-    border-radius: 30%;
+    border-radius: 30px;
     margin-left: 20px;
     border: none;
     font-size: 2rem;
@@ -64,6 +67,18 @@ input,select{
     padding: 10px;
     font-size: 2rem;
 }
-.user-profile__content--account{
+.user-profile__content--account,
+.user-profile__content--password{
     padding: 10px;
+    margin-left: 12px;
+}
+.user-profile__content--password-form label,
+.user-profile__content--password-form input{
+    display: block;
+}
+.user-profile__content--password-form label{
+    margin-bottom: 5px;
+}
+.user-profile__content--password-form input{
+    margin-bottom: 15px;
 }

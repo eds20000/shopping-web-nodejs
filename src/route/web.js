@@ -2,6 +2,7 @@ import express from "express";
 import homeController from '../controller/homeController';
 import loginController from '../controller/loginController';
 import adminPageController from '../controller/adminPageController';
+import profileController from '../controller/profileController';
 import { upload } from '../middleware/userInfor-updateimg'
 let router = express.Router();
 
@@ -38,7 +39,9 @@ const initWebRoute = (app) => {
     router.post('/users-edit/add', upload.single('user_avatar'), adminPageController.addUser)
 
     //Profile
-    router.get('/user-profile', homeController.getProfilePage)
+    router.get('/user-profile', profileController.getProfilePage)
+    router.post('/user-profile/edit/:id', profileController.profileEdit)
+    router.post('/user-profile/edit/pass/:id', profileController.profilePasswordEdit)
 
 
 

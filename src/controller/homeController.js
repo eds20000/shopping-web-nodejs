@@ -2,6 +2,7 @@ import models from '../models/admin/adminPage.model'
 import usersEdit from '../models/admin/userEdit.model'
 
 
+
 let getHomepage = async (req, res) => {
     const items = await models.getItems();
 
@@ -27,16 +28,8 @@ let productPage = async (req, res) => {
     return res.render('product.ejs', { itemId, items })
 }
 
-//Profile
-let getProfilePage = async (req, res) => {
-    const items = await models.getItems();
-    if (req.session.user) {
-        return res.render('profile.ejs', { items, user: req.session.user })
-    } else {
-    }
-}
 
 
 module.exports = {
-    getHomepage, loginPage, signupPage, productPage, getProfilePage
+    getHomepage, loginPage, signupPage, productPage,
 }

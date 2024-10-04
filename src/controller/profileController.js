@@ -1,0 +1,61 @@
+import userProfileEdit from '../models/profile/profileEdit'
+import models from '../models/admin/adminPage.model'
+import usersEdit from '../models/admin/userEdit.model'
+import bcrypt from 'bcryptjs';
+
+// password hashing
+const salt = bcrypt.genSaltSync(10);
+
+
+//Profile
+let getProfilePage = async (req, res) => {
+    const items = await models.getItems();
+    if (req.session.user) {
+        return res.render('profile.ejs', { items, user: req.session.user })
+    } else {
+        return res.redirect('/login');
+    }
+}
+let profileEdit = async (req, res) => {
+    const userId = req.params.id;
+    const userSection = req.body.section
+    const userValue = req.body[userSection]
+
+    await userProfileEdit.userProfileEdit(req, userId, userSection, userValue)
+    return res.redirect('/user-profile')
+}
+let profilePasswordEdit = async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    const passwordCheck = req.body.user_password_check;
+    const passwordNew = req.body.user_password_new;
+    const passwordConfirm = req.body.user_password_confirm;
+
+    // Kiểm tra mật khẩu cũ
+    const isMatch = bcrypt.compareSync(passwordCheck, req.session.user.user_password);
+
+    if (!isMatch) {
+        req.flash('error_msg', '旧パスワードが間違っています');
+        return res.redirect('/user-profile');
+    }
+
+    // Kiểm tra mật khẩu mới và xác nhận
+    if (passwordNew !== passwordConfirm) {
+        req.flash('error_msg', 'パスワード確認が間違っています');
+        return res.redirect('/user-profile');
+    }
+
+    // Mã hóa mật khẩu mới
+    const hashPassword = bcrypt.hashSync(passwordNew, salt); // Sử dụng passwordNew
+
+    // Cập nhật mật khẩu trong cơ sở dữ liệu
+    await userProfileEdit.userPasswordEdit(req, hashPassword);
+
+    req.flash('success_msg', 'Mật khẩu đã được cập nhật thành công.');
+    return res.redirect('/user-profile'); // Chuyển hướng về trang hồ sơ
+};
+
+module.exports = {
+    getProfilePage, profileEdit, profilePasswordEdit
+}

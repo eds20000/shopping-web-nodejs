@@ -100,8 +100,9 @@
                                         <%= user.user_name %> 
                                         <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--name')">変更</div>
                                     </div>
-                                    <form action="" class="user-profile__content--name-form" style="display: none;">
-                                        <input type="text" name="user_name" id="user_name" style="display: inline-block;width: auto; "value=" <%= user.user_name %>">
+                                    <form action="/user-profile/edit/<%=user.user_id %>" class="user-profile__content--name-form" style="display: none;" method="post">
+                                        <input type="text" name="user_name" id="user_name" style="display: inline-block;width: auto; " value="<%= user.user_name %>">
+                                        <input type="text" name="section" value="user_name" hidden>
                                         <button type="submit" class="user-profile__content--value-reset">確認</button>
                                     </form>
                                 </div>
@@ -111,8 +112,9 @@
                                         <%= user.user_birth %>
                                         <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--birth')">変更</div>
                                     </div>
-                                    <form action="" class="user-profile__content--birth-form" style="display: none;">
-                                        <input type="date" name="user_birth" id="user_birth" style="display: inline-block;width: auto; " value=<%= user.user_birth %>>
+                                    <form action="/user-profile/edit/<%=user.user_id %>" class="user-profile__content--birth-form" style="display: none;"  method="post">
+                                        <input type="date" name="user_birth" id="user_birth" style="display: inline-block;width: auto; " value="<%= user.user_birth %>">
+                                        <input type="text" name="section" value="user_birth" hidden>
                                         <button type="submit" class="user-profile__content--value-reset">確認</button>
                                     </form>
                                 </div>
@@ -122,11 +124,12 @@
                                         <%= user.user_sex == 'male' ? '男' : '女' %>
                                         <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--sex')">変更</div>
                                     </div>
-                                    <form action="" class="user-profile__content--sex-form" style="display: none;">
+                                    <form action="/user-profile/edit/<%=user.user_id %>" class="user-profile__content--sex-form" style="display: none;" method="post">
                                         <select name="user_sex" id="user_sex">
                                             <option value="male" <%= user.user_sex == 'male' ? 'selected' : '' %>>男</option>
                                             <option value="female" <%= user.user_sex == 'female' ? 'selected' : '' %>>女</option>
                                         </select>
+                                        <input type="text" name="section" value="user_sex" hidden>
                                         <button type="submit" class="user-profile__content--value-reset">確認</button>
                                     </form>
                                 </div>
@@ -146,18 +149,46 @@
                                     <%= user.user_email %>
                                     <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--email')">変更</div>
                                     </div>
-                                    <form action="" class="user-profile__content--email-form" style="display: none;">
+                                    <form action="/user-profile/edit/<%=user.user_id %>" class="user-profile__content--email-form" style="display: none;" method="post">
                                         <input type="text" name="user_email" id="user_email" style="display: inline-block; " value=<%= user.user_email %>>
+                                        <input type="text" name="section" value="user_email" hidden>
                                         <button type="submit" class="user-profile__content--value-reset">確認</button>
                                     </form>
                                 </div>
                             </div>
                             <div class="user-profile__content--password">
-                                <span>*********</span>
-                                <div class="user-profile__content--password-resetBtn">変更</div>
+                                <div class=" profile__content--label user-profile__content--password-label">パスワード </div> 
+                                <div class="profile__content--value user-profile__content--password-value">
+                                    *********
+                                    <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--password')">変更</div>
+                                    </div>
+                                    <form action="/user-profile/edit/pass/<%=user.user_id %>" class="user-profile__content--password-form" style="display: none;" method="post">
+                                        <label for="user_password-check">旧パスワード</label>
+                                        <input type="password" name="user_password_check" id="user_password-check" style="display: inline-block; " value="">
+                                        <label for="user_password-new">新パスワード</label>
+                                        <input type="password" name="user_password_new" id="user_password-new" style="display: inline-block; " value="">
+                                        <label for="user_password-confirm">パスワード確認</label>
+                                        <input type="password" name="user_password_confirm" id="user_password-confirm" style="display: inline-block; " value="">
+                                        <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                    </form>
+                                    <% if (error_msg.length > 0) { %>
+                                        <form action="/user-profile/edit/pass/<%=user.user_id %>" class="user-profile__content--password-form"  method="post">
+                                            <label for="user_password-check">旧パスワード</label>
+                                            <input type="password" name="user_password_check" id="user_password-check" style="display: inline-block; " value="">
+                                            <label for="user_password-new">新パスワード</label>
+                                            <input type="password" name="user_password_new" id="user_password-new" style="display: inline-block; " value="">
+                                            <label for="user_password-confirm">パスワード確認</label>
+                                            <input type="password" name="user_password_confirm" id="user_password-confirm" style="display: inline-block; " value="">
+                                            <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                        </form>
+                                        <div class="alert alert-danger"><%= error_msg %></div>
+                                    <% } %>
+                                    <% if (success_msg.length > 0) { %>
+                                        <div class="alert alert-success"><%= success_msg %></div>
+                                    <% } %>
+                                </div>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>

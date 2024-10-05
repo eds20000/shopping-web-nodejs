@@ -23,7 +23,9 @@ let userCheck = async (req, res) => {
                 // Lưu thông tin người dùng vào session và chuyển hướng
                 req.session.user = user;
                 const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id)
+                const cartItems = await modelCourse.getCartItems(req.session.user.user_id)
                 req.session.user.favorItems = favorItems
+                req.session.user.cartItems = cartItems
                 res.redirect('/');
             } else {
                 // Phản hồi nếu mật khẩu không đúng

@@ -303,6 +303,19 @@ ul{
         padding: 0 10px;
     }
 }
+.product-item-data-infor{
+    margin-top: 50px;
+}
+.product-item-data-infor_title{
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+.product-item-data-infor_content{
+    font-size: var(--font-size);
+    border: 1px solid var(--border-color);
+    padding: 10px;
+}
 
 /* Tablet */
 @media(min-width :740px) and (max-width :1023px){

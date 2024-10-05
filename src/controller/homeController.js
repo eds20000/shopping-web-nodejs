@@ -26,10 +26,30 @@ let getHomepage = async (req, res) => {
     if (req.session.user) {
         // Fetch favorItems for the user
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
-        res.render('index', { items, user: req.session.user });
+        req.session.user.cartItems = cartItems;
+
+        // Find the full item details for each cart item
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+        res.render('index', { items, user: req.session.user, cartItems: fullCartItems });
     } else {
-        res.render('index', { items, user: null });
+        res.render('index', { items, user: null, cartItems: [] });
     }
 }
 

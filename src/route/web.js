@@ -3,6 +3,7 @@ import homeController from '../controller/homeController';
 import loginController from '../controller/loginController';
 import adminPageController from '../controller/adminPageController';
 import profileController from '../controller/profileController';
+import cartController from '../controller/cartController';
 import { userImgUpload, itemImgUpload } from '../middleware/userInfor-updateimg'
 const multer = require('multer');
 const upload = multer();
@@ -56,6 +57,10 @@ const initWebRoute = (app) => {
 
     router.get('/user-favorite', profileController.getFavoritePage)
     router.get('/remove-favorite/:id', profileController.removeFavoriteItem)
+
+
+    //cart
+    router.post('/add-to-cart/:id', cartController.addToCart)
 
     return app.use('/', router)
 }

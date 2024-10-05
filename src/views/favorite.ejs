@@ -15,9 +15,10 @@
     <link rel="stylesheet" href="./style/responsive.css">
     <link rel="stylesheet" href="/style/profile.css">
     <script>
+        const items = <%= items %>;
+        console.log(items)
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
         const favorItemsList = JSON.parse('<%- JSON.stringify(favorItems) %>');
-        console.log(favorItemsList);
     </script>
     <script type ="module" src="./script/script.js" defer></script>
     <title>TS-shop</title>
@@ -46,13 +47,13 @@
                         <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
                         <!-- ログインしたとき -->
                         <% } else{ %>
-                        <a href="/user/infor"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                        <a href="/user-profile"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
                         <div class="user_navbar">
                             <div class="dropdown-username"><%= user.user_name %></div>
                             <% if(user.user_role === 'admin'){ %>
                                 <a href="/admin-page" class="dropdown-account">管理ページ</a>
                             <% } %>
-                            <a href="" class="dropdown-account">プロフィール</a>
+                            <a href="/user-profile" class="dropdown-account">プロフィール</a>
                             <a href="" class="dropdown-purchase-history">注文履歴</a>
                             <a href="/logout" class="dropdown-logout">サインアウト</a>
                         </div>

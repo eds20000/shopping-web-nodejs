@@ -300,7 +300,7 @@ productItemContainer.innerHTML =
             <div class="product-item-data">
                 <div class="product-item-data-title">
                     <div class="product-item-data-title_name" data-value = "${productItem.name}">${productItem.name}</div>
-                    <a ${user ? `onclick="addToFavorites(${productItem.id},this)"` : 'href="/login"'} class="product-item-data-title_favor favor-btn ${user && user.favorItems.includes(productItem.id) ? 'favor-btn-available' : 'favor-btn-disable'}" "></a>
+                    <a ${user ? `onclick="addToFavorites(${productItem.id},this)"` : 'href="/login"'} class="product-item-data-title_favor favor-btn ${user && user.favorItems.find(item => item.item_id === productItem.id) ? 'favor-btn-available' : 'favor-btn-disable'}" "></a>
                     <div class="product-item-data-title-favornum">900</div>
                 </div>
                 <div class="product-item-data-brand" data-value ="${productItem.brand}">
@@ -311,6 +311,12 @@ productItemContainer.innerHTML =
                     <div class="product-item-data-price_tax">税込</div>
                 </div>
                 <div class="product-item-data_list"></div>
+                <div class="product-item-data-infor">
+                    <div class="product-item-data-infor_title">商品情報</div>
+                    <div class="product-item-data-infor_content">
+                        ${productItem.infor}
+                    </div>
+                </div>
             </div>
         </div>
     </div>`;

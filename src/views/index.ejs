@@ -21,7 +21,23 @@
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
-        console.log(user)
+        const cartItems = JSON.parse('<%- JSON.stringify(cartItems) %>');
+        console.log(JSON.parse('<%- JSON.stringify(cartItems) %>'))
+        console.log(list_items)
+        var myCart = []
+        if (typeof cartItems !== 'undefined' && Array.isArray(cartItems)) {
+            myCart = cartItems.map(item => ({
+                name: item.name,
+                brand: item.brand,
+                img: item.img[0],
+                price: item.price,
+                size: item.size,
+                color: item.color,
+                quantity: item.quantity
+            }));
+        } else {
+            myCart = [];
+        }
     </script>
     <title>TS-shop</title>
 </head>
@@ -77,8 +93,8 @@
                             <a href="">
                                 <i class="fa-solid fa-cart-shopping"></i>
                             </a>
+                            <div class="header__navbar-cart-count"></div>
                         </li>
-                        <div class="header__navbar-cart-count"></div>
                     </div>
                     <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
                     <div class="header__navbar-cart-box-container">

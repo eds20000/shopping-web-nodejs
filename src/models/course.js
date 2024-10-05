@@ -77,9 +77,45 @@ let removeFromFavorites = async (userId, itemId) => {
     }
 };
 
+let addToCart = async (userId, itemId, colorName, size) => {
+    try {
+        // Lấy `rows` từ kết quả trả về của truy vấn
+        const [colorResult] = await pool.query('SELECT id FROM colors WHERE color_name = ? AND item_id = ? ', [colorName, itemId]);
+
+        if (colorResult.length > 0) {
+            const colorId = colorResult[0].id;
+
+            // Kiểm tra xem mục đã tồn tại trong giỏ hàng hay chưa
+            const [cartItemExist] = await pool.query('SELECT * FROM cart WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
+
+            if (cartItemExist.length > 0) {
+                // Cập nhật số lượng nếu đã tồn tại
+                await pool.query('UPDATE cart SET quantity = quantity + 1, add_time= NOW()  WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
+            } else {
+                // Thêm mục mới vào giỏ hàng nếu chưa tồn tại
+                await pool.query('INSERT INTO cart (user_id, item_id, color_id, size, quantity) VALUES (?, ?, ?, ?, 1)', [userId, itemId, colorId, size]);
+            }
+        } else {
+            throw new Error('Color not found for the item');
+        }
+    } catch (error) {
+        console.error('Error adding to cart:', error);
+        throw error;
+    }
+}
+
+let getCartItems = async (userId) => {
+    try {
+        const [rows] = await pool.query('SELECT * FROM cart WHERE user_id = ?', [userId]);
+        return rows;
+    } catch (error) {
+        console.error('Error fetching cart items:', error);
+        return [];
+    }
+}
 module.exports = {
     getFavoriteItems,
     addToFavorites,
     resetUserSession,
-    getFavoriteItemList, getFavoriteItemIds, removeFromFavorites
+    getFavoriteItemList, getFavoriteItemIds, removeFromFavorites, addToCart, getCartItems
 }

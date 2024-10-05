@@ -199,13 +199,6 @@ function categoryItemBtn() {
             }
         };
     });
-
-    favorBtn.forEach(a => {
-        a.onclick = function () {
-            this.classList.toggle('favor-btn-disable');
-            this.classList.toggle('favor-btn-available');
-        };
-    });
 }
 
 // Hàm chuyển đổi hình ảnh
@@ -240,6 +233,7 @@ function CreateImgItem() {
 }
 
 // Hàm tạo nội dung sản phẩm
+console.log(productItem)
 function itemProductCreat() {
     var productItemListColor = $('.product-item-data_list');
     productItemListColor.innerHTML = ''; // Clear the existing content
@@ -248,8 +242,8 @@ function itemProductCreat() {
         let colorSize = '';
         for (let y = 0; y < productItem.color_img[i].color_size.length; ++y) {
             colorSize += `<div class="product-item-data-content">
-                            <div class="product-item-data-content_size" data-value = "${productItem.color_img[i].color_size[y]}">
-                               <span>${productItem.color_img[i].color_size[y]}</span> サイズ / 在庫あり
+                            <div class="product-item-data-content_size" data-value = "${productItem.color_img[i].color_size[y].size}">
+                               <span>${productItem.color_img[i].color_size[y].size}</span> サイズ / 在庫あり
                             </div>
                             <div class="product-item-data-content_add">
                                 <div class="product-item-data-content_addcart">カートに入れる</div>
@@ -306,7 +300,7 @@ productItemContainer.innerHTML =
             <div class="product-item-data">
                 <div class="product-item-data-title">
                     <div class="product-item-data-title_name" data-value = "${productItem.name}">${productItem.name}</div>
-                    <div class="product-item-data-title_favor favor-btn favor-btn-disable"></div>
+                    <a ${user ? `onclick="addToFavorites(${productItem.id},this)"` : 'href="/login"'} class="product-item-data-title_favor favor-btn ${user && user.favorItems.includes(productItem.id) ? 'favor-btn-available' : 'favor-btn-disable'}" "></a>
                     <div class="product-item-data-title-favornum">900</div>
                 </div>
                 <div class="product-item-data-brand" data-value ="${productItem.brand}">

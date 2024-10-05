@@ -56,20 +56,6 @@ $$('.sort__tab-list').forEach(function (a) {
 // sort-tab end//
 
 //item start//
-
-
-function favoritebutton(a) {
-    console.log(a.classList[1])
-    if (a.classList.contains('sort__item-takecart-disable')) {
-        a.classList.remove('sort__item-takecart-disable');
-        a.classList.add('sort__item-takecart-enable');
-    }
-    else {
-        a.classList.remove('sort__item-takecart-enable');
-        a.classList.add('sort__item-takecart-disable');
-    }
-}
-
 var pageButton = document.querySelectorAll(".bar-page_list-item");
 Array.from(pageButton).forEach(function (item) {
     item.addEventListener('click', function () {
@@ -110,7 +96,6 @@ if ($('.header__navbar-cart-box-container')) {
     takeCart();
 }
 
-
 //ham trich xuat item
 function exportItem(itemList, column) {
     itemList.innerHTML = '';
@@ -131,7 +116,7 @@ function exportItem(itemList, column) {
                     <div class="sort__item-title">
                         <div class="sort__item-price">￥${list_item[i].price}</div>
                         <div class="sort__item-takeit">
-                            <button type="button" class="sort__item-favorite sort__item-takecart-disable" onclick="favoritebutton(this)"></button>
+                            <a class="sort__item-favorite ${user && user.favorItems.find(favorItem => favorItem.item_id == list_item[i].id) ? 'sort__item-takecart-enable' : 'sort__item-takecart-disable'} " ${user ? `onclick="addToFavorites(${list_item[i].id},this)"` : 'href="/login"'}></a>
                             <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>
                         </div>
                     </div>
@@ -150,6 +135,7 @@ function exportItem(itemList, column) {
             </div>
         </div>`
     }
+
 }
 
 function CreatItemSelectBox() {

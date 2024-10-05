@@ -20,9 +20,9 @@
     <link rel="stylesheet" href="./style/responsive.css">
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        console.log(user)
     </script>
-    <script type ="module" src="./script/script.js" defer></script>
-    <script  src="./script/home.js" defer></script>
     <title>TS-shop</title>
 </head>
 <body>
@@ -49,7 +49,7 @@
                         <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
                         <!-- ログインしたとき -->
                         <% } else{ %>
-                        <a href="/user/infor"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                        <a href="/user-profile"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
                         <div class="user_navbar">
                             <div class="dropdown-username"><%= user.user_name %></div>
                             <% if(user.user_role === 'admin'){ %>
@@ -62,7 +62,16 @@
                         <% } %>
 
                     </li>
-                    <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
+                    <li class="header__navbar-like icon-center">
+                        <a href="/user-favorite">
+                            <i class="fa-regular fa-heart"></i>
+                            <% if(user){if (user.favorItems.length > 0){ %>
+                                <div class="header__navbar--favor-quality"><%=user.favorItems.length %></div>
+                            <% }else{ %>
+                                <div class="header__navbar--favor-quality" style="display: none;"></div>
+                            <% }} %>
+                        </a>
+                    </li>
                     <div class="navbar-cart">
                         <li class="header__navbar-cart icon-center">
                             <a href="">
@@ -336,5 +345,39 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
         </div>
         <!-- Footer End -->
     </div>
-</body>
+</body> 
+    <script type ="module" src="./script/script.js"></script>
+    <script  src="./script/home.js"></script>
+    <script>
+        function addToFavorites(itemId, event) {
+            fetch('/add-to-favorites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ itemId: itemId }),
+                })          
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    event.classList.toggle('sort__item-takecart-disable');
+                    event.classList.toggle('sort__item-takecart-enable');
+                    const favorQualityElement = document.querySelector('.header__navbar--favor-quality');
+                    document.querySelector('.header').style.transform = 'translateY(0)';
+                    if (favorQualityElement) {
+                        favorQualityElement.textContent = data.favorCount;
+                        favorQualityElement.style.display = data.favorCount > 0 ? 'block' : 'none';
+                    }
+                } else {
+                    alert('Failed to add item to favorites. Please try again.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        }
+
+       
+    </script>
 </html>

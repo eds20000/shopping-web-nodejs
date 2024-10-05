@@ -66,6 +66,20 @@ body.over{
     margin-right: 10px;
 }
 
+.header__navbar-like{
+    position: relative;
+}
+.header__navbar--favor-quality{
+    background-color: var(--primary-color);
+    padding: 2px 7px;
+    color: var(--white-color);
+    border-radius: 50%;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: var(--font-size);
+}
+
 .header__search{
     flex-basis: 450px;
     height: 40px;
@@ -258,7 +272,7 @@ body.over{
     color: var(--white-color);
     border-radius: 50%;
     position: absolute;
-    top: -20px;
+    top: -8px;
     right: -8px;
     font-size: var(--font-size);
     /* display: none; */

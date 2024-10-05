@@ -77,16 +77,20 @@
                             </div>
                             <div class="user_info-img col l-7">
                                     <label for="user_avatar" class="user_info-img-label">プロフィール写真:</label>
-                                    <img src="" class="user_avatar" alt="user-avatar"style="display: none; width: 200px;" >
+                                    <img src="image/user-image/default.jpg" class="user_avatar" alt="user-avatar"style="display:block; width: 200px;" >
                                     <input type="file" name="user_avatar" id="user_avatar" accept="image/*" style="display: none;">
-                                    <input type="hidden" name="currentUserImg" value="">
+                                    <input type="hidden" name="currentUserImg" value="default.jpg">
                                     <label for="user_avatar" class="image-upload-label" style="display: block">
                                         <span class="material-symbols-rounded"> 画像アップロード </span> 
                                     </label>
                             </div>
                             </div>
+                            <% if (error_msg.length > 0) { %>
+                            <div class="user_exist-warning"><%= error_msg %></div>    
+                            <% } %>
                             <button type="submit" class="primary-btn" style="width: 200px;">ユーザーをを追加</button>
                         </form>
+
                     </div>
                    
                 </div>

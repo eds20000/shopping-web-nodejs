@@ -1,5 +1,6 @@
 import pool from '../configs/connectDB';
 import bcrypt from 'bcryptjs';
+import modelCourse from '../models/course'
 
 // password hashing
 const salt = bcrypt.genSaltSync(10);
@@ -21,6 +22,8 @@ let userCheck = async (req, res) => {
             if (isMatch) {
                 // Lưu thông tin người dùng vào session và chuyển hướng
                 req.session.user = user;
+                const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id)
+                req.session.user.favorItems = favorItems
                 res.redirect('/');
             } else {
                 // Phản hồi nếu mật khẩu không đúng

@@ -1,7 +1,8 @@
 import userProfileEdit from '../models/profile/profileEdit'
 import models from '../models/admin/adminPage.model'
-import usersEdit from '../models/admin/userEdit.model'
+import modelCourse from '../models/course'
 import bcrypt from 'bcryptjs';
+
 
 // password hashing
 const salt = bcrypt.genSaltSync(10);
@@ -52,10 +53,44 @@ let profilePasswordEdit = async (req, res) => {
     // Cập nhật mật khẩu trong cơ sở dữ liệu
     await userProfileEdit.userPasswordEdit(req, hashPassword);
 
-    req.flash('success_msg', 'Mật khẩu đã được cập nhật thành công.');
+    req.flash('success_msg', 'パスワードが正常に更新されました。');
     return res.redirect('/user-profile'); // Chuyển hướng về trang hồ sơ
 };
+let profileImageEdit = async (req, res) => {
+    let userImg;
+    let userId = req.params.id
+    if (req.file) {
+        userImg = req.file.filename;
+    } else {
+        userImg = req.body.currentUserImg;
+    }
+    await userProfileEdit.userImageEdit(req, userId, userImg)
+    return res.redirect('/user-profile')
+}
+
+
+//Favorite
+let getFavoritePage = async (req, res) => {
+    if (req.session.user) {
+        const items = await models.getItems();
+        const userId = req.session.user.user_id;
+        const favorIds = await modelCourse.getFavoriteItemIds(userId)
+        const favorItems = favorIds.length > 0 ? await models.getItemById(favorIds) : [];
+        return res.render('favorite.ejs', { user: req.session.user, favorItems, items })
+    } else {
+        return res.redirect('/login');
+    }
+}
+let removeFavoriteItem = async (req, res) => {
+    const itemId = req.params.id;
+    const userId = req.session.user.user_id;
+    await modelCourse.removeFromFavorites(userId, itemId);
+    const favorItems = await modelCourse.getFavoriteItems(userId);
+    req.session.user.favorItems = favorItems;
+    return res.redirect('/user-favorite');
+}
 
 module.exports = {
-    getProfilePage, profileEdit, profilePasswordEdit
+    getProfilePage, profileEdit, profilePasswordEdit,
+    profileImageEdit, getFavoritePage, removeFavoriteItem
 }

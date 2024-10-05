@@ -269,15 +269,23 @@
   align-items: center;
   gap: 10px;
 }
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-color-box {
+  display: flex;
+  gap: 10px;
+}
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-color-box .colorSelected {
   width: 20px;
   height: 20px;
   border-radius: 50%;
 }
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box {
+  display: flex;
+  gap: 5px;
+}
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .item-colorImg {
   width: 50px;
 }
-.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label {
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .item-colorImg-agree, .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label {
   font-size: 1.5rem;
   color: white;
   background-color: rgb(0, 123, 255);
@@ -285,7 +293,7 @@
   border-radius: 10px;
   display: inline-block;
 }
-.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label:hover {
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .item-colorImg-agree:hover, .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label:hover {
   cursor: pointer;
   background-color: rgba(0, 123, 255, 0.838);
 }
@@ -307,8 +315,35 @@
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box div {
   margin: 10px 10px;
 }
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImg-size-list {
+  margin: 0;
+}
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImg-size-list label {
   margin: 0 10px;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImg-size-list .item-colorImgSize-Delete {
+  background-color: rgb(229, 87, 85);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  display: inline-block;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImg-size-list .item-colorImgSize-Delete:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImgSize-add {
+  font-size: 1.5rem;
+  color: white;
+  background-color: rgb(0, 123, 255);
+  padding: 10px;
+  border-radius: 10px;
+  display: inline-block;
+}
+.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImgSize-add:hover {
+  cursor: pointer;
+  background-color: rgba(0, 123, 255, 0.838);
 }
 
 .user-nameImg {

@@ -16,6 +16,9 @@
     <script>
         const productId = Number('<%= itemId %>');
         const list_item = JSON.parse('<%- JSON.stringify(items) %>');
+        const item = JSON.parse('<%- JSON.stringify(item) %>');
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        console.log(item)
     </script>
     
     <script type ="module" src="/script/script-product.js"defer></script>
@@ -32,18 +35,47 @@
                     <i class="fa-solid fa-bars"></i>
                 </div>
                 <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
-                <form class="header__search" method="get" action="/category.html">
+                <form class="header__search" method="get" action="./category.html">
                     <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
                     <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
                     <div class="header__search-box">
                     </div>
                 </form>
                 <ul class="header__navbar">
-                    <li class="header__navbar-user"><a href="./login.html"><i class="fa-regular fa-user"></i><span>ログイン</span></a></li>
-                    <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
+                    <li class="header__navbar-user">
+                        <!-- ログインしてないとき -->
+                        <% if (!user) { %>
+                        <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
+                        <!-- ログインしたとき -->
+                        <% } else{ %>
+                        <a href="/user/infor"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                        <div class="user_navbar">
+                            <div class="dropdown-username"><%= user.user_name %></div>
+                            <% if(user.user_role === 'admin'){ %>
+                                <a href="/admin-page" class="dropdown-account">管理ページ</a>
+                            <% } %>
+                            <a href="" class="dropdown-account">プロフィール</a>
+                            <a href="" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/logout" class="dropdown-logout">サインアウト</a>
+                        </div>
+                        <% } %>
+
+                    </li>
+                    <li class="header__navbar-like icon-center">
+                        <a href="/user-favorite">
+                            <i class="fa-regular fa-heart"></i>
+                            <% if(user){if (user.favorItems.length > 0){ %>
+                                <div class="header__navbar--favor-quality"><%=user.favorItems.length %></div>
+                            <% }else{ %>
+                                <div class="header__navbar--favor-quality" style="display: none;"></div>
+                            <% }} %>
+                        </a>
+                    </li>
                     <div class="navbar-cart">
                         <li class="header__navbar-cart icon-center">
-                            <i class="fa-solid fa-cart-shopping"></i>
+                            <a href="">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
                         </li>
                         <div class="header__navbar-cart-count"></div>
                     </div>
@@ -56,8 +88,7 @@
                         </div>
                     </div>
                 </ul>
-            </div>
-            
+            </div>   
         </header>
         <div class="category-box">
             <ul class="category__list">
@@ -85,7 +116,6 @@
         <div class="grid wide product-item-container">
         </div>
     </div>
-
 
 
 <!-- Footer Start -->
@@ -123,10 +153,40 @@
         <div class="row shop-detail">
                 TS-SHOP（ティィエスショップ）とは<br>
 SHOPLISTはレディースからメンズ・キッズまで、幅広いジャンルのファストファッションアイテムをまとめて購入できるファッション通販サイトです。最新のファストファッションアイテムを取り揃え、様々なお支払い方法にてお買い求めいただけます。お得なセールやイベントも365日毎日開催しておりますので、是非ファッション通販サイトSHOPLISTでのお買い物をお楽しみください！
+                </div>
         </div>
+        <div class="footer-index">© THANHSON SHOPLIST, ALL RIGHTS RESERVED</div>
     </div>
-    <div class="footer-index">© THANHSON SHOPLIST, ALL RIGHTS RESERVED</div>
-</div>
-<!-- Footer End -->
+    <!-- Footer End -->
+     <script>
+        function addToFavorites(itemId, event) {
+    fetch('/add-to-favorites', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ itemId: itemId }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                event.classList.toggle('favor-btn-available');
+                event.classList.toggle('favor-btn-disable');
+                const favorQualityElement = document.querySelector('.header__navbar--favor-quality');
+                document.querySelector('.header').style.transform = 'translateY(0)';
+                if (favorQualityElement) {
+                    favorQualityElement.textContent = data.favorCount;
+                    favorQualityElement.style.display = data.favorCount > 0 ? 'block' : 'none';
+                }
+            } else {
+                alert('Failed to add item to favorites. Please try again.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+            });
+        }
+     </script>
 </body>
 </html>

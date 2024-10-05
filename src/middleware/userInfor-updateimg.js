@@ -10,6 +10,17 @@ const storageUserImg = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storageUserImg });
+const storageItemImg = multer.diskStorage({
 
-export { upload };
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '../public/image/item-image'));
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const userImgUpload = multer({ storage: storageUserImg });
+const itemImgUpload = multer({ storage: storageItemImg });
+
+export { userImgUpload, itemImgUpload };

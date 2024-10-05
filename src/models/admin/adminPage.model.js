@@ -76,6 +76,12 @@ const getItems = async () => {
 
 const getItemById = async (id) => {
     try {
+        // Convert id to an array if it's not already
+        const idArray = Array.isArray(id) ? id : [id];
+
+        // Use placeholders for each id in the array
+        const placeholders = idArray.map(() => '?').join(',');
+
         const [rows] = await pool.execute(`
             SELECT items.id, brand, name, price, category, infor,
             sizes.size,
@@ -85,14 +91,11 @@ const getItemById = async (id) => {
             LEFT JOIN colors ON items.id = colors.item_id
             LEFT JOIN color_sizes ON colors.id = color_sizes.color_id
             LEFT JOIN images ON colors.id = images.color_id
-            WHERE items.id = ?
-        `, [id]);
-
-        console.log(rows);
+            WHERE items.id IN (${placeholders})
+        `, idArray);
 
         // Transform the data into the desired format
-        return rows.reduce((acc, row) => {
-            // Find or create the item
+        const transformedItems = rows.reduce((acc, row) => {
             let item = acc.find(item => item.id === row.id);
             if (!item) {
                 item = {
@@ -144,15 +147,11 @@ const getItemById = async (id) => {
                 if (row.img_url && !color.img.includes(row.img_url)) {
                     color.img.push(row.img_url);
                 }
-
-                // Add images for this color
-                if (row.img_url && !color.img.includes(row.img_url)) {
-                    color.img.push(row.img_url);
-                }
             }
-
             return acc;
         }, []);
+
+        return transformedItems;
     } catch (error) {
         console.error('Error fetching items:', error);
         throw error;
@@ -178,5 +177,86 @@ const deleteItemByColorsize = async (itemId, colorId, colorSize) => {
         console.log(err);
     }
 }
+const updateItemById = async (id, name, brand, category, price, zaiko, infor, size, color_img) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
 
-module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize }
+        // Parse dữ liệu JSON nếu nó là chuỗi
+        if (typeof size === 'string') {
+            size = JSON.parse(size);
+        }
+        if (typeof color_img === 'string') {
+            color_img = JSON.parse(color_img);
+        }
+
+        console.log('Dữ liệu đầu vào sau khi parse:', { id, name, brand, category, price, zaiko, infor, size, color_img });
+
+        // Cập nhật bảng items
+        console.log('Cập nhật bảng items:', { id, name, brand, category, price, zaiko, infor });
+        await connection.query(
+            'UPDATE items SET name = ?, brand = ?, category = ?, price = ?, zaiko = ?, infor = ? WHERE id = ?',
+            [name, brand, category, price, zaiko, infor, id]
+        );
+
+        // Xử lý size
+        if (Array.isArray(size) && size.length > 0) {
+            await connection.query('DELETE FROM sizes WHERE item_id = ?;', [id]);
+            await connection.query('ALTER TABLE sizes AUTO_INCREMENT = 1; ')
+            for (const s of size) {
+                await connection.query(
+                    'INSERT INTO sizes (item_id, size) VALUES (?, ?)',
+                    [id, s]
+                );
+            }
+        } else {
+            console.log('Không có size để cập nhật.');
+        }
+
+        // Xử lý màu sắc
+        if (Array.isArray(color_img) && color_img.length > 0) {
+            console.log('Xử lý màu sắc và hình ảnh:', color_img);
+            await connection.query('DELETE FROM colors WHERE item_id = ?;', [id]);
+            await connection.query('ALTER TABLE colors AUTO_INCREMENT = 1; ')
+            for (const colorImgs of color_img) {
+                await connection.query('INSERT INTO colors (id,item_id,color_nameEng,color_name) VALUES (?,?,?,?)', [colorImgs.color_id, id, colorImgs.color_nameEng, colorImgs.color_name]);
+
+
+                await connection.query('DELETE FROM color_sizes WHERE item_id = ? AND color_id = ?;', [id, colorImgs.color_id]);
+                for (const colorSize of colorImgs.color_size) {
+                    await connection.query('INSERT INTO color_sizes (color_id,size,item_id,zaiko) VALUE (?,?,?,?); ', [colorImgs.color_id, colorSize.size, id, colorSize.zaiko])
+                }
+                await connection.query('DELETE FROM images WHERE color_id = ? ', [colorImgs.color_id]);
+                for (const colorImg of colorImgs.img) {
+                    await connection.query('INSERT INTO images (color_id,img_url) VALUE (?,?); ', [colorImgs.color_id, colorImg])
+                }
+
+
+            }
+
+        } else {
+            console.log('Không có màu sắc để cập nhật.');
+        }
+
+        // Commit transaction sau khi mọi việc hoàn thành
+        console.log('Commit transaction');
+        await connection.commit();
+        console.log('Cập nhật thành công!');
+    } catch (err) {
+        await connection.rollback();
+        console.error('Error during transaction, rolling back:', err.message);
+        throw err;
+    } finally {
+        connection.release();
+    }
+};
+
+
+
+
+
+
+
+
+
+module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById }

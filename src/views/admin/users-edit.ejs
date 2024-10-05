@@ -17,6 +17,7 @@
     <script>
         const list_users = JSON.parse('<%- JSON.stringify(users) %>');
     </script>
+    <script src="script/admin/users-edit.js" defer></script>
 </head>
 
 <body>
@@ -55,36 +56,16 @@
                         <a href="/user-add" class="user-addBtn primary-btn" style="font-size: 1.5rem; width: 80px;">+追加</a>
                     </div>
                     <table class="ad_page-user-list">
-                        <tr>
-                            <th>ID</th>
-                            <th>ユーザー名</th>
-                            <th>メールアドレス</th>
-                            <th>性別</th>
-                            <th>誕生日</th>
-                            <th>作成時</th>
-                            <th>動作</th>
-                        </tr>
-                        <% users.forEach(user => { %>
-                            <tr>
-                                <td><%= user.user_id %></td>
-                                <td class="user-nameImg">
-                                    <div class="user-img"><img src="/image/user-image/<%= user.user_img %>" alt=""></div>
-                                    <div class="user-name"><%= user.user_name %></div>
-                                </td>
-                                <td><%= user.user_email %></td>
-                                <td><%= user.user_sex %></td>
-                                <td><%= user.user_birth %></td>
-                                <td><%= user.created_at %></td>
-                                <td>
-                                    <div class="action-box" style="display: flex; gap: 10px; height:100%;">
-                                        <div class="action-edit"><a href="/users-edit/<%= user.user_id %>">更新</a></div>
-                                        <div class="action-delete"><a href="#" onclick="deleteUser(<%=user.user_id %>)">削除</a></div>
-                                    </div>
-                                    
-                                </td>
-                            </tr>
-                        <% }) %>
+                        
                     </table>
+                    <div class="bar-page">
+                        <div class="bar-page_list">
+                                    
+                        </div>
+                    </div>
+                    <% if (success_msg.length > 0){ %>
+                        <div class="user-add__success"><%= success_msg %></div>
+                    <% } %>
                 </div>
             </div>
         </div>
@@ -93,41 +74,5 @@
             </div>
         </div>
     </div>
-    <script>
-        function deleteUser(id) {
-    document.querySelector('.warning-delete-box-background').style.display = 'flex'
-    let selectUser = list_users.find((user) => user.user_id == id)
-    if (selectUser) {
-        document.querySelector('.warning-delete-box').innerHTML = `
-        <div class="warning-delete-title">
-                <h2>Delete User</h2>
-                <div class="warning-delete-box-close"><i class="fa-solid fa-xmark"></i></div>
-            </div>
-            <div class="warning-delete-content">
-                Are you sure to delete User:<br>
-                <div class="warning-delete-content-item">
-                    <img class="item-img" src="/image/user-image/${selectUser.user_img}" alt="item-img">
-                    ${selectUser.user_name}
-                </div>      
-            </div>
-            <div class="warning-delete-action">
-                <div class="warning-delete-cancel">キャンセル</div>
-                <a href="/users-delete/${selectUser.user_id}" class="warning-delete-sure">削除</a>
-            </div>
-        
-        `
-    }
-    if (document.querySelector('.warning-delete-box-close')) {
-        document.querySelector('.warning-delete-box-close').onclick = function () {
-            document.querySelector('.warning-delete-box-background').style.display = 'none'
-        }
-    }
-    if (document.querySelector('.warning-delete-cancel')) {
-        document.querySelector('.warning-delete-cancel').onclick = function () {
-            document.querySelector('.warning-delete-box-background').style.display = 'none'
-        }
-    }
-}
-    </script>
 </body>
 </html>

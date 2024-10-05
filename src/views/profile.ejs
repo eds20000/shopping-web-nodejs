@@ -57,7 +57,16 @@
                         <% } %>
 
                     </li>
-                    <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
+                    <li class="header__navbar-like icon-center">
+                        <a href="/user-favorite">
+                            <i class="fa-regular fa-heart"></i>
+                            <% if(user){if (user.favorItems.length > 0){ %>
+                                <div class="header__navbar--favor-quality"><%=user.favorItems.length %></div>
+                            <% }else{ %>
+                                <div class="header__navbar--favor-quality" style="display: none;"></div>
+                            <% }} %>
+                        </a>
+                    </li>
                     <div class="navbar-cart">
                         <li class="header__navbar-cart icon-center">
                             <a href="">
@@ -84,11 +93,11 @@
             <div class="grid wide">
                 <div class="row">
                     <ul class="col l-3 user-profile__category">
-                        <li class="user-profile__category--myacount profile__category--checked"><i class="fa-solid fa-file-invoice"></i>アカウント管理</li>
-                        <li class="user-profile__category--favor"><i class="fa-solid fa-heart"></i>お気に入り</li>
+                        <li class="user-profile__category--myacount profile__category--checked"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
+                        <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</li></a>
                         <li class="user-profile__category--cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</li>
                         <li class="user-profile__category--hitory"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</li>
-                        <li class="user-profile__category--signout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</li>
+                        <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
                     </ul>
                     <div class="col l-9 user-profile__content">
                         <div class="user-profile__content--title">アカウント管理</div>
@@ -136,8 +145,20 @@
                             </div>
                             <div class="col l-6">
                                 <div class="user-profile__content--avatar">
-                                    <div class="profile__content--label">プロフィール写真:</div> 
-                                    <img src="image/user-image/<%=user.user_img %>" alt="">
+                                    <div class="profile__content--label">プロフィール写真:</div>
+                                    <div class="profile__content--value user-profile__content--image-value ">
+                                        <img src="image/user-image/<%=user.user_img %>" alt="">
+                                        <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--image')">変更</div>
+                                    </div>
+                                    <form action="/user-profile/edit/img/<%=user.user_id %>" class="user-profile__content--image-form" style="display: none;" method="post" enctype="multipart/form-data">
+                                        <img src="image/user-image/<%=user.user_img %>" alt="" class="user_avatar">
+                                        <input type="file" name="user_avatar" id="user_avatar" accept="image/*" style="display: none;">
+                                        <input type="hidden" name="currentUserImg" value="<%= user.user_img %>">
+                                        <label for="user_avatar" class="image-upload-label" style="display: block">
+                                            <span class="material-symbols-rounded"> 画像アップロード </span> 
+                                        </label>
+                                        <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -181,10 +202,10 @@
                                             <input type="password" name="user_password_confirm" id="user_password-confirm" style="display: inline-block; " value="">
                                             <button type="submit" class="user-profile__content--value-reset">確認</button>
                                         </form>
-                                        <div class="alert alert-danger"><%= error_msg %></div>
+                                        <div class="user_password-warning"><%= error_msg %></div>
                                     <% } %>
                                     <% if (success_msg.length > 0) { %>
-                                        <div class="alert alert-success"><%= success_msg %></div>
+                                        <div class="user_password-success"><%= success_msg %></div>
                                     <% } %>
                                 </div>
                             </div>
@@ -242,6 +263,19 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
             document.querySelector('.' + section + '-value').style.display = 'none'
             document.querySelector('.' + section + '-form').style.display = 'block'
         }
+        let userImgInput = document.getElementById('user_avatar')
+        userImgInput.addEventListener('change', (event) => {
+        const reader = new FileReader();
+        const avatarPreview = document.querySelector('.user_avatar');
+            
+         reader.onload = function () {
+             // Cập nhật src của thẻ img bằng ảnh mớia
+              avatarPreview.src = reader.result;
+           }
+       
+        // Đọc file ảnh được chọn
+           reader.readAsDataURL(event.target.files[0])
+        })        
     </script>
 </body>
 </html>

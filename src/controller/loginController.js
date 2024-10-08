@@ -26,7 +26,8 @@ let userCheck = async (req, res) => {
                 const cartItems = await modelCourse.getCartItems(req.session.user.user_id)
                 req.session.user.favorItems = favorItems
                 req.session.user.cartItems = cartItems
-                res.redirect('/');
+                const redirectUrl = req.session.returnTo || '/';
+                return res.redirect(redirectUrl);
             } else {
                 // Phản hồi nếu mật khẩu không đúng
                 res.status(401).json({ message: 'Invalid credentials' });
@@ -42,11 +43,12 @@ let userCheck = async (req, res) => {
     }
 };
 let userLogout = (req, res) => {
+    const redirectUrl = req.session.returnTo || '/';
     req.session.destroy(err => {
         if (err) {
             return res.status(500).json({ message: 'Unable to log out' });
         }
-        res.redirect('/');
+        return res.redirect(redirectUrl);
     });
 }
 

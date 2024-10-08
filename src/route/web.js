@@ -15,7 +15,7 @@ let router = express.Router();
 const initWebRoute = (app) => {
     router.get('/', homeController.getHomepage);
 
-    router.get('/login', homeController.loginPage);
+    router.get('/login', (req, res) => { return res.render('login.ejs') });
     router.post('/login/user-check', loginController.userCheck);
     router.get('/logout', loginController.userLogout);
 
@@ -57,11 +57,15 @@ const initWebRoute = (app) => {
 
     router.get('/user-favorite', profileController.getFavoritePage)
     router.get('/remove-favorite/:id', profileController.removeFavoriteItem)
+    router.get('/user-cart', profileController.getCartPage)
 
 
     //cart
     router.post('/add-to-cart/:id', cartController.addToCart)
-
+    router.post('/getCartPage', cartController.getCartPage)
+    router.post('/remove-from-cart', cartController.removeFromCart)
+    router.post('/decrease-quantity-item-cart', cartController.decreaseQuantityItemCart)
+    router.post('/increase-quantity-item-cart', cartController.increaseQuantityItemCart)
     return app.use('/', router)
 }
 

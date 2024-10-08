@@ -211,35 +211,6 @@ function changeImage() {
 function takeCart() {
     var takeCartBoxBtn = $$('.sort__item-takecart');
     var takeCartBtn = $('.item-checklist-takecart-btn');
-
-    $$('.product-item-data-content_addcart').forEach(function (addCartBtn) {
-        addCartBtn.onclick = function () {
-            // Lấy thông tin sản phẩm từ phần tử cha của nút "カートに入れる"
-            var productName = $('.product-item-data-title_name').dataset.value;
-            var productBrand = getItemParent(this, '.product-item-data').querySelector('.product-item-data-brand').dataset.value;
-            var productImgSrc = getItemParent(this, '.product-item-data-color_item').querySelector('.product-item-data-color_header').dataset.value;
-            var productPrice = parseInt(getItemParent(this, '.product-item-data').querySelector('.product-item-data-price_index').dataset.value);
-            var productSize = getItemParent(this, '.product-item-data-content').querySelector('.product-item-data-content_size').dataset.value;
-            var productColor = getItemParent(this, '.product-item-data-color_item').querySelector('.product-item-data-color_header_title').dataset.value;
-            var productQuantity = 1; // Default quantity is 1
-
-            // Thêm sản phẩm vào giỏ hàng
-            myCart.push({
-                name: productName,
-                brand: productBrand,
-                img: productImgSrc,
-                price: productPrice,
-                size: productSize,
-                color: productColor,
-                quantity: productQuantity
-            });
-
-            // Cập nhật giỏ hàng sau khi thêm sản phẩm
-            onChangeCart();
-            header.style.transform = 'translateY(0)';
-        };
-    });
-
     // Hàm chuyển đổi hình ảnh
     function itemImgChange() {
         var itemImageMain = $('.item-checklist-img-main img');
@@ -256,85 +227,6 @@ function takeCart() {
         });
     }
     //
-
-
-
-    var onChangeCart = function () {
-        var headerCartBox = $('.header__navbar-cart-box');
-        var myCartCount = $('.header__navbar-cart-count');
-        var priceTotal = myCart.reduce((total, item) => total + item.price, 0);
-
-        if (myCart.length === 0) {
-            myCartCount.style.display = 'none';
-            headerCartBox.innerHTML =
-                `
-                <div class="header__navbar-cart-box-empty">
-                    <div class="header__navbar-cart-box-empty-img">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </div>
-                    <div class="header__navbar-cart-box-empty-content">
-                        現在カートに商品はありません。
-                    </div>
-                </div>                       
-    
-            `
-        } else {
-            myCartCount.style.display = 'block';
-            myCartCount.innerHTML = myCart.reduce((quantity, current) => current.quantity + quantity, 0);
-            headerCartBox.style.maxHeight = '80vh'
-
-            headerCartBox.innerHTML =
-                `<div class="header__navbar-cart-list">
-                                    
-                </div>
-                <div class="header__navbar-cart-checkox">
-                    <div class="header__navbar-cart-total">合計：<span>￥<div class="header__navbar-cart-total-index"></div></span></div>
-                    <div class="header__navbar-cart-check-btn"><a href="./cart.html">買い物かごを見る(${myCart.length})</a></div>
-                </div>`
-            $('.header__navbar-cart-total-index').innerHTML = priceTotal;
-            renderCart();
-        }
-        // Duyệt qua cartItems để hiển thị các sản phẩm và số lượng của chúng
-        function renderCart() {
-            const cartList = document.querySelector('.header__navbar-cart-list');
-            cartList.innerHTML = '';
-            myCart.forEach(cartItem => {
-                cartList.innerHTML +=
-                    `<div class="row header__navbar-cart-item">
-                    <div class="col l-3 c-3 m-3 header__navbar-cart-item_img">
-                        <a href="http://" class="item-link">
-                            <img src="/image/item-image/${cartItem.img}" alt="">
-                        </a> 
-                    </div>
-            
-                    <div class="col l-9 c-9 m-9 header__navbar-cart-item_content">
-                        <a href="" class="item-link">
-                            <div class="header__navbar-cart-item_title">
-                                ${cartItem.name}
-                            </div>
-                        </a>
-                        <div class="header__navbar-cart-item_brand">${cartItem.brand}</div>
-                        <div class="header__navbar-cart-item_info">
-                            <div class="header__navbar-cart-item_info-box">
-                                <div class="header__navbar-cart-item_info-color"><b>カラー：</b>${cartItem.color}</div>
-                                <div class="header__navbar-cart-item_info-size"><b>サイズ：</b>${cartItem.size}</div>
-                            </div>
-                            <div class="header__navbar-cart-item_info-quantity-box">
-                                <div class="header__navbar-cart-item_info-quantity-down">-</div>
-                                <div class="header__navbar-cart-item_info-quantity-num">${cartItem.quantity}</div>
-                                <div class="header__navbar-cart-item_info-quantity-up">+</div>
-                            </div>
-                        </div>
-                        <div class="header__navbar-cart-item_info-footer">
-                            <div class="header__navbar-cart-item_info-price">￥${cartItem.price}</div>
-                            <div class="header__navbar-cart-item_btn-remove"><i class="fa-regular fa-trash-can"></i></div>
-                        </div>
-                    </div>
-                </div>`;
-            });
-        }
-    }
-
     if (true) {
         takeCartBoxBtn.forEach(function (currentItemBox) {
             currentItemBox.onclick = function (a) {
@@ -468,18 +360,22 @@ function takeCart() {
                     var ItemPrice = itemCurrent.price;
                     var ItemSize = $('.checklist-size.size_checked').innerHTML;
                     var ItemBrand = itemCurrent.brand;
+                    var ItemCategory = itemCurrent.category;
+                    var ItemId = itemCurrent.id;
 
-                    if (myCart.some(item => item.name === ItemName && item.brand === ItemBrand && item.color === ItemColor && item.size === ItemSize)) {
+                    if (myCart.some(item => item.name === ItemName && item.brand === ItemBrand && item.color === ItemColor && item.size === ItemSize && item.id === ItemId)) {
                         myCart.forEach(item => {
-                            if (item.name === ItemName && item.brand === ItemBrand && item.color === ItemColor && item.size === ItemSize) {
+                            if (item.name === ItemName && item.brand === ItemBrand && item.color === ItemColor && item.size === ItemSize && item.id === ItemId) {
                                 item.quantity++;
                             }
                         });
                     }
                     else {
                         myCart.push({
+                            id: ItemId,
                             name: ItemName,
                             brand: ItemBrand,
+                            category: ItemCategory,
                             img: ItemImgSrc,
                             price: ItemPrice,
                             size: ItemSize,
@@ -493,7 +389,6 @@ function takeCart() {
                     if (user) {
                         addToCart(ItemId, ItemColor, ItemSize, user);
                     }
-                    console.log(myCart)
                 };
 
                 //Item product take -------------------------------- Enđ
@@ -501,32 +396,216 @@ function takeCart() {
 
         })
     }
-    onChangeCart();
-    function addToCart(itemId, colorName, size, user) {
-        fetch(`/add-to-cart/${user.user_id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                itemId: itemId,
-                colorName: colorName,
-                size: size,
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log('Item added to cart successfully');
-                } else {
-                    console.log('Error adding item to cart:', data.error);
-                }
-            })
-            .catch(error => console.error('Error adding item to cart:', error));
-    }
 
 }
-//-----------------------Take-cart--------------------------------End
+onChangeCart()
+
+function addToCart(itemId, colorName, size, user) {
+    fetch(`/add-to-cart/${user.user_id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            itemId: itemId,
+            colorName: colorName,
+            size: size,
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Item added to cart successfully');
+            } else {
+                console.log('Error adding item to cart:', data.error);
+            }
+        })
+        .catch(error => console.error('Error adding item to cart:', error));
+}
+
+function onChangeCart() {
+    var headerCartBox = $('.header__navbar-cart-box');
+    var myCartCount = $('.header__navbar-cart-count');
+    var priceTotal = myCart.reduce((total, item) => total + item.price, 0);
+
+    if (myCart.length === 0) {
+        myCartCount.style.display = 'none';
+        headerCartBox.innerHTML =
+            `
+            <div class="header__navbar-cart-box-empty">
+                <div class="header__navbar-cart-box-empty-img">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="header__navbar-cart-box-empty-content">
+                    現在カートに商品はありません。
+                </div>
+            </div>                       
+        `;
+    } else {
+        myCartCount.style.display = 'block';
+        myCartCount.innerHTML = myCart.reduce((quantity, current) => current.quantity + quantity, 0);
+        headerCartBox.style.maxHeight = '80vh';
+
+        headerCartBox.innerHTML =
+            `<div class="header__navbar-cart-list"></div>
+            <div class="header__navbar-cart-checkox">
+                <div class="header__navbar-cart-total">合計：<span>￥<div class="header__navbar-cart-total-index"></div></span></div>
+                <div class="header__navbar-cart-check-btn"><div onclick="renderMycart()">買い物かごを見る(${myCart.length})</div></div>
+            </div>`;
+
+        $('.header__navbar-cart-total-index').innerHTML = priceTotal;
+
+        // Duyệt qua cartItems để hiển thị các sản phẩm và số lượng của chúng
+        const cartList = document.querySelector('.header__navbar-cart-list');
+        cartList.innerHTML = '';
+        myCart.forEach(cartItem => {
+            cartList.innerHTML +=
+                `<div class="row header__navbar-cart-item">
+                <div class="col l-3 c-3 m-3 header__navbar-cart-item_img">
+                    <a href="/product/${cartItem.id}" class="item-link">
+                        <img src="/image/item-image/${cartItem.img}" alt="">
+                    </a> 
+                </div>
+        
+                <div class="col l-9 c-9 m-9 header__navbar-cart-item_content">
+                    <a href="" class="item-link">
+                        <div class="header__navbar-cart-item_title">
+                            ${cartItem.name}
+                        </div>
+                    </a>
+                    <div class="header__navbar-cart-item_brand">${cartItem.brand}</div>
+                    <div class="header__navbar-cart-item_info">
+                        <div class="header__navbar-cart-item_info-box">
+                            <div class="header__navbar-cart-item_info-color"><b>カラー：</b>${cartItem.color}</div>
+                            <div class="header__navbar-cart-item_info-size"><b>サイズ：</b>${cartItem.size}</div>
+                        </div>
+                        <div class="header__navbar-cart-item_info-quantity-box">
+                            <div class="header__navbar-cart-item_info-quantity-down" onclick="decreaseQuantityItemCart(${cartItem.id},${cartItem.colorId},'${cartItem.size}')">-</div>
+                            <div class="header__navbar-cart-item_info-quantity-num">${cartItem.quantity}</div>
+                            <div class="header__navbar-cart-item_info-quantity-up" onclick="increaseQuantityItemCart(${cartItem.id},${cartItem.colorId},'${cartItem.size}')">+</div>
+                        </div>
+                    </div>
+                    <div class="header__navbar-cart-item_info-footer">
+                        <div class="header__navbar-cart-item_info-price">￥${cartItem.price}</div>
+                        <div class="header__navbar-cart-item_btn-remove" onclick="removeItemFromCart(${cartItem.id},${cartItem.colorId},'${cartItem.size}')"><i class="fa-regular fa-trash-can"></i></div>
+                    </div>
+                </div>
+            </div>`;
+        });
+    }
+}
+
+function addToFavorites(itemId, event) {
+    fetch('/add-to-favorites', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ itemId: itemId }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                event.classList.toggle('sort__item-takecart-disable');
+                event.classList.toggle('sort__item-takecart-enable');
+                const favorQualityElement = document.querySelector('.header__navbar--favor-quality');
+                document.querySelector('.header').style.transform = 'translateY(0)';
+                if (favorQualityElement) {
+                    favorQualityElement.textContent = data.favorCount;
+                    favorQualityElement.style.display = data.favorCount > 0 ? 'block' : 'none';
+                }
+            } else {
+                alert('Failed to add item to favorites. Please try again.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+}
+function renderMycart() {
+    if (!myCart || myCart.length === 0) {
+        alert('Your cart is empty.');
+        return;
+    }
+
+    // Tạo form ẩn
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/getCartPage'; // Điều hướng tới trang giỏ hàng
+
+    // Tạo input ẩn để chứa dữ liệu myCart
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'myCart';
+    input.value = JSON.stringify(myCart);
+
+    // Thêm input vào form và gửi form
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit(); // Gửi form
+}
+
+
+//--------------------------Cart-button--------------------------------Start
+
+function removeItemFromCart(itemId, colorId, size) {
+    myCart = myCart.filter(item => !(item.id === itemId && item.colorId === colorId && item.size === size));
+    if (user) {
+        const userId = user.user_id
+        fetch('/remove-from-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId, itemId: itemId, colorId: colorId, size: size }),
+        })
+    }
+    onChangeCart();
+}
+function decreaseQuantityItemCart(itemId, colorId, size) {
+    myCart.forEach(item => {
+        if (item.id === itemId && item.colorId === colorId && item.size === size) {
+            item.quantity--;
+            if (item.quantity <= 0) {
+                removeItemFromCart(item.id, colorId, size);
+            }
+        }
+    });
+    if (user) {
+        const userId = user.user_id
+        fetch('/decrease-quantity-item-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId, itemId: itemId, colorId: colorId, size: size }),
+        })
+    }
+    onChangeCart();
+}
+function increaseQuantityItemCart(itemId, colorId, size) {
+    myCart.forEach(item => {
+        if (item.id === itemId && item.colorId === colorId && item.size === size) {
+            item.quantity++;
+        }
+    });
+    if (user) {
+        const userId = user.user_id
+        fetch('/increase-quantity-item-cart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId: userId, itemId: itemId, colorId: colorId, size: size }),
+        })
+    }
+    onChangeCart();
+}
+//--------------------------Cart-button--------------------------------End
+
+
+//---------------------Take-cart--------------------------------End
 
 //--------------------------Thanhchuyenhuonggiaodiensanpham----------]
 

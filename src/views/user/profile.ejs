@@ -16,6 +16,24 @@
     <link rel="stylesheet" href="/style/profile.css">
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        const cartItems = JSON.parse('<%- JSON.stringify(cartItems) %>');
+        var myCart = []
+        if (user) {
+            myCart = cartItems.map(item => ({
+                id: item.id,
+                name: item.name,
+                brand: item.brand,
+                img: item.img[0],
+                price: item.price,
+                size: item.size,
+                color: item.color,
+                colorId:item.colorId,
+                quantity: item.quantity
+            }));
+        } else {
+            myCart = [];
+        } 
     </script>
     <script type ="module" src="./script/script.js" defer></script>
     <title>TS-shop</title>
@@ -94,8 +112,8 @@
                 <div class="row">
                     <ul class="col l-3 user-profile__category">
                         <li class="user-profile__category--myacount profile__category--checked"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
-                        <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</li></a>
-                        <li class="user-profile__category--cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</li>
+                        <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</a></li>
+                        <li class="user-profile__category--cart"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
                         <li class="user-profile__category--hitory"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</li>
                         <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
                     </ul>

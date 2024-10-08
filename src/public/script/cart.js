@@ -1,68 +1,70 @@
-const $ = document.querySelector.bind(document)
-const $$ = document.querySelectorAll.bind(document)
 var cartItemQuanityBtn = document.querySelector(".cart__list-item-quantily i");
 var cartItemSelect = document.querySelector(".cart__list-item-count");
 
 TakeCart();
-var itemPrice = $('.cart__list-item-price span');
-var itemPricePay = $('.cart-detail-price span');
-var itemShipPay = $('.cart-detail-price-ship span');
-var TotalPay = $('.cart-detail-total-price span');
-var itemPayCount =$('.cart__list-item-count')
-var TotalPrice = 0;
+function updateTotalPrice() {
+    let totalPrice = 0;
 
-itemPricePay.innerHTML = parseInt(itemPrice.innerHTML) * parseInt(itemPayCount.value);
-TotalPrice = (parseInt(itemPricePay.innerHTML) + parseInt(itemShipPay.innerHTML)).toLocaleString();
-TotalPay.innerHTML = TotalPrice;
-itemPayCount.addEventListener("change",function(){
-itemPricePay.innerHTML = parseInt(itemPrice.innerHTML) * parseInt(itemPayCount.value);
+    // Duyệt qua tất cả các mục trong giỏ hàng
+    const cartItems = document.querySelectorAll('.cart__list-item');
+    cartItems.forEach(function (item) {
+        let price = parseInt(item.querySelector('.cart__list-item-price span').textContent); // Lấy giá của sản phẩm
+        let quantity = parseInt(item.querySelector('.header__navbar-cart-item_info-quantity-num').textContent); // Lấy số lượng sản phẩm
 
-TotalPrice = (parseInt(itemPricePay.innerHTML) + parseInt(itemShipPay.innerHTML)).toLocaleString();
-TotalPay.innerHTML = TotalPrice;
-})
+        // Tính tổng cho sản phẩm hiện tại (giá * số lượng)
+        let itemTotal = price * quantity;
+        // Cộng tổng cho toàn bộ giỏ hàng
+        totalPrice += itemTotal;
+    });
+
+    // Cộng thêm phí ship
+    document.querySelector('.cart-detail-price span').textContent = totalPrice.toLocaleString();
+    let shippingCost = parseInt(document.querySelector('.cart-detail-price-ship span').textContent) || 0;
+
+    totalPrice += shippingCost;
+
+    // Cập nhật tổng tiền thanh toán
+    document.querySelector('.cart-detail-total-price span').textContent = totalPrice.toLocaleString();
+}
 
 
-function TakeCart(){
-    $('.container').innerHTML=`<div class="grid wide">
+function TakeCart() {
+    $('.container').innerHTML = `<div class="grid wide">
                 <div class="row cart-content">
-                    <div class="col l-8 m-8 c-12">
+                ${myCart.length > 0 ?
+            `<div class="col l-8 m-8 c-12">
                         <div class="cart__list-box">
+                        ${myCart.map(item => `
                             <div class="cart__list-item">
                                 <div class="cart__list-item-img">
-                                    <a href="./product.html"><img src="./image/item-image/item1-img1.jpg" alt=""></a>
+                                    <a href="/product/${item.id}"><img src="/image/item-image/${item.img}" alt=""></a>
                                 </div>
                                 <div class="cart__list-content">
                                     <ul class="cart__list-item-title">
-                                        <li class="cart__list-item-name">Manfinity EMRG メンズシャツ バギー クルーネック 半袖 グラフィックティー 夏用</li>
-                                        <li class="cart__list-item-category">Tシャツ</li>
-                                        <li class="cart__list-item-color">カラー：ブラック</li>
-                                        <li class="cart__list-item-size">サイズ：L</li>
+                                        <li class="cart__list-item-name">${item.name}</li>
+                                        <li class="cart__list-item-brand">${item.brand}</li>
+                                        <li class="cart__list-item-category">${item.category}</li>
+                                        <li class="cart__list-item-color">カラー：${item.color}</li>
+                                        <li class="cart__list-item-size">サイズ：${item.size}</li>
                                     </ul>
                                     <div class="cart__list-item-check">
                                         <div class="cart__list-item-price">
-                                            ￥ <span>1023</span> 
+                                            ￥ <span>${item.price}</span> 
                                         </div>
                                         <div class="cart__list-item-quantily">
-                                            <select class="cart__list-item-count" name="item-quantily">
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
-                                                <option value="6">6</option>
-                                                <option value="7">7</option>
-                                                <option value="8">8</option>
-                                                <option value="9">9</option>
-                                                <option value="10">10</option>
-                                    
-                                            </select>
+                                             <div class="header__navbar-cart-item_info-quantity-box">
+                                                <div class="header__navbar-cart-item_info-quantity-down" onclick="decreaseQuantityItemCart(${item.id},${item.colorId},'${item.size}'),TakeCart()">-</div>
+                                                <div class="header__navbar-cart-item_info-quantity-num">${item.quantity}</div>
+                                                <div class="header__navbar-cart-item_info-quantity-up" onclick="increaseQuantityItemCart(${item.id},${item.colorId},'${item.size}'),TakeCart()">+</div>
+                                            </div>
                                         </div>
-                                        <div class="cart__list-item-delete-btn">
+                                        <div class="cart__list-item-delete-btn" onclick="removeItemFromCart(${item.id},${item.colorId},'${item.size}'),TakeCart()">
                                             削除
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            `).join('')}
                         </div>
                     </div>
                     <div class="col l-4 m-4 c-12">
@@ -90,16 +92,29 @@ function TakeCart(){
                             <div class="cart-total-account primary-btn">ご購入手続きへ(1)</div>
                         </div>
                     </div>
+                    `: `
+                    <div class="cart-empty-box">
+                        <img src="/image/cart-empty.jpg" alt="cart-empty-img">
+                        <p>現在カートに商品がありません。</p>
+                    </div>`}
                 </div>
-            </div>`
-            if($('.cart-total-account')){
-                $('.cart-total-account').onclick = TakeCartInfor;
-            }
+            </div>`// Tính tổng tiền khi render giỏ hàng
+    if (myCart.length > 0) {
+        updateTotalPrice();
+        // Sự kiện thay đổi số lượng sản phẩm
+        $('.header__navbar-cart-item_info-quantity-num').onchange = function () {
+            updateTotalPrice();
         }
+        if ($('.cart-total-account')) {
+            $('.cart-total-account').onclick = TakeCartInfor;
+        }
+    }
 
-function TakeCartInfor(){  
-    $('.container').innerHTML = 
-    `
+}
+
+function TakeCartInfor() {
+    $('.container').innerHTML =
+        `
     <div class="grid wide">
                 <div class="row">
                     <div class="cart-heading">
@@ -269,39 +284,39 @@ function TakeCartInfor(){
             </div>
     `
     let paymentCloseBtn = $('.close-formBtn')
-    paymentCloseBtn.onclick = function(){
+    paymentCloseBtn.onclick = function () {
         let paymentForm = $('#payment-form')
         paymentForm.classList.toggle('form-close');
-        if(paymentForm.classList.contains('form-close')){
+        if (paymentForm.classList.contains('form-close')) {
             paymentCloseBtn.innerHTML = '他のお支払い方法で支払う<i class="fa-solid fa-chevron-down"></i>';
         }
-        else{
+        else {
             paymentCloseBtn.innerHTML = '閉じる<i class="fa-solid fa-chevron-up"></i>';
         }
 
     }
     $('.cart-heading-cartshow.cart-active').addEventListener("click", TakeCart);
     Validator({
-        form:'#cart__pay-form',
-        formGroupSelector:'.input-group',
-        errorSelector:'.form-message',
-        rules:[
-            Validator.isRequired('#adress-name','ユーザー名を入力してください'),
+        form: '#cart__pay-form',
+        formGroupSelector: '.input-group',
+        errorSelector: '.form-message',
+        rules: [
+            Validator.isRequired('#adress-name', 'ユーザー名を入力してください'),
 
-            Validator.isRequired('#adress-phone','電話番号を入力してください'),
-            Validator.isPhoneNumber('#adress-phone','正しい電話番号を入力してください'),
+            Validator.isRequired('#adress-phone', '電話番号を入力してください'),
+            Validator.isPhoneNumber('#adress-phone', '正しい電話番号を入力してください'),
 
-            Validator.isRequired('#adress-zip-code','郵便番号を入力してください'),
-            Validator.isRequired('#adress-prefecture','都道府県を入力してください'),
-            Validator.isRequired('#adress-city','市区町村を入力してください'),
-            Validator.isRequired('#adress-add','町名・丁番地等を入力してくださいを入力してください。'),
+            Validator.isRequired('#adress-zip-code', '郵便番号を入力してください'),
+            Validator.isRequired('#adress-prefecture', '都道府県を入力してください'),
+            Validator.isRequired('#adress-city', '市区町村を入力してください'),
+            Validator.isRequired('#adress-add', '町名・丁番地等を入力してくださいを入力してください。'),
 
-            Validator.isRequired('input[name="payment"]','支払い方法を選択しください')
+            Validator.isRequired('input[name="payment"]', '支払い方法を選択しください')
         ],
         onSubmit: function TakeCartInforCheck(data) {
 
-            $('.container').innerHTML = 
-        `<div class="grid wide">
+            $('.container').innerHTML =
+                `<div class="grid wide">
                 <div class="row">
                     <div class="cart-heading">
                     <div class="cart-heading-list cart-heading-cartshow cart-active">
@@ -425,12 +440,12 @@ function TakeCartInfor(){
                 </form>
             </div>
         `
-        $('.cart-heading-cartshow.cart-active').addEventListener("click", TakeCart);
-        $('.cart-heading-pay.cart-active').onclick = TakeCartInfor;
+            $('.cart-heading-cartshow.cart-active').addEventListener("click", TakeCart);
+            $('.cart-heading-pay.cart-active').onclick = TakeCartInfor;
 
-        $('.payment-agree-btn').onclick = function TakeCartAgree(){
-            $('.container').innerHTML = 
-            `<div class="gird wide">
+            $('.payment-agree-btn').onclick = function TakeCartAgree() {
+                $('.container').innerHTML =
+                    `<div class="gird wide">
             <div class="row">
                 <div class="cart-heading">
                     <div class="cart-heading-list cart-heading-cartshow cart-active">
@@ -478,18 +493,15 @@ function TakeCartInfor(){
             </div>
         </div>
             `
-        }
+            }
 
         }
-    });   
+    });
 }
 
-// if('.cart-heading-pay-check.cart-active'){
-//     $('.cart-heading-pay-check.cart-active').onclick = TakeCartInforCheck();
-// }
 
 
-if(window.innerWidth < 1023 ){
+if (window.innerWidth < 1023) {
     $$('.cart-heading-list').forEach(headinglist => {
         headinglist.innerHTML = '.';
     });

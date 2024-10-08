@@ -7,6 +7,7 @@
 .user-profile__category{
     font-weight: 600;
     font-size: 2rem;
+    margin-top: 66px;
 }
 .user-profile__category li{
     padding: 20px 10px 10px;
@@ -161,3 +162,93 @@ input,select{
     padding: 10px;
     border-radius: 10px;
 }
+/* Favorite Page */
+.cart__item{
+    border-bottom: 1px solid var(--border-color);
+}
+.cart__item:hover{
+    background-color: var(--hover-color);
+}
+.cart__item--image {
+    padding: 10px 20px;
+}
+.cart__item--image img{
+    width: 100%;
+}
+.cart__item--delete{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cart__item--info{
+    padding: 10px 0;
+    font-weight: 600;
+}
+.cart__item--info span{
+    font-weight: 400;
+}
+.cart__item--info>div{
+    margin-bottom: 10px;
+}
+.cart__item--info-name,.cart__item--info-brand{
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+.cart__item--info-name span,.cart__item--info-brand span{
+    font-weight: 500;
+}
+.cart__item--info-name{
+    
+}
+.cart__item--info-number{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+.cart__item--info-price{
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+.cart__item--info-stock{
+    font-size: 2rem;
+}
+.cart__item--delete a{
+    background-color: rgb(229, 87, 85);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.cart__item--info-quantity{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cart__item--info-quantity-down,
+.cart__item--info-quantity-up{
+    padding:4px 10px 6px;
+    width: 30px;
+    background-color: var(--hover-color);
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    &:hover{
+        background-color: var(--hover-color1);
+    }
+}
+
+
+.cart__item--info-quantity-num{
+    padding:4px 8px 6px ;
+    border: 1px solid var(--border-color);
+}
+.cart-empty-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.cart-empty-box img{
+    width: 200px;
+}
+

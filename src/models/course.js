@@ -113,9 +113,45 @@ let getCartItems = async (userId) => {
         return [];
     }
 }
+let removeFromCart = async (userId, itemId, colorId, size) => {
+    try {
+        await pool.query('DELETE FROM cart WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
+    } catch (error) {
+        console.error('Error removing from cart:', error);
+        throw error;
+    }
+};
+
+let decreaseQuantityItemCart = async (userId, itemId, colorId, size) => {
+    try {
+        await pool.query('UPDATE cart SET quantity = quantity - 1 WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
+    } catch (error) {
+        console.error('Error decreasing quantity item cart:', error);
+        throw error;
+    }
+};
+
+let increaseQuantityItemCart = async (userId, itemId, colorId, size) => {
+    try {
+        await pool.query(`
+            UPDATE cart 
+            SET quantity = quantity + 1 
+            WHERE user_id = ? 
+            AND item_id = ? 
+            AND color_id = ? 
+            AND size = ?`,
+            [userId, itemId, colorId, size]);
+    } catch (error) {
+        console.error('Error increasing quantity item cart:', error);
+        throw error;
+    }
+};
+
+
 module.exports = {
     getFavoriteItems,
     addToFavorites,
     resetUserSession,
-    getFavoriteItemList, getFavoriteItemIds, removeFromFavorites, addToCart, getCartItems
+    getFavoriteItemList, getFavoriteItemIds, removeFromFavorites,
+    addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart
 }

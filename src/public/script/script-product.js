@@ -78,7 +78,7 @@ var onChangeCart = function () {
             </div>
             <div class="header__navbar-cart-checkox">
                 <div class="header__navbar-cart-total">合計：<span>￥<div class="header__navbar-cart-total-index"></div></span></div>
-                <div class="header__navbar-cart-check-btn"><a href="./cart.html">買い物かごを見る(${myCart.length})</a></div>
+                <div class="header__navbar-cart-check-btn"><a href="" onclick="renderMycart()">買い物かごを見る(${myCart.length})</a></div>
             </div>`
         $('.header__navbar-cart-total-index').innerHTML = priceTotal;
         // Duyệt qua myCart và đếm số lượng của mỗi sản phẩm

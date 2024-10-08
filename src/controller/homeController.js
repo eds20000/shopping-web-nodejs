@@ -1,5 +1,4 @@
 import models from '../models/admin/adminPage.model'
-import usersEdit from '../models/admin/userEdit.model'
 import modelCourse from '../models/course'
 
 let addToFavorites = async (req, res) => {
@@ -35,10 +34,13 @@ let getHomepage = async (req, res) => {
             const fullItem = items.find(item => item.id === cartItem.item_id);
             if (fullItem) {
                 return {
+                    id: fullItem.id,
                     name: fullItem.name,
                     brand: fullItem.brand,
+                    category: fullItem.category,
                     price: fullItem.price,
                     color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
                     size: cartItem.size,
                     img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
                     quantity: cartItem.quantity
@@ -51,10 +53,6 @@ let getHomepage = async (req, res) => {
     } else {
         res.render('index', { items, user: null, cartItems: [] });
     }
-}
-
-let loginPage = async (req, res) => {
-    return res.render('login.ejs')
 }
 let signupPage = async (req, res) => {
     return res.render('signup.ejs')
@@ -69,15 +67,37 @@ let productPage = async (req, res) => {
     if (req.session.user) {
         // Fetch favorItems for the user
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
-        res.render('product.ejs', { items, item, user: req.session.user, itemId });
+        req.session.user.cartItems = cartItems;
+
+        // Find the full item details for each cart item
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    category: fullItem.category,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+        res.render('product.ejs', { items, item, user: req.session.user, cartItems: fullCartItems, itemId });
     } else {
-        res.render('product.ejs', { items, item, user: null, itemId });
+        res.render('product.ejs', { items, item, user: null, cartItems: null, itemId });
     }
 }
 
 
 
 module.exports = {
-    getHomepage, loginPage, signupPage, productPage, addToFavorites
+    getHomepage, signupPage, productPage, addToFavorites
 }

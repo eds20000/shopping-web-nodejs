@@ -12,7 +12,31 @@ const salt = bcrypt.genSaltSync(10);
 let getProfilePage = async (req, res) => {
     const items = await models.getItems();
     if (req.session.user) {
-        return res.render('profile.ejs', { items, user: req.session.user })
+        const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        req.session.user.favorItems = favorItems;
+        req.session.user.cartItems = cartItems;
+
+        // Find the full item details for each cart item
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+        return res.render('user/profile.ejs', { items, user: req.session.user, cartItems: fullCartItems });
     } else {
         return res.redirect('/login');
     }
@@ -76,7 +100,31 @@ let getFavoritePage = async (req, res) => {
         const userId = req.session.user.user_id;
         const favorIds = await modelCourse.getFavoriteItemIds(userId)
         const favorItems = favorIds.length > 0 ? await models.getItemById(favorIds) : [];
-        return res.render('favorite.ejs', { user: req.session.user, favorItems, items })
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        req.session.user.favorItems = favorItems;
+        req.session.user.cartItems = cartItems;
+
+        // Find the full item details for each cart item
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    category: fullItem.category,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+        return res.render('user/favorite.ejs', { user: req.session.user, favorItems, items, cartItems: fullCartItems });
     } else {
         return res.redirect('/login');
     }
@@ -90,7 +138,42 @@ let removeFavoriteItem = async (req, res) => {
     return res.redirect('/user-favorite');
 }
 
+//Cart
+let getCartPage = async (req, res) => {
+    const items = await models.getItems();
+    if (req.session.user) {
+        // Fetch favorItems for the user
+        const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        req.session.user.favorItems = favorItems;
+        req.session.user.cartItems = cartItems;
+        // Find the full item details for each cart item
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    category: fullItem.category,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+        res.render('user/user-cart.ejs', { items, user: req.session.user, cartItems: fullCartItems });
+    } else {
+        res.redirect('/login')
+    }
+}
+
 module.exports = {
     getProfilePage, profileEdit, profilePasswordEdit,
-    profileImageEdit, getFavoritePage, removeFavoriteItem
+    profileImageEdit, getFavoritePage, removeFavoriteItem,
+    getCartPage
 }

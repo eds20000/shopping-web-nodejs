@@ -15,12 +15,29 @@
     <link rel="stylesheet" href="./style/responsive.css">
     <link rel="stylesheet" href="/style/profile.css">
     <script>
-        const items = <%= items %>;
-        console.log(items)
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
-        const favorItemsList = JSON.parse('<%- JSON.stringify(favorItems) %>');
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        const cartItems = JSON.parse('<%- JSON.stringify(cartItems) %>');
+        var myCart = []
+        if (user) {
+            myCart = cartItems.map(item => ({
+                id: item.id,
+                name: item.name,
+                brand: item.brand,
+                img: item.img[0],
+                price: item.price,
+                size: item.size,
+                color: item.color,
+                colorId:item.colorId,
+                quantity: item.quantity
+            }));
+        } else {
+            myCart = [];
+        } 
+        console.log(cartItems)
+        console.log(myCart)
+        console.log(user)
     </script>
-    <script type ="module" src="./script/script.js" defer></script>
     <title>TS-shop</title>
 </head>
 <body>
@@ -97,39 +114,48 @@
                 <div class="row">
                     <ul class="col l-3 user-profile__category">
                         <li class="user-profile__category--myacount"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
-                        <li class="user-profile__category--favor profile__category--checked"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</li></a>
-                        <li class="user-profile__category--cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</li>
-                        <li class="user-profile__category--hitory"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</li>
+                        <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</a></li>
+                        <li class="user-profile__category--cart profile__category--checked"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
+                        <li class="user-profile__category--hitory"><a href="/user-history"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</a></li>
                         <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
                     </ul>
                     <div class="col l-9 user-profile__content">
-                        <div class="user-profile__content--title">お気に入り</div>
-                        <div class="row user-profile__content--favorite">
-                            <div class="col l-12 favorite__item--list">
-                                <% if (favorItems && favorItems.length > 0) { %>
-                                    <% favorItems.forEach(favorItem => { %>
-                                    <div class="row favorite__item">
-                                        <div class="col l-2 favorite__item--image">
-                                            <a href="/product/<%= favorItem.id %>">
-                                                <img src="/image/item-image/<%= favorItem.color_img[0].img[0] %>" alt="<%= favorItem.name %>">
+                        <div class="user-profile__content--title">買い物かご</div>
+                        <div class="row user-profile__content--cart">
+                            <div class="col l-12 cart__item--list">
+                                <% if (cartItems && cartItems.length > 0) { %>
+                                    <% cartItems.forEach(cartItem => { %>
+                                    <div class="row cart__item">
+                                        <div class="col l-2 cart__item--image">
+                                            <a href="/product/<%= cartItem.id %>">
+                                                <img src="/image/item-image/<%= cartItem.img[0] %>" alt="<%= cartItem.name %>">
                                             </a>
                                         </div>
-                                        <div class="col l-7 favorite__item--info">
-                                            <a href="/product/<%= favorItem.id %>">
-                                                <div class="favorite__item--info-name"><%= favorItem.name %></div>
+                                        <div class="col l-7 cart__item--info">
+                                            <a href="/product/<%= cartItem.id %>">
+                                                <div class="cart__item--info-name"><%= cartItem.name %></div>
                                             </a>
-                                            <div class="favorite__item--info-brand">ブランド：<span><%= favorItem.brand %></span></div>
-                                            <div class="favorite__item--info-category">カテゴリー：<span><%= favorItem.category %></span></div>
-                                            <div class="favorite__item--info-number">
-                                                <div class="favorite__item--info-price">￥<%= favorItem.price %></div>
-                                                <div class="favorite__item--info-stock">在庫：<%= favorItem.zaiko %></div>
+                                            <div class="cart__item--info-brand"><%= cartItem.brand %></div>
+                                            <div class="cart__item--info-category">カテゴリー：<span><%= cartItem.category %></span></div>
+                                            <div class="cart__item--info-color">カラー：<span><%= cartItem.color %></span></div>
+                                            <div class="cart__item--info-size">サイズ：<span><%= cartItem.size %></span></div>
+                                            <div class="cart__item--info-number">
+                                                <div class="cart__item--info-price">￥<%= cartItem.price %></div>
+                                                <div class="cart__item--info-quantity">数量：
+                                                    <div class="cart__item--info-quantity-down" onclick="decreaseQuantityValue(this),decreaseQuantityItemCart(<%= cartItem.id %>,<%= cartItem.colorId %>,'<%= cartItem.size %>')">-</div>
+                                                    <div class="cart__item--info-quantity-num"><%= cartItem.quantity %></div>
+                                                    <div class="cart__item--info-quantity-up" onclick="increaseQuantityValue(this),increaseQuantityItemCart(<%= cartItem.id %>,<%= cartItem.colorId %>,'<%= cartItem.size %>')">+</div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col l-3 favorite__item--delete"><a href="/remove-favorite/<%= favorItem.id %>">削除</a></div>
+                                        <div class="col l-3 cart__item--delete"><a onclick="removeItemCart(this),removeItemFromCart(<%= cartItem.id %>,<%= cartItem.colorId %>,'<%= cartItem.size %>'),">削除</a></div>
                                     </div>
                                     <% }) %>
                                 <% } else { %>
-                                    <p>お気に入りアイテムがありません。</p>
+                                    <div class="cart-empty-box">
+                                        <img src="/image/cart-empty.jpg" alt="cart-empty-img">
+                                        <p>現在カートに商品がありません。</p>
+                                    </div>
                                 <% } %>
                             </div>
                         </div>
@@ -182,4 +208,27 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
         <!-- Footer End -->
     </div>
 </body>
+<script src="/script/script.js"></script>
+<script>
+    function decreaseQuantityValue(a){
+        const quantityElement = a.parentElement.closest('.cart__item--info-quantity');
+        var quantityValue = parseInt(quantityElement.querySelector('.cart__item--info-quantity-num').innerText);
+        if(quantityValue == 1){
+            removeItemCart(a);
+        }
+        else{
+            quantityValue--;
+            quantityElement.querySelector('.cart__item--info-quantity-num').innerText=quantityValue;
+        }
+    }
+    function increaseQuantityValue(a){
+        const quantityElement = a.parentElement.closest('.cart__item--info-quantity');
+        var quantityValue = parseInt(quantityElement.querySelector('.cart__item--info-quantity-num').innerText);
+        quantityValue++;
+        quantityElement.querySelector('.cart__item--info-quantity-num').innerText=quantityValue;    
+    }
+    function removeItemCart(a){
+        window.location.reload();
+    }
+</script>
 </html>

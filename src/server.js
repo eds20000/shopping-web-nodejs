@@ -42,8 +42,24 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
 // setup view engine
 configViewEngine(app);
+// Middleware để lưu trang trước khi vào /login
+
+app.use((req, res, next) => {
+    if (req.method === 'GET' &&
+        !req.session.user &&
+        !req.path.startsWith('/api') &&
+        !req.path.startsWith('/static') &&
+        req.path !== '/login' &&
+        req.path !== '/logout' &&
+        req.path !== '/favicon.ico') {
+        req.session.returnTo = req.originalUrl;
+    }
+    next();
+});
 
 //init web route
 initWebRoute(app);

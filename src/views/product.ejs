@@ -18,7 +18,20 @@
         const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const item = JSON.parse('<%- JSON.stringify(item) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
-        console.log(user)
+        var myCart = []
+        if (typeof cartItems !== 'undefined' && Array.isArray(cartItems)) {
+            myCart = cartItems.map(item => ({
+                name: item.name,
+                brand: item.brand,
+                img: item.img[0],
+                price: item.price,
+                size: item.size,
+                color: item.color,
+                quantity: item.quantity
+            }));
+        } else {
+            myCart = [];
+        }
     </script>
     
     <script type ="module" src="/script/script-product.js"defer></script>

@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="./style/base.css">
     <link rel="stylesheet" href="./style/grid.css">
     <link rel="stylesheet" href="./style/main.css">
-    <link rel="stylesheet" href="./style/responsive.css">
-    <link rel="stylesheet" href="./style/cart.css">
+    <link rel="stylesheet" href="./style/home.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style/responsive.css">
+    <link rel="stylesheet" href="/style/profile.css">
     <script>
         const list_items = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const cartItems = JSON.parse('<%- JSON.stringify(cartItems) %>');
-
-        var myCart =[]
+        var myCart = []
         if (user) {
             myCart = cartItems.map(item => ({
                 id: item.id,
                 name: item.name,
                 brand: item.brand,
-                category: item.category,
                 img: item.img[0],
                 price: item.price,
                 size: item.size,
@@ -32,14 +31,15 @@
                 colorId:item.colorId,
                 quantity: item.quantity
             }));
-        }else{
-            myCart = <%- JSON.stringify(myCart) %>;;
-        }
-        console.log(myCart);
+        } else {
+            myCart = [];
+        } 
     </script>
-    <title>カート-TS-shop</title>
+    <script type ="module" src="./script/script.js" defer></script>
+    <title>TS-shop</title>
 </head>
 <body>
+    <!-- Container start -->
     <div class="app">
         <div class="over-play"></div>
         <!-- Header start1-->
@@ -48,7 +48,7 @@
                 <div class="header-category-box">
                     <i class="fa-solid fa-bars"></i>
                 </div>
-                <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+                <a href="/" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
                 <form class="header__search" method="get" action="./category.html">
                     <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
                     <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -104,56 +104,78 @@
                 </ul>
             </div>   
         </header>
-        
-        <div class="category-box">
-            <ul class="category__list">
-                <p class="category_header">カテゴリー</p>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text tab-suport">サポート<i class="fa-solid fa-headset"></i></a></li>    
-            </ul>
-            <div class="category-box-closeBtn"><i class="fa-solid fa-xmark"></i></div>
-        </div>
-        <div class="tab__list-close"></div>
         <!-- Header end -->
 
         <!-- Container start -->
         <div class="container">
-            
+            <div class="grid wide">
+                <div class="row">
+                    <ul class="col l-3 user-profile__category">
+                        <li class="user-profile__category--myacount"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
+                        <li class="user-profile__category--favor profile__category--checked"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</a></li>
+                        <li class="user-profile__category--cart"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
+                        <li class="user-profile__category--hitory"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</li>
+                        <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
+                    </ul>
+                    <div class="col l-9 user-profile__content">
+                        <div class="user-profile__content--title">お気に入り</div>
+                        <div class="row user-profile__content--favorite">
+                            <div class="col l-12 favorite__item--list">
+                                <% if (favorItems && favorItems.length > 0) { %>
+                                    <% favorItems.forEach(favorItem => { %>
+                                    <div class="row favorite__item">
+                                        <div class="col l-2 favorite__item--image">
+                                            <a href="/product/<%= favorItem.id %>">
+                                                <img src="/image/item-image/<%= favorItem.color_img[0].img[0] %>" alt="<%= favorItem.name %>">
+                                            </a>
+                                        </div>
+                                        <div class="col l-7 favorite__item--info">
+                                            <a href="/product/<%= favorItem.id %>">
+                                                <div class="favorite__item--info-name"><%= favorItem.name %></div>
+                                            </a>
+                                            <div class="favorite__item--info-brand">ブランド：<span><%= favorItem.brand %></span></div>
+                                            <div class="favorite__item--info-category">カテゴリー：<span><%= favorItem.category %></span></div>
+                                            <div class="favorite__item--info-number">
+                                                <div class="favorite__item--info-price">￥<%= favorItem.price %></div>
+                                                <div class="favorite__item--info-stock">在庫：<%= favorItem.zaiko %></div>
+                                            </div>
+                                        </div>
+                                        <div class="col l-3 favorite__item--delete"><a href="/remove-favorite/<%= favorItem.id %>">削除</a></div>
+                                    </div>
+                                    <% }) %>
+                                <% } else { %>
+                                    <p>お気に入りアイテムがありません。</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <!-- Container end -->
-        
+
         <!-- Footer Start -->
         <div class="footer">
             <div class="grid wide">
                 <div class="row">
-                    <div class="col l-3">
+                    <div class="col l-3 c-6">
                         <h1 class="shop-infor-title">会社情報</h1>
                         <div class="shop-infor-list"><a href="">TS-Shopについて</a></div>
                         <div class="shop-infor-list"><a href="">お問い合わせ</a></div>
                         <div class="shop-infor-list"><a href="">採用情報</a></div>
                         <div class="shop-infor-list"><a href="">TS-Shopが取り組む環境活動</a></div>
                     </div>
-                    <div class="col l-3">
+                    <div class="col l-3 c-6">
                         <h1 class="shop-poricy-title">カスタマーサービス</h1>
                         <div class="shop-poricy-list"><a href="">返品・返金ポリシー</a></div>
                         <div class="shop-poricy-list"><a href="">配送について</a></div>
                     </div>
-                    <div class="col l-3">
+                    <div class="col l-3 c-6">
                         <h1 class="shop-help-title">へプル</h1>
                         <div class="shop-help-list"><a href="">サポートセンター＆FAQ</a></div>
                     </div>
-                    <div class="col l-3">
+                    <div class="col l-3 c-6">
                         <h1 class="shop-media-title">TS-SHOPとつながる</h1>
                         <ul class="row shop-media-list">
                             <li class="col l-4"><a href="https://instagram.com" class="shop-media-list_insta"><i class="fa-brands fa-instagram"></i></a></li>
@@ -167,16 +189,12 @@
                 </div>
                 <div class="row shop-detail">
                         TS-SHOP（ティィエスショップ）とは<br>
-                    TS-SHOPはレディースからメンズ・キッズまで、幅広いジャンルのファストファッションアイテムをまとめて購入できるファッション通販サイトです。最新のファストファッションアイテムを取り揃え、様々なお支払い方法にてお買い求めいただけます。お得なセールやイベントも365日毎日開催しておりますので、是非ファッション通販サイトTS-SHOPでのお買い物をお楽しみください！
+TS-SHOPはレディースからメンズ・キッズまで、幅広いジャンルのファストファッションアイテムをまとめて購入できるファッション通販サイトです。最新のファストファッションアイテムを取り揃え、様々なお支払い方法にてお買い求めいただけます。お得なセールやイベントも365日毎日開催しておりますので、是非ファッション通販サイトTS-SHOPでのお買い物をお楽しみください！
                 </div>
             </div>
             <div class="footer-index">© THANHSON TS-SHOP, ALL RIGHTS RESERVED</div>
         </div>
         <!-- Footer End -->
-
-<script src="/script/validation.js"></script>        
-<script src="/script/script.js"></script>
-<script src="/script/cart.js"></script>
-<script src="https://ajaxzip3.github.io/ajaxzip3.js"></script>
+    </div>
 </body>
 </html>

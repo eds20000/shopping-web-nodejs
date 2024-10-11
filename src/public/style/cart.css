@@ -1,6 +1,6 @@
 .cart-heading{
     font-size: var(--font-size);
-    margin: 40px 0;
+    margin-bottom: 40px;
     width: 100%;
     display: flex;
     justify-content: center;

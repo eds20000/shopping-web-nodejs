@@ -1,3 +1,4 @@
+"use strict";
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
@@ -39,12 +40,7 @@ if (window.innerWidth < 1023) {
 }
 
 //
-
-
-
 // <!---------------Page-bar--------Start--> 
-
-const list_item = list_items
 $$('.sort__tab-list').forEach(function (a) {
     a.onclick = function () {
         $(".content__title-sort-selected").value = this.innerHTML;
@@ -67,6 +63,20 @@ Array.from(pageButton).forEach(function (item) {
 );
 
 //Item
+//Set-cartProxy
+const handlerCartProxy = {
+    set(target, property, value) {
+        target[property] = value; // Cập nhật giá trị trong mảng
+        setCartCookie(target); // Lưu vào cookies
+        return true; // Trả về true để cho phép thay đổi
+    },
+    deleteProperty(target, property) {
+        delete target[property]; // Xóa phần tử trong mảng
+        setCartCookie(target); // Lưu vào cookies
+        return true; // Trả về true để cho phép xóa
+    }
+};
+const proxyCart = new Proxy(myCart, handlerCartProxy);
 
 var sort__item_list = $('.sort__item-list')
 var recommendList = $('.section__recommend-list')
@@ -300,7 +310,7 @@ function takeCart() {
                 CheckColorList.innerHTML = "";
                 for (let i = 0; i < itemCurrent.color_img.length; ++i) {
 
-                    CheckColorList.innerHTML += `<li class="checklist-color"></li>`;
+                    CheckColorList.innerHTML += `<li class="checklist-color" data-id="${itemCurrent.color_img[i].id}"></li>`;
                 }
                 var checkListItem = $$('.checklist-color');
                 checkListItem[0].classList.add('color-checked')
@@ -355,14 +365,14 @@ function takeCart() {
 
                 //Item product take --------------------------------- Start
                 takeCartBtn.onclick = function () {
-                    var ItemImgSrc = itemColorCurrent.img[0];
+                    var ItemImgSrc = itemColorCurrent.img;
                     var ItemColor = itemColorCurrent.color_name;
                     var ItemPrice = itemCurrent.price;
                     var ItemSize = $('.checklist-size.size_checked').innerHTML;
                     var ItemBrand = itemCurrent.brand;
                     var ItemCategory = itemCurrent.category;
                     var ItemId = itemCurrent.id;
-
+                    var ItemColorId = parseInt(document.querySelector('.checklist-color.color-checked').getAttribute('data-id'));
                     if (myCart.some(item => item.name === ItemName && item.brand === ItemBrand && item.color === ItemColor && item.size === ItemSize && item.id === ItemId)) {
                         myCart.forEach(item => {
                             if (item.name === ItemName && item.brand === ItemBrand && item.color === ItemColor && item.size === ItemSize && item.id === ItemId) {
@@ -371,7 +381,7 @@ function takeCart() {
                         });
                     }
                     else {
-                        myCart.push({
+                        proxyCart.push({
                             id: ItemId,
                             name: ItemName,
                             brand: ItemBrand,
@@ -380,14 +390,16 @@ function takeCart() {
                             price: ItemPrice,
                             size: ItemSize,
                             color: ItemColor,
+                            colorId: ItemColorId,
                             quantity: 1,
 
                         })
+                        console.log(myCart)
                     }
                     onChangeCart()
                     header.style.transform = 'translateY(0)';
                     if (user) {
-                        addToCart(ItemId, ItemColor, ItemSize, user);
+                        addToCart(ItemId, ItemColorId, ItemSize, user);
                     }
                 };
 
@@ -400,16 +412,17 @@ function takeCart() {
 }
 onChangeCart()
 
-function addToCart(itemId, colorName, size, user) {
+
+function addToCart(ItemId, ItemcolorId, ItemSize, user) {
     fetch(`/add-to-cart/${user.user_id}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            itemId: itemId,
-            colorName: colorName,
-            size: size,
+            itemId: ItemId,
+            colorId: ItemcolorId,
+            size: ItemSize,
         })
     })
         .then(response => response.json())
@@ -463,7 +476,7 @@ function onChangeCart() {
                 `<div class="row header__navbar-cart-item">
                 <div class="col l-3 c-3 m-3 header__navbar-cart-item_img">
                     <a href="/product/${cartItem.id}" class="item-link">
-                        <img src="/image/item-image/${cartItem.img}" alt="">
+                        <img src="/image/item-image/${cartItem.img[0]}" alt="">
                     </a> 
                 </div>
         
@@ -524,11 +537,6 @@ function addToFavorites(itemId, event) {
         });
 }
 function renderMycart() {
-    if (!myCart || myCart.length === 0) {
-        alert('Your cart is empty.');
-        return;
-    }
-
     // Tạo form ẩn
     const form = document.createElement('form');
     form.method = 'POST';
@@ -550,7 +558,12 @@ function renderMycart() {
 //--------------------------Cart-button--------------------------------Start
 
 function removeItemFromCart(itemId, colorId, size) {
-    myCart = myCart.filter(item => !(item.id === itemId && item.colorId === colorId && item.size === size));
+    const filteredCart = proxyCart.filter(item => {
+        return !(item.id === itemId && item.colorId === colorId && item.size === size);
+    });
+
+    proxyCart.length = 0; // Xóa tất cả phần tử
+    filteredCart.forEach(item => proxyCart.push(item)); // Thêm lại phần tử đã lọc
     if (user) {
         const userId = user.user_id
         fetch('/remove-from-cart', {
@@ -564,7 +577,7 @@ function removeItemFromCart(itemId, colorId, size) {
     onChangeCart();
 }
 function decreaseQuantityItemCart(itemId, colorId, size) {
-    myCart.forEach(item => {
+    proxyCart.forEach(item => {
         if (item.id === itemId && item.colorId === colorId && item.size === size) {
             item.quantity--;
             if (item.quantity <= 0) {
@@ -585,11 +598,13 @@ function decreaseQuantityItemCart(itemId, colorId, size) {
     onChangeCart();
 }
 function increaseQuantityItemCart(itemId, colorId, size) {
-    myCart.forEach(item => {
-        if (item.id === itemId && item.colorId === colorId && item.size === size) {
-            item.quantity++;
-        }
-    });
+    const item = proxyCart.find(item =>
+        item.id === itemId && item.colorId === colorId && item.size === size
+    );
+    if (item)
+        item.quantity++;
+
+    setCartCookie(proxyCart);
     if (user) {
         const userId = user.user_id
         fetch('/increase-quantity-item-cart', {
@@ -600,6 +615,7 @@ function increaseQuantityItemCart(itemId, colorId, size) {
             body: JSON.stringify({ userId: userId, itemId: itemId, colorId: colorId, size: size }),
         })
     }
+
     onChangeCart();
 }
 //--------------------------Cart-button--------------------------------End
@@ -754,6 +770,26 @@ function searchItemIp() {
     }
     );
 
+}
+function setCartCookie(target) {
+    if (!user) {
+        fetch('/set-cart-cookie', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ myCart: target }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log('Cookie set successfully');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
 }
 
 // --------------SEARCH-ITEM-BAR-------------END

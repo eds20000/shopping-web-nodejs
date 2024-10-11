@@ -1,7 +1,6 @@
 import pool from '../../configs/connectDB';
 import fs from 'fs'
 const path = require('path');
-import modelCourse from '../course'
 
 let getUsers = async () => {
     try {

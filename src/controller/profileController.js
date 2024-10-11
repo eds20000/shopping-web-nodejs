@@ -10,8 +10,16 @@ const salt = bcrypt.genSaltSync(10);
 
 //Profile
 let getProfilePage = async (req, res) => {
-    const items = await models.getItems();
     if (req.session.user) {
+        const items = await models.getItems();
+        let myCart;
+        if (req.cookies && req.cookies.myCart) {
+            myCart = JSON.parse(req.cookies.myCart)
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
@@ -25,6 +33,7 @@ let getProfilePage = async (req, res) => {
                     id: fullItem.id,
                     name: fullItem.name,
                     brand: fullItem.brand,
+                    category: fullItem.category,
                     price: fullItem.price,
                     color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
                     colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
@@ -35,9 +44,10 @@ let getProfilePage = async (req, res) => {
             }
             return null;
         }).filter(item => item !== null);
-
-        return res.render('user/profile.ejs', { items, user: req.session.user, cartItems: fullCartItems });
+        req.session.logoutBack = req.originalUrl;
+        return res.render('user/profile.ejs', { items, user: req.session.user, myCart: fullCartItems });
     } else {
+        req.session.loginBack = req.originalUrl;
         return res.redirect('/login');
     }
 }
@@ -103,7 +113,14 @@ let getFavoritePage = async (req, res) => {
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
         req.session.user.cartItems = cartItems;
-
+        let myCart;
+        if (req.cookies && req.cookies.myCart) {
+            myCart = JSON.parse(req.cookies.myCart)
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
         // Find the full item details for each cart item
         const fullCartItems = cartItems.map(cartItem => {
             const fullItem = items.find(item => item.id === cartItem.item_id);
@@ -123,9 +140,10 @@ let getFavoritePage = async (req, res) => {
             }
             return null;
         }).filter(item => item !== null);
-
-        return res.render('user/favorite.ejs', { user: req.session.user, favorItems, items, cartItems: fullCartItems });
+        req.session.logoutBack = req.originalUrl;
+        return res.render('user/favorite.ejs', { user: req.session.user, favorItems, items, myCart: fullCartItems });
     } else {
+        req.session.loginBack = req.originalUrl;
         return res.redirect('/login');
     }
 }
@@ -140,13 +158,21 @@ let removeFavoriteItem = async (req, res) => {
 
 //Cart
 let getCartPage = async (req, res) => {
-    const items = await models.getItems();
     if (req.session.user) {
-        // Fetch favorItems for the user
+        const items = await models.getItems();
+        let myCart;
+        if (req.cookies && req.cookies.myCart) {
+            myCart = JSON.parse(req.cookies.myCart)
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
         req.session.user.cartItems = cartItems;
+
         // Find the full item details for each cart item
         const fullCartItems = cartItems.map(cartItem => {
             const fullItem = items.find(item => item.id === cartItem.item_id);
@@ -166,14 +192,63 @@ let getCartPage = async (req, res) => {
             }
             return null;
         }).filter(item => item !== null);
-        res.render('user/user-cart.ejs', { items, user: req.session.user, cartItems: fullCartItems });
+        req.session.logoutBack = req.originalUrl;
+        return res.render('user/user-cart.ejs', { items, user: req.session.user, myCart: fullCartItems });
     } else {
-        res.redirect('/login')
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+}
+
+//Order
+let getOrderPage = async (req, res) => {
+    if (req.session.user) {
+        const items = await models.getItems();
+        let myCart;
+        if (req.cookies && req.cookies.myCart) {
+            myCart = JSON.parse(req.cookies.myCart)
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
+        const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        req.session.user.favorItems = favorItems;
+        req.session.user.cartItems = cartItems;
+
+        // Find the full item details for each cart item
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    category: fullItem.category,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+        const orders = await modelCourse.getOrders(req.session.user.user_id);
+        const order_details = await modelCourse.getOrderDetails(orders.map(order => order.order_id));
+        req.session.logoutBack = req.originalUrl;
+        return res.render('user/user-order.ejs', { items, user: req.session.user, myCart: fullCartItems, orders, order_details });
+    } else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
     }
 }
 
 module.exports = {
     getProfilePage, profileEdit, profilePasswordEdit,
     profileImageEdit, getFavoritePage, removeFavoriteItem,
-    getCartPage
+    getCartPage, getOrderPage
 }

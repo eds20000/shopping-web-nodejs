@@ -14,28 +14,12 @@
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style/responsive.css">
     <script>
-        const productId = Number('<%= itemId %>');
         const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const item = JSON.parse('<%- JSON.stringify(item) %>');
+        const productId = Number('<%= itemId %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
-        var myCart = []
-        if (typeof cartItems !== 'undefined' && Array.isArray(cartItems)) {
-            myCart = cartItems.map(item => ({
-                name: item.name,
-                brand: item.brand,
-                img: item.img[0],
-                price: item.price,
-                size: item.size,
-                color: item.color,
-                quantity: item.quantity
-            }));
-        } else {
-            myCart = [];
-        }
+        const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
     </script>
-    
-    <script type ="module" src="/script/script-product.js"defer></script>
-    
     <title>ログイン-TS-shop</title>
 </head>
 <body>
@@ -68,7 +52,7 @@
                                 <a href="/admin-page" class="dropdown-account">管理ページ</a>
                             <% } %>
                             <a href="/user-profile" class="dropdown-account">プロフィール</a>
-                            <a href="" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/user-order" class="dropdown-purchase-history">注文履歴</a>
                             <a href="/logout" class="dropdown-logout">サインアウト</a>
                         </div>
                         <% } %>
@@ -84,13 +68,13 @@
                             <% }} %>
                         </a>
                     </li>
-                    <div class="navbar-cart">
+                    <div class="navbar-cart" onclick="renderMycart()">
                         <li class="header__navbar-cart icon-center">
-                            <a href="">
+                            <a >
                                 <i class="fa-solid fa-cart-shopping"></i>
                             </a>
+                            <div class="header__navbar-cart-count"></div>
                         </li>
-                        <div class="header__navbar-cart-count"></div>
                     </div>
                     <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
                     <div class="header__navbar-cart-box-container">
@@ -170,6 +154,8 @@ SHOPLISTはレディースからメンズ・キッズまで、幅広いジャン
         </div>
         <div class="footer-index">© THANHSON SHOPLIST, ALL RIGHTS RESERVED</div>
     </div>
+    <script src="/script/script.js"></script>
+    <script src="/script/script-product.js"></script>
     <!-- Footer End -->
      <script>
         function addToFavorites(itemId, event) {

@@ -252,3 +252,68 @@ input,select{
     width: 200px;
 }
 
+
+/* Order Page */
+table{
+    width: 100%;
+}
+.order-list__item{
+    border-collapse: collapse;
+}
+.order-list__item th{
+    background-color: var(--hover-color);
+    text-wrap: nowrap;
+}
+.order-list__item tr,th,td{
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+.order-list__item td,th{
+    padding: 10px;
+}
+.order-item--img img{
+    width: 100px;
+}
+
+
+.order-list__item--data{
+    display: inline-flex;
+    border:none;
+}
+.order-item--data{
+    display: flex;
+    border: none;
+}
+.order-item--info{
+    padding: 10px;
+    text-align: left;
+}
+.order-item--info div{
+    margin-bottom: 10px;
+}
+.order-item--return a:hover,
+.order-item--repurchase a:hover{
+    text-decoration: underline;
+}
+.order-item--review{
+    background-color: var(--black-color);
+    color: white;
+    padding: 5px 10px;
+}
+.order-item--review:hover{
+    text-decoration: underline;
+}
+.order-info{
+    cursor: pointer;
+}
+.order-item--status-info div{
+    text-wrap: nowrap;
+    padding: 5px;
+}
+.order-info{
+    color: var(--primary-color);
+}
+.order-info:hover{
+    text-decoration: underline;
+}
+

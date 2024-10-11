@@ -1,27 +1,34 @@
 import modelCourse from '../models/course'
 import models from '../models/admin/adminPage.model'
+import { json } from 'body-parser';
 
 let addToCart = async (req, res) => {
     const userId = req.params.id;
-    const { itemId, colorName, size } = req.body;
-    console.log(userId, itemId, colorName, size);
+    const { itemId, colorId, size } = req.body;
     try {
-        await modelCourse.addToCart(userId, itemId, colorName, size);
+        await modelCourse.addToCart(userId, itemId, colorId, size);
     } catch (error) {
         return res.json({ success: false, error: error.message });
     }
 }
 
 let getCartPage = async (req, res) => {
-    const items = await models.getItems();
-    const myCart = JSON.parse(req.body.myCart);
+    const items = await models.getItems()
+    let myCart = []
+    if (req.cookies && req.cookies.myCart) {
+        myCart = req.cookies.myCart
+    }
     if (req.session.user) {
-        // Fetch favorItems for the user
+        if (req.cookies && req.cookies.myCart) {
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
         req.session.user.cartItems = cartItems;
-
 
         // Find the full item details for each cart item
         const fullCartItems = cartItems.map(cartItem => {
@@ -42,11 +49,14 @@ let getCartPage = async (req, res) => {
             }
             return null;
         }).filter(item => item !== null);
-        res.render('cart.ejs', { items, user: req.session.user, cartItems: fullCartItems, myCart: myCart });
+        req.session.logoutBack = req.originalUrl;
+        res.render('cart.ejs', { user: req.session.user, myCart: fullCartItems });
     } else {
-        res.render('cart.ejs', { items, user: null, cartItems: [], myCart: myCart });
+        req.session.loginBack = req.originalUrl;
+        res.render('cart.ejs', { user: null, myCart });
     }
-}
+};
+
 
 let removeFromCart = async (req, res) => {
     const { userId, itemId, colorId, size } = req.body;

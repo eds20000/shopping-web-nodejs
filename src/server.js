@@ -3,6 +3,7 @@ import configViewEngine from './configs/viewEngine';
 import initWebRoute from './route/web';
 import initAPIRoute from './route/api';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import flash from 'connect-flash';
 
 require('dotenv').config();
@@ -32,6 +33,7 @@ app.use(session({
     cookie: { secure: false }
 }));
 
+app.use(cookieParser());
 // Sử dụng flash
 app.use(flash());
 
@@ -46,20 +48,7 @@ app.use((req, res, next) => {
 
 // setup view engine
 configViewEngine(app);
-// Middleware để lưu trang trước khi vào /login
 
-app.use((req, res, next) => {
-    if (req.method === 'GET' &&
-        !req.session.user &&
-        !req.path.startsWith('/api') &&
-        !req.path.startsWith('/static') &&
-        req.path !== '/login' &&
-        req.path !== '/logout' &&
-        req.path !== '/favicon.ico') {
-        req.session.returnTo = req.originalUrl;
-    }
-    next();
-});
 
 //init web route
 initWebRoute(app);

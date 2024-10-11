@@ -41,11 +41,13 @@
                 <ul class="header__navbar">
                     <li class="header__navbar-user"><a href="./login.html"><i class="fa-regular fa-user"></i><span>ログイン</span></a></li>
                     <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
-                    <div class="navbar-cart">
+                    <div class="navbar-cart" onclick="renderMycart()">
                         <li class="header__navbar-cart icon-center">
-                            <i class="fa-solid fa-cart-shopping"></i>
+                            <a >
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
+                            <div class="header__navbar-cart-count"></div>
                         </li>
-                        <div class="header__navbar-cart-count"></div>
                     </div>
                     <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
                     <div class="header__navbar-cart-box-container">

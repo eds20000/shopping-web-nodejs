@@ -20,10 +20,18 @@ let addToFavorites = async (req, res) => {
 }
 
 let getHomepage = async (req, res) => {
-    const items = await models.getItems();
-
+    const items = await models.getItems()
+    let myCart = []
+    if (req.cookies && req.cookies.myCart) {
+        myCart = req.cookies.myCart
+    }
     if (req.session.user) {
-        // Fetch favorItems for the user
+        if (req.cookies && req.cookies.myCart) {
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
@@ -48,10 +56,11 @@ let getHomepage = async (req, res) => {
             }
             return null;
         }).filter(item => item !== null);
-
-        res.render('index', { items, user: req.session.user, cartItems: fullCartItems });
+        req.session.logoutBack = req.originalUrl;
+        res.render('index', { items, user: req.session.user, myCart: fullCartItems });
     } else {
-        res.render('index', { items, user: null, cartItems: [] });
+        req.session.loginBack = req.originalUrl;
+        res.render('index', { items, user: null, myCart: myCart });
     }
 }
 let signupPage = async (req, res) => {
@@ -62,16 +71,28 @@ let productPage = async (req, res) => {
     const itemId = req.params.id;
     let item;
     if (itemId) {
-        item = (await models.getItemById(itemId))[0]
+        item = (await models.getItemById(itemId))[0];
     }
+
+    let myCart = [];
+    if (req.cookies && req.cookies.myCart) {
+        myCart = req.cookies.myCart;
+    }
+
     if (req.session.user) {
-        // Fetch favorItems for the user
+        if (req.cookies && req.cookies.myCart) {
+            // Sử dụng for...of với await để đảm bảo thực thi tuần tự
+            for (const item of myCart) {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size);
+            }
+            res.clearCookie('myCart');
+        }
+
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
         req.session.user.favorItems = favorItems;
         req.session.user.cartItems = cartItems;
 
-        // Find the full item details for each cart item
         const fullCartItems = cartItems.map(cartItem => {
             const fullItem = items.find(item => item.id === cartItem.item_id);
             if (fullItem) {
@@ -90,12 +111,14 @@ let productPage = async (req, res) => {
             }
             return null;
         }).filter(item => item !== null);
-        res.render('product.ejs', { items, item, user: req.session.user, cartItems: fullCartItems, itemId });
-    } else {
-        res.render('product.ejs', { items, item, user: null, cartItems: null, itemId });
-    }
-}
 
+        req.session.logoutBack = req.originalUrl;
+        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId });
+    } else {
+        req.session.loginBack = req.originalUrl;
+        res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId });
+    }
+};
 
 
 module.exports = {

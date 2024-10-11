@@ -4,6 +4,7 @@ import loginController from '../controller/loginController';
 import adminPageController from '../controller/adminPageController';
 import profileController from '../controller/profileController';
 import cartController from '../controller/cartController';
+import orderController from '../controller/orderController';
 import { userImgUpload, itemImgUpload } from '../middleware/userInfor-updateimg'
 const multer = require('multer');
 const upload = multer();
@@ -59,13 +60,23 @@ const initWebRoute = (app) => {
     router.get('/remove-favorite/:id', profileController.removeFavoriteItem)
     router.get('/user-cart', profileController.getCartPage)
 
+    router.get('/user-order', profileController.getOrderPage)
 
     //cart
     router.post('/add-to-cart/:id', cartController.addToCart)
+    router.post('/set-cart-cookie', (req, res) => {
+        console.log(req.cookies.myCart)
+        res.cookie('myCart', req.body.myCart, { maxAge: 900000, httpOnly: true });
+        res.sendStatus(200);
+    })
     router.post('/getCartPage', cartController.getCartPage)
     router.post('/remove-from-cart', cartController.removeFromCart)
     router.post('/decrease-quantity-item-cart', cartController.decreaseQuantityItemCart)
     router.post('/increase-quantity-item-cart', cartController.increaseQuantityItemCart)
+
+    //take-order
+    router.post('/take-order', orderController.takeOrder)
+
     return app.use('/', router)
 }
 

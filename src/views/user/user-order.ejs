@@ -18,6 +18,11 @@
         const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+        const orderDetails = JSON.parse('<%- JSON.stringify(order_details) %>');
+        const orders = JSON.parse('<%- JSON.stringify(orders) %>');
+
+        console.log(orderDetails,orders)
+
     </script>
     <title>TS-shop</title>
 </head>
@@ -96,49 +101,59 @@
                     <ul class="col l-3 user-profile__category">
                         <li class="user-profile__category--myacount"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
                         <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</a></li>
-                        <li class="user-profile__category--cart profile__category--checked"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
-                        <li class="user-profile__category--hitory"><a href="/user-order"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</a></li>
+                        <li class="user-profile__category--cart"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
+                        <li class="user-profile__category--hitory profile__category--checked"><a href="/user-order"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</a></li>
                         <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
                     </ul>
                     <div class="col l-9 user-profile__content">
-                        <div class="user-profile__content--title">買い物かご</div>
-                        <div class="row user-profile__content--cart">
-                            <div class="col l-12 cart__item--list">
-                                <% if (myCart && myCart.length > 0) { %>
-                                    <% myCart.forEach(cartItem => { %>
-                                    <div class="row cart__item">
-                                        <div class="col l-2 cart__item--image">
-                                            <a href="/product/<%= cartItem.id %>">
-                                                <img src="/image/item-image/<%= cartItem.img[0] %>" alt="<%= cartItem.name %>">
-                                            </a>
+                        <div class="user-profile__content--title">注文履歴</div>
+                        <div class="row user-profile__content--order-list">
+                            <table class="order-list__item">
+                                <tr>
+                                    <th>商品情報</th>
+                                    <th>支払い金額</th>
+                                    <th>商品操作</th>
+                                    <th>ステータス</th>
+                                    <th>注文操作</th>
+                                </tr>
+                                <% orders.forEach(order => { %>
+                                <tr>
+                                    <td colspan="5" class="order-list__item--data">
+                                        <div class="order-date"><%= order.order_date %>&nbsp;&nbsp;&nbsp;<strong>注文番号</strong>&nbsp;NO.<%= order.order_number %></div>
+
+                                        <div class="order-remove"><a href=""></a></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <% order_details.forEach(order_detail => { %>
+                                    <td class="order-item--data">
+                                        <div class="order-item--img"><img src="/image/item-image/<%= JSON.parse(order_detail.img)[0] %>" alt=""></div>
+                                        <div class="order-item--info">
+                                            <div class="order-item--name"><strong><%= order_detail.item_name %></strong></div>
+                                            <div class="order-item--brand"><strong>ブランド: </strong><%= order_detail.brand %></div>
+                                            <div class="order-item--color"><strong>カラー: </strong><%= order_detail.color %></div>
+                                            <div class="order-item--size"><strong>サイズ: </strong><%= order_detail.size %></div>
+                                            <div class="order-item--quantity"><strong>数量: </strong><%= order_detail.quantity %></div>
                                         </div>
-                                        <div class="col l-7 cart__item--info">
-                                            <a href="/product/<%= cartItem.id %>">
-                                                <div class="cart__item--info-name"><%= cartItem.name %></div>
-                                            </a>
-                                            <div class="cart__item--info-brand"><%= cartItem.brand %></div>
-                                            <div class="cart__item--info-category">カテゴリー：<span><%= cartItem.category %></span></div>
-                                            <div class="cart__item--info-color">カラー：<span><%= cartItem.color %></span></div>
-                                            <div class="cart__item--info-size">サイズ：<span><%= cartItem.size %></span></div>
-                                            <div class="cart__item--info-number">
-                                                <div class="cart__item--info-price">￥<%= cartItem.price %></div>
-                                                <div class="cart__item--info-quantity">数量：
-                                                    <div class="cart__item--info-quantity-down" onclick="decreaseQuantityValue(this),decreaseQuantityItemCart(<%= cartItem.id %>,<%= cartItem.colorId %>,'<%= cartItem.size %>')">-</div>
-                                                    <div class="cart__item--info-quantity-num"><%= cartItem.quantity %></div>
-                                                    <div class="cart__item--info-quantity-up" onclick="increaseQuantityValue(this),increaseQuantityItemCart(<%= cartItem.id %>,<%= cartItem.colorId %>,'<%= cartItem.size %>')">+</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col l-3 cart__item--delete"><a onclick="removeItemCart(this),removeItemFromCart(<%= cartItem.id %>,<%= cartItem.colorId %>,'<%= cartItem.size %>')">削除</a></div>
-                                    </div>
+                                    </td>
                                     <% }) %>
-                                <% } else { %>
-                                    <div class="cart-empty-box">
-                                        <img src="/image/cart-empty.jpg" alt="cart-empty-img">
-                                        <p>現在カートに商品がありません。</p>
-                                    </div>
-                                <% } %>
-                            </div>
+                                    <td>¥<%= order.total_amount %></td>
+                                    <td>
+                                        <div class="order-item--return" style="text-wrap: nowrap;padding: 10px; color: var(--primary-color); "><a href="">商品を返品</a></div>
+                                        <div class="order-item--repurchase" style="text-wrap: nowrap;padding: 10px; color: var(--primary-color);"><a href="">再購入</a></div>
+                                    </td>
+                                    <td class="order-item--status-info">
+                                        <div class="order-item--status">
+                                            <%= order.status == 'pending' ? '未処理' :order.status == "delivered" ? '配送待ち' : order.status == 'shipping' ? '配送中' : order.status == 'shipped' ? '配送済み' : 'キャンセル' %>
+                                        </div>
+                                        <div class="order-info" onclick="showOrderInfo()">
+                                           注文詳細
+                                        </div>
+                                    </td>
+                                    <td><a href="" class="order-item--review">レビュー</a></td>
+                                </tr>
+                                <% }) %>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -190,6 +205,78 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
     </div>
 </body>
 <script src="/script/script.js"></script>
+<script>
+    function showOrderInfo() {
+    $('.user-profile__content').innerHTML =
+        `<div class="order-info-modal">注文詳細</div>
+    <div class ="row order-page-return">
+        <a href="/user-order"><i class="fa-solid fa-chevron-left"></i>戻る</a>
+    </div>
+
+    <div class="row order-page-info__number">
+        <div class="col l-6">
+            注文番号
+        </div>
+        <div class="col l-6">
+            1234567890
+        </div>
+    </div>
+    <div class="row order-page-info__action">
+        <div class="order-repurchase">再購入</div>
+        <div class="order-return">返品</div>
+        <div class="order-tracking">追跡</div>
+        <div class="order-review">レビュー</div>
+    </div>
+    <table class="order-page-info__table">
+        <tr>
+            <th>商品情報</th>
+            <th>数量</th>
+            <th>金額</th>
+            <th>ステータス</th>
+            <th>アクション</th>
+        </tr>
+        <% order_details.forEach(order_detail => { %>
+        <tr>
+            <td>
+                <div class="order-item--img"><img src="/image/item-image/<%= JSON.parse(order_detail.img)[0] %>" alt=""></div>
+                <div class="order-item--info">
+                    <div class="order-item--name"><strong><%= order_detail.item_name %></strong></div>
+                    <div class="order-item--brand"><strong>ブランド: </strong><%= order_detail.brand %></div>
+                    <div class="order-item--color"><strong>カラー: </strong><%= order_detail.color %></div>
+                    <div class="order-item--size"><strong>サイズ: </strong><%= order_detail.size %></div>
+                </div>
+            </td>
+            <td><%= order_detail.quantity %></td>
+            <td><%= order_detail.price %></td>
+            <td><%= order_detail.status == 'pending' ? '未処理' : order_detail.status == "delivered" ? '配送待ち' : order_detail.status == 'shipping' ? '配送中' : order_detail.status == 'shipped' ? '配送済み' : 'キャンセル' %></td>
+            <td><a href=""><%= order_detail.status == 'pending' ? 'キャンセル' : '' %></a></td>
+        </tr>
+        <% }) %>
+    </table>
+    <div class="order-page-info__total">
+        <div class="order-page-info__item--price">
+            <div>小計</div>
+            <div>¥<%= orders.total_amount %></div>
+        </div>
+        <div class="order-page-info__item--shipping">
+            <div>送料</div>
+            <div>¥<%= orders.shipping_fee %></div>
+        </div>
+        <div class="order-page-info__item--total">
+            <div>合計</div>
+            <div>¥<%= orders.total_amount + orders.shipping_fee %></div>
+        </div>
+    </div>
+    <div class="order-page-info__tracking">
+        <div class="order-page-info__tracking--title">配送情報</div>
+        <div class="order-page-info__tracking--item">
+            <div><%= orders.order_username %>  <%= orders.shipping_address %></div>
+            <div><%= orders.shipping_company %></div>
+        </div>
+    </div>
+    `;
+}
+</script>
 <script>
     function decreaseQuantityValue(a){
         const quantityElement = a.parentElement.closest('.cart__item--info-quantity');

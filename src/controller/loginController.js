@@ -26,8 +26,7 @@ let userCheck = async (req, res) => {
                 const cartItems = await modelCourse.getCartItems(req.session.user.user_id)
                 req.session.user.favorItems = favorItems
                 req.session.user.cartItems = cartItems
-                const redirectUrl = req.session.returnTo || '/';
-                return res.redirect(redirectUrl);
+                return res.redirect(req.session.loginBack);
             } else {
                 // Phản hồi nếu mật khẩu không đúng
                 res.status(401).json({ message: 'Invalid credentials' });
@@ -43,14 +42,28 @@ let userCheck = async (req, res) => {
     }
 };
 let userLogout = (req, res) => {
-    const redirectUrl = req.session.returnTo || '/';
+    const logoutBack = req.session.logoutBack || '/'; // Default to '/' if logoutBack is undefined
+    const myCart = req.cookies.myCart || null; // Read myCart from cookies
+
     req.session.destroy(err => {
         if (err) {
             return res.status(500).json({ message: 'Unable to log out' });
         }
-        return res.redirect(redirectUrl);
+
+        // If myCart exists, re-set it in cookies
+        if (req.cookies.myCart) {
+            res.cookie('myCart', '', { maxAge: 900000, httpOnly: true });
+        }
+
+
+        // Redirect to the stored logoutBack URL or default '/'
+        return res.redirect(logoutBack);
     });
-}
+};
+
+
+
+
 
 let userCreate = async (req, res) => {
     try {

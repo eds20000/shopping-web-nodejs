@@ -77,26 +77,14 @@ let removeFromFavorites = async (userId, itemId) => {
     }
 };
 
-let addToCart = async (userId, itemId, colorName, size) => {
+let addToCart = async (userId, itemId, colorId, size) => {
     try {
-        // Lấy `rows` từ kết quả trả về của truy vấn
-        const [colorResult] = await pool.query('SELECT id FROM colors WHERE color_name = ? AND item_id = ? ', [colorName, itemId]);
+        const [cartItemExist] = await pool.query('SELECT * FROM cart WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
 
-        if (colorResult.length > 0) {
-            const colorId = colorResult[0].id;
-
-            // Kiểm tra xem mục đã tồn tại trong giỏ hàng hay chưa
-            const [cartItemExist] = await pool.query('SELECT * FROM cart WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
-
-            if (cartItemExist.length > 0) {
-                // Cập nhật số lượng nếu đã tồn tại
-                await pool.query('UPDATE cart SET quantity = quantity + 1, add_time= NOW()  WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
-            } else {
-                // Thêm mục mới vào giỏ hàng nếu chưa tồn tại
-                await pool.query('INSERT INTO cart (user_id, item_id, color_id, size, quantity) VALUES (?, ?, ?, ?, 1)', [userId, itemId, colorId, size]);
-            }
+        if (cartItemExist.length > 0) {
+            await pool.query('UPDATE cart SET quantity = quantity + 1, add_time= NOW()  WHERE user_id = ? AND item_id = ? AND color_id = ? AND size = ?', [userId, itemId, colorId, size]);
         } else {
-            throw new Error('Color not found for the item');
+            await pool.query('INSERT INTO cart (user_id, item_id, color_id, size, quantity) VALUES (?, ?, ?, ?, 1)', [userId, itemId, colorId, size]);
         }
     } catch (error) {
         console.error('Error adding to cart:', error);
@@ -147,11 +135,36 @@ let increaseQuantityItemCart = async (userId, itemId, colorId, size) => {
     }
 };
 
+//Order
+let getOrders = async (userId) => {
+    const [rows] = await pool.query('SELECT * FROM orders WHERE user_id = ?', [userId]);
+    for (let i = 0; i < rows.length; i++) {
+        const date = new Date(rows[i].order_date);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Tháng bắt đầu từ 0, cần +1 và định dạng 2 chữ số
+        const day = date.getDate().toString().padStart(2, '0'); // Định dạng ngày với 2 chữ số
+
+        // Lấy giờ, phút, giây
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+
+        // Tạo chuỗi định dạng YYYY/MM/DD HH:MM:SS
+        const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+        rows[0].order_date = formattedDate;
+    }
+    return rows;
+}
+let getOrderDetails = async (orderIds) => {
+    const [rows] = await pool.query('SELECT * FROM order_details WHERE order_id IN (?)', [orderIds]);
+    return rows;
+}
 
 module.exports = {
     getFavoriteItems,
     addToFavorites,
     resetUserSession,
     getFavoriteItemList, getFavoriteItemIds, removeFromFavorites,
-    addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart
+    addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart,
+    getOrders, getOrderDetails
 }

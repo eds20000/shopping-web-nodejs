@@ -15,27 +15,10 @@
     <link rel="stylesheet" href="./style/responsive.css">
     <link rel="stylesheet" href="/style/profile.css">
     <script>
-        const list_items = JSON.parse('<%- JSON.stringify(items) %>');
+        const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
-        const cartItems = JSON.parse('<%- JSON.stringify(cartItems) %>');
-        var myCart = []
-        if (user) {
-            myCart = cartItems.map(item => ({
-                id: item.id,
-                name: item.name,
-                brand: item.brand,
-                img: item.img[0],
-                price: item.price,
-                size: item.size,
-                color: item.color,
-                colorId:item.colorId,
-                quantity: item.quantity
-            }));
-        } else {
-            myCart = [];
-        } 
+        const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
     </script>
-    <script type ="module" src="./script/script.js" defer></script>
     <title>TS-shop</title>
 </head>
 <body>
@@ -69,7 +52,7 @@
                                 <a href="/admin-page" class="dropdown-account">管理ページ</a>
                             <% } %>
                             <a href="/user-profile" class="dropdown-account">プロフィール</a>
-                            <a href="" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/user-order" class="dropdown-purchase-history">注文履歴</a>
                             <a href="/logout" class="dropdown-logout">サインアウト</a>
                         </div>
                         <% } %>
@@ -85,13 +68,13 @@
                             <% }} %>
                         </a>
                     </li>
-                    <div class="navbar-cart">
+                    <div class="navbar-cart" onclick="renderMycart()">
                         <li class="header__navbar-cart icon-center">
-                            <a href="">
+                            <a >
                                 <i class="fa-solid fa-cart-shopping"></i>
                             </a>
+                            <div class="header__navbar-cart-count"></div>
                         </li>
-                        <div class="header__navbar-cart-count"></div>
                     </div>
                     <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
                     <div class="header__navbar-cart-box-container">
@@ -114,7 +97,7 @@
                         <li class="user-profile__category--myacount profile__category--checked"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
                         <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</a></li>
                         <li class="user-profile__category--cart"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
-                        <li class="user-profile__category--hitory"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</li>
+                        <li class="user-profile__category--hitory"><a href="/user-order"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</a></li>
                         <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
                     </ul>
                     <div class="col l-9 user-profile__content">
@@ -276,6 +259,7 @@ TS-SHOPはレディースからメンズ・キッズまで、幅広いジャン�
         </div>
         <!-- Footer End -->
     </div>
+    <script src="/script/script.js"></script>
     <script>
         function userProfileReset(section){
             document.querySelector('.' + section + '-value').style.display = 'none'

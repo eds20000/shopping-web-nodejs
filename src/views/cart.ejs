@@ -14,28 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
     <script>
-        const list_items = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
-        const cartItems = JSON.parse('<%- JSON.stringify(cartItems) %>');
-
-        var myCart =[]
-        if (user) {
-            myCart = cartItems.map(item => ({
-                id: item.id,
-                name: item.name,
-                brand: item.brand,
-                category: item.category,
-                img: item.img[0],
-                price: item.price,
-                size: item.size,
-                color: item.color,
-                colorId:item.colorId,
-                quantity: item.quantity
-            }));
-        }else{
-            myCart = <%- JSON.stringify(myCart) %>;;
-        }
-        console.log(myCart);
+        const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+        console.log(myCart)
     </script>
     <title>カート-TS-shop</title>
 </head>
@@ -69,7 +50,7 @@
                                 <a href="/admin-page" class="dropdown-account">管理ページ</a>
                             <% } %>
                             <a href="/user-profile" class="dropdown-account">プロフィール</a>
-                            <a href="" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/user-order" class="dropdown-purchase-history">注文履歴</a>
                             <a href="/logout" class="dropdown-logout">サインアウト</a>
                         </div>
                         <% } %>
@@ -85,13 +66,13 @@
                             <% }} %>
                         </a>
                     </li>
-                    <div class="navbar-cart">
+                    <div class="navbar-cart" onclick="renderMycart()">
                         <li class="header__navbar-cart icon-center">
-                            <a href="">
+                            <a >
                                 <i class="fa-solid fa-cart-shopping"></i>
                             </a>
+                            <div class="header__navbar-cart-count"></div>
                         </li>
-                        <div class="header__navbar-cart-count"></div>
                     </div>
                     <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
                     <div class="header__navbar-cart-box-container">

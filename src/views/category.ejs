@@ -26,74 +26,7 @@
     <div class="app">
         <div class="over-play"></div>
         <!-- Header start1-->
-        <header class="header">
-            <div class="grid wide">
-                <div class="header-category-box">
-                    <i class="fa-solid fa-bars"></i>
-                </div>
-                <a href="./index.html" class="header__logo"><img src="./image/logo.png" alt="logo" class="logo-img"></a>
-                <form class="header__search" method="get" action="./category.html">
-                    <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
-                    <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <div class="header__search-box">
-                    </div>
-                </form>
-                <ul class="header__navbar">
-                    <li class="header__navbar-user"><a href="./login.html"><i class="fa-regular fa-user"></i><span>ログイン</span></a></li>
-                    <li class="header__navbar-like icon-center"><a href=""><i class="fa-regular fa-heart"></i></a></li>
-                    <div class="navbar-cart" onclick="renderMycart()">
-                        <li class="header__navbar-cart icon-center">
-                            <a >
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </a>
-                            <div class="header__navbar-cart-count"></div>
-                        </li>
-                    </div>
-                    <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
-                    <div class="header__navbar-cart-box-container">
-                        <div class="header__navbar-cart-box">
-                        </div>
-                        <div class="row header__navbar-cart-box-closeBtn">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </div>
-                    </div>
-                </ul>
-            </div>
-            
-            <div class="swiper tab">  
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide tab__list-start"><a href="">すべて</a></div>
-                    <div class="swiper-slide"><a href="">おすすめ</a></div>
-                    <div class="swiper-slide"><a href="">新着</a></div>
-                    <div class="swiper-slide"><a href="">マイリスト</a></div>
-                    <div class="swiper-slide"><a href="">ベストセラ</a></div>
-                    <div class="swiper-slide"><a href="">メンズ</a></div>
-                    <div class="swiper-slide"><a href="">レディース</a></div>
-                    <div class="swiper-slide"><a href="">コスメ</a></div>
-                </div>
-            </div>
-            
-        </header>
-        <div class="category-box">
-            <ul class="category__list">
-                <p class="category_header">カテゴリー</p>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text tab-suport">サポート<i class="fa-solid fa-headset"></i></a></li>    
-            </ul>
-            <div class="category-box-closeBtn"><i class="fa-solid fa-xmark"></i></div>
-        </div>
-        <div class="tab__list-close"></div>
+        <%- include('./includes/header.ejs') %>
         <!-- Header end -->
 
         <!-- Container start -->
@@ -157,44 +90,7 @@
         <!-- Container end -->
 
         <!-- Footer Start -->
-        <div class="footer">
-            <div class="grid wide">
-                <div class="row">
-                    <div class="col l-3">
-                        <h1 class="shop-infor-title">会社情報</h1>
-                        <div class="shop-infor-list"><a href="">TS-Shopについて</a></div>
-                        <div class="shop-infor-list"><a href="">お問い合わせ</a></div>
-                        <div class="shop-infor-list"><a href="">採用情報</a></div>
-                        <div class="shop-infor-list"><a href="">TS-Shopが取り組む環境活動</a></div>
-                    </div>
-                    <div class="col l-3">
-                        <h1 class="shop-poricy-title">カスタマーサービス</h1>
-                        <div class="shop-poricy-list"><a href="">返品・返金ポリシー</a></div>
-                        <div class="shop-poricy-list"><a href="">配送について</a></div>
-                    </div>
-                    <div class="col l-3">
-                        <h1 class="shop-help-title">へプル</h1>
-                        <div class="shop-help-list"><a href="">サポートセンター＆FAQ</a></div>
-                    </div>
-                    <div class="col l-3">
-                        <h1 class="shop-media-title">TS-SHOPとつながる</h1>
-                        <ul class="row shop-media-list">
-                            <li class="col l-4"><a href="https://instagram.com" class="shop-media-list_insta"><i class="fa-brands fa-instagram"></i></a></li>
-                            <li class="col l-4"><a href="https://facebook.com" class="shop-media-list_fb"><i class="fa-brands fa-facebook"></i></a></li>
-                            <li class="col l-4"><a href="https://twitter.com/" class="shop-media-list_tw"><i class="fa-brands fa-x-twitter"></i></a></li>
-                            <li class="col l-4"><a href="https://tiktok.com" class="shop-media-list_tiktok"><i class="fa-brands fa-tiktok"></i></a></li>
-                            <li class="col l-4"><a href="https://youtube.com" class="shop-media-list_ytb"><i class="fa-brands fa-youtube"></i></a></li>
-                            <li class="col l-4"><a href="https://www.pinterest.jp/" class="shop-media-list_pinterest"><i class="fa-brands fa-pinterest"></i></a></li>
-                            
-                    </div>
-                </div>
-                <div class="row shop-detail">
-                        TS-SHOP（ティィエスショップ）とは<br>
-TS-SHOPはレディースからメンズ・キッズまで、幅広いジャンルのファストファッションアイテムをまとめて購入できるファッション通販サイトです。最新のファストファッションアイテムを取り揃え、様々なお支払い方法にてお買い求めいただけます。お得なセールやイベントも365日毎日開催しておりますので、是非ファッション通販サイトTS-SHOPでのお買い物をお楽しみください！
-                </div>
-            </div>
-            <div class="footer-index">© THANHSON TS-SHOP, ALL RIGHTS RESERVED</div>
-        </div>
+        <%- include('./includes/footer.ejs') %>
         <!-- Footer End -->
     </div>
 <script type ="module" src="./script/script.js"></script>

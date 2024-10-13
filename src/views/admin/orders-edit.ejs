@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>  
+    <link rel="stylesheet" href="/style/responsive.css">
+    <link rel="stylesheet" href="/style/admin/admin-page.css">
+    <title>Admin-orders</title>
+</head>
+
+<body>
+    <header class="header header-only">
+        <div class="grid wide">
+            <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+        </div> 
+    </header>
+    <div class="container_ad">
+        <div class="grid wide">
+            <div class="row">
+                <div class="col l-2 ad_page-category">
+                    <% users.forEach(user => { %>
+                        <% if(user.user_role == 'admin'){ %>
+                    <div class="ad_category-img"><img src="/image/user-image/<%=user.user_img %>" alt="user-image"></div>
+                    <div class="ad_category-name"><%=user.user_name %></div>
+                        <% } %>
+                    <% }) %>
+                    <ul class="ad_page-category-content">
+                        <li class="ad_category"><a href="http://">カテゴリー</a></li>
+                        <li class="ad_item "><a href="/admin-page">製品</a></li>
+                        <li class="ad_order ad-checked"><a href="/admin-orders">注文</a></li>
+                        <li class="ad_cutomer"><a href="/admin-users">顧客</a></li>
+                        <li class="ad_review"><a href="http://">レビュー</a></li>
+                    </ul>
+                </div>
+                <div class="col l-10 ad_page-content">
+                    <div class="row">
+                        <div class="content-title">
+                            <a href="/admin-orders" class="ad-content-title-checked">注文</a>
+                        </div>
+                    </div>
+                    <% if(orders.length > 0){ %>
+                    <div class="row">
+                        <div class="item-total">
+                            総注文数:
+                            <div class="number"><%=orders.length %></div>
+                        </div>
+                    </div>
+                    <table class="order-page-info__table">
+                            <tr>
+                                <th>注文番号</th>
+                                <th>注文者</th>
+                                <th>商品情報</th>
+                                <th>注文日</th>
+                                <th>配送方法</th>
+                                <th>ステータス</th>
+                                <th>会計</th>
+                                <th>アクション</th>
+                            </tr>
+                            <% orders.map(order => { %>
+                                <tr>
+                                    <td><%= order.order_number %></td>
+                                    <% let user = users.find(user => user.user_id == order.user_id) %>
+                                    <td>
+                                        <div class="order-user">
+                                            <img src="/image/user-image/<%= user.user_img %>" alt="user-image" >
+                                            <%= user.user_name %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                    <% order.order_details.map(order_detail => { %>
+                                        <div class="order-detail-info">
+                                            <a href="/product/<%= order_detail.item_id %>">
+                                                <img src="/image/item-image/<%= order_detail.img[0] %>" alt="">
+                                            </a>
+                                            <div class="order-detail-info__content">
+                                                <div class="order-detail-name"><%= order_detail.item_name %></div>
+                                                <div class="order-detail-brand"><%= order_detail.brand %></div>
+                                                <div class="order-detail-infor">
+                                                    <strong>カラー：</strong><%= order_detail.color %>  <strong>サイズ：</strong><%= order_detail.size %> <strong>数量 : </strong><%= order_detail.quantity %> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                    </td>
+                                    <td><%= order.order_date %></td>
+                                    <td><%= order.shipping_method %></td>
+                                    <td><%= order.status == 'pending' ? '未処理' : order.status == "delivered" ? '配送待ち' : order.status == 'shipping' ? '配送中' : order.status == 'shipped' ? '配送済み' : 'キャンセル' %></td>
+                                    <td><%= order.total_amount %></td>
+                                    <td>
+                                        <div class="order-page-info__action">
+                                            <div class="order-check" onclick="showOrderInfo('<%= order.order_id %>')">詳細</div>
+                                            <div class="order-edit">編集</div>
+                                            <form action="/user-order/remove" method="post">
+                                                <input type="hidden" name="order_id" value="<%= order.order_id %>">
+                                                <button type="submit" class="order-delete">削除</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </table>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="warning-delete-box-background">
+        <div class="warning-delete-box">
+        </div>
+    </div>
+    <div class="footer" style="height: 200px;">
+    </div>
+<script> 
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+    
+    
+    //HEADER TAB HIDE //
+    let lastScrollTop = 0;
+    const header = $('.header');
+    const headerHeight = header.clientHeight; // Chiều cao của header
+    const scrollThreshold = headerHeight; // Giá trị ngưỡng cuộn
+    const headerSearch = $('.header__search')
+    
+    if (window.innerWidth > 1023) {
+        window.addEventListener('scroll', function () {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+                // Cuộn xuống và vượt ngưỡng
+                header.style.transform = 'translateY(-100%)';
+            } else {
+                // Cuộn lên hoặc chưa vượt ngưỡng
+                header.style.transform = 'translateY(0)';
+            }
+    
+            lastScrollTop = scrollTop;
+        });
+    }
+    if (window.innerWidth < 1023) {
+        window.addEventListener('scroll', function () {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+                headerSearch.style.display = 'flex'
+                $('.header__logo').style.display = 'none'
+            } else {
+                headerSearch.style.display = 'none'
+                $('.header__logo').style.display = 'block'
+            }
+        });
+    }
+    const orders = JSON.parse('<%- JSON.stringify(orders) %>');
+    function showOrderInfo(order_id) {
+        const order = orders.find(order => order.order_id == order_id);
+    $('.ad_page-content').innerHTML =
+        `
+    <div class="row">
+        <div class="content-title">
+            <a href="/admin-orders">注文</a> > 
+            <div class="ad-content-title-checked">詳細</div>
+        </div>
+    </div>
+    <div class="row order-page-info__number">
+        <div class="col l-6">
+            <span>注文番号No</span><br>
+            ${order.order_number}
+        </div>
+        <div class="col l-6">
+            <span>注文日</span><br>
+            ${order.order_date}
+        </div>
+    </div>
+    <table class="order-page-info__table">
+    <tr>        
+        <th>商品情報</th>
+        <th>数量</th>
+        <th>金額</th>
+        <th>アクション</th>
+        </tr>
+        ${order.order_details.map(order_detail => {
+            return `
+                    <tr>            
+                        <td class="order-item__info--data">
+                            <div class="order-item--img">
+                                <a href="/product/${order_detail.item_id}">
+                                    <img src="/image/item-image/${order_detail.img[0]}" alt="">
+                                </a>
+                                </div>
+                                <div class="order-item--info">
+                                    <div class="order-item--name"><strong>${order_detail.item_name}</strong></div>
+                                    <div class="order-item--brand"><strong>ブランド: </strong>${order_detail.brand}</div>
+                                        <div class="order-item--color"><strong>カラー: </strong>${order_detail.color}</div>
+                                    <div class="order-item--size"><strong>サイズ: </strong>${order_detail.size}</div>
+                                      </div>
+                                </td>
+                                <td>${order_detail.quantity}</td>
+                                <td>${order_detail.price}</td>
+                                <td class="order-item--action"><a href="">${order.status == 'pending' ? 'キャンセル' : ''}</a></td>
+                            </tr>
+        `;
+        }).join('')}
+    </table>
+    <div class="order-page-info__total">
+        <div>
+            <div class="order-page-info__item--price">
+                <div>小計:</div>
+                <div>¥${order.total_amount}</div>
+            </div>
+            <div class="order-page-info__item--shipping">
+                <div>送料:</div>
+            <div>¥${order.shipping_fee}</div>
+            </div>
+            <div class="order-page-info__item--total">
+                <div>合計</div>
+                <div>¥${order.total_amount + order.shipping_fee}</div>
+            </div>
+        </div>
+    </div>
+    <div class="order-page-info__tracking">
+        <div class="order-page-info__tracking--title">配送情報</div>
+        <div class="order-page-info__tracking--item">
+            <div>${order.order_username}  ${order.order_userphone}</div>
+            <div>${order.shipping_address.split('\n').join('<br>')}</div>
+        </div>
+    </div>
+    <div class="order-page-info__tracking">
+        <div class="order-page-info__tracking--title">お支払い情報</div>
+        <div class="order-page-info__tracking--item">
+            <div>${order.payment_method}</div>
+        </div>
+    </div>
+    <div class="order-page-info__tracking">
+        <div class="order-page-info__tracking--title">配送方法</div>
+        <div class="order-page-info__tracking--item">
+            <div>お急ぎ便<br>推定配達時間：到着予定日： ${order.estimated_delivery_time ? order.estimated_delivery_time : '未定'}</div>
+        </div>
+        </div>
+        `;
+    }   
+</script>
+</body>
+</html>

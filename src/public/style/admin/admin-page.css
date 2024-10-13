@@ -44,7 +44,8 @@
 }
 
 .ad_page-content {
-  padding: 20px;
+  font-size: var(--font-size);
+  padding: 20px 20px 100px;
 }
 .ad_page-content .content-title {
   font-size: 2rem;
@@ -83,9 +84,6 @@
 .ad_page-content table th {
   background-color: var(--hover-color);
   white-space: nowrap;
-}
-.ad_page-content table tr:hover {
-  background-color: var(--hover-color1);
 }
 .ad_page-content table a {
   text-align: center;
@@ -391,6 +389,193 @@
 .user_infor .user_info-img .user_info-img-label {
   margin: 20px 0;
   display: block;
+}
+
+/* Order Detail Page */
+.order-page-info__table {
+  border-collapse: collapse;
+}
+.order-page-info__table .order-user {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.order-page-info__table .order-user img {
+  width: 50px;
+}
+.order-page-info__table .order-detail-info {
+  display: flex;
+  max-width: 400px;
+  margin: 10px;
+  padding: 10px 0;
+}
+.order-page-info__table .order-detail-info:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+}
+.order-page-info__table .order-detail-info img {
+  width: 50px;
+  margin-right: 10px;
+}
+.order-page-info__table .order-page-info__action div, .order-page-info__table .order-page-info__action .order-delete {
+  width: 80px;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+}
+.order-page-info__table .order-page-info__action div:hover, .order-page-info__table .order-page-info__action .order-delete:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+.order-page-info__table .order-page-info__action .order-check {
+  background-color: var(--hover-color);
+}
+.order-page-info__table .order-page-info__action .order-edit {
+  background-color: rgb(0, 115, 255);
+  color: white;
+}
+.order-page-info__table .order-page-info__action .order-delete {
+  border: none;
+  background-color: rgb(229, 87, 85);
+  color: white;
+}
+
+.user-profile__content {
+  padding-left: 12px;
+}
+
+.order-page-info__number {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  line-height: 4rem;
+  border-top: 1px solid var(--border-color);
+  padding: 20px 0;
+  margin: 0;
+}
+
+.order-page-info__number div:nth-child(1) {
+  border-right: 1px solid var(--border-color);
+}
+
+.order-page-info__number div {
+  text-align: center;
+}
+
+.order-page-return {
+  margin: 0;
+}
+
+.order-page-return a {
+  padding: 10px;
+}
+
+.order-page-return a:hover {
+  background-color: var(--hover-color);
+}
+
+.order-page-info__number div span {
+  font-weight: 600;
+}
+
+.order-page-info__action {
+  float: right;
+  margin-bottom: 20px;
+}
+
+.order-page-info__action div {
+  padding: 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  border: 1px solid var(--black-color);
+  background-color: var(--hover-color);
+}
+
+.order-page-info__action div:hover {
+  background-color: var(--hover-color1);
+}
+
+.order-page-info__action .order-review {
+  background-color: var(--black-color);
+  color: white;
+}
+
+.order-page-info__action .order-review:hover {
+  text-decoration: underline;
+  color: black;
+}
+
+.order-page-info__table {
+  border-collapse: collapse;
+}
+
+.order-page-info__table th {
+  text-wrap: nowrap;
+  background-color: var(--hover-color);
+}
+
+.order-page-info__table .order-item__info--data {
+  display: flex;
+  padding: 10px;
+  border-top: none;
+  border-right: none;
+}
+.order-page-info__table .order-item__info--data:last-child {
+  border-bottom: none;
+}
+
+.order-item--action {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.order-item--action a:hover {
+  text-decoration: underline;
+}
+
+.order-page-info__total {
+  width: 100%;
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.order-page-info__total > div {
+  width: 30%;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.order-page-info__total > div > div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.order-page-info__item--total {
+  font-weight: 600;
+}
+
+.order-page-info__tracking {
+  margin-top: 20px;
+}
+
+.order-page-info__tracking--title {
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+
+.order-page-info__tracking--item div {
+  margin-bottom: 10px;
+}
+
+/* Order Detail Page */
+.order-item--img img {
+  width: 50px;
+  margin-right: 10px;
 }
 
 /*# sourceMappingURL=admin-page.css.map */

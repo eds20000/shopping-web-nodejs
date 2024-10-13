@@ -463,7 +463,7 @@ function onChangeCart() {
             `<div class="header__navbar-cart-list"></div>
             <div class="header__navbar-cart-checkox">
                 <div class="header__navbar-cart-total">合計：<span>￥<div class="header__navbar-cart-total-index"></div></span></div>
-                <div class="header__navbar-cart-check-btn"><div onclick="renderMycart()">買い物かごを見る(${myCart.length})</div></div>
+                <div class="header__navbar-cart-check-btn"><a href="/getCartPage">買い物かごを見る(${myCart.length})</a></div>
             </div>`;
 
         $('.header__navbar-cart-total-index').innerHTML = priceTotal;
@@ -536,23 +536,7 @@ function addToFavorites(itemId, event) {
             alert('An error occurred. Please try again.');
         });
 }
-function renderMycart() {
-    // Tạo form ẩn
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/getCartPage'; // Điều hướng tới trang giỏ hàng
 
-    // Tạo input ẩn để chứa dữ liệu myCart
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'myCart';
-    input.value = JSON.stringify(myCart);
-
-    // Thêm input vào form và gửi form
-    form.appendChild(input);
-    document.body.appendChild(form);
-    form.submit(); // Gửi form
-}
 
 
 //--------------------------Cart-button--------------------------------Start

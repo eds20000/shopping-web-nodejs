@@ -1,0 +1,61 @@
+<header class="header header-only">
+    <div class="grid wide">
+        <div class="header-category-box">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+        <form class="header__search" method="get" action="./category.html">
+            <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
+            <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <div class="header__search-box">
+            </div>
+        </form>
+        <ul class="header__navbar">
+            <li class="header__navbar-user">
+                <!-- ログインしてないとき -->
+                <% if (!user) { %>
+                <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
+                <!-- ログインしたとき -->
+                <% } else{ %>
+                <a href="/user-profile"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                <div class="user_navbar">
+                    <div class="dropdown-username"><%= user.user_name %></div>
+                    <% if(user.user_role === 'admin'){ %>
+                        <a href="/admin-page" class="dropdown-account">管理ページ</a>
+                    <% } %>
+                    <a href="/user-profile" class="dropdown-account">プロフィール</a>
+                    <a href="/user-order" class="dropdown-purchase-history">注文履歴</a>
+                    <a href="/logout" class="dropdown-logout">サインアウト</a>
+                </div>
+                <% } %>
+
+            </li>
+            <li class="header__navbar-like icon-center">
+                <a href="/user-favorite">
+                    <i class="fa-regular fa-heart"></i>
+                    <% if(user){if (user.favorItems.length > 0){ %>
+                        <div class="header__navbar--favor-quality"><%=user.favorItems.length %></div>
+                    <% }else{ %>
+                        <div class="header__navbar--favor-quality" style="display: none;"></div>
+                    <% }} %>
+                </a>
+            </li>
+            <div class="navbar-cart">
+                <li class="header__navbar-cart icon-center">
+                    <a href="/getCartPage">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <div class="header__navbar-cart-count"></div>
+                    </a>
+                </li>
+            </div>
+            <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
+            <div class="header__navbar-cart-box-container">
+                <div class="header__navbar-cart-box">
+                </div>
+                <div class="row header__navbar-cart-box-closeBtn">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </div>
+            </div>
+        </ul>
+    </div>   
+</header>

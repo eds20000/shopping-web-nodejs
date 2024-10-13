@@ -95,7 +95,7 @@ function renderItem() {
                                         </tr>
                                         ${item.color_img.map(itemColor => `
                                            ${itemColor.color_size.map(itemColor_size => `
-                                        <tr class="item-course">
+                                        <tr class="item-course" style="display: none;">
                                             <td></td>
                                             <td class="item-image-name">
                                                 <div class="item-img-name_box">

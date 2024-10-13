@@ -43,9 +43,11 @@ const initWebRoute = (app) => {
 
     router.post('/users-edit/upload', userImgUpload.single('user_avatar'), adminPageController.userInforUpdate)
 
-
     router.get('/user-add', adminPageController.addUserPage)
     router.post('/users-edit/add', userImgUpload.single('user_avatar'), adminPageController.addUser)
+
+    //admin-order-page
+    router.get('/admin-orders', adminPageController.getOrdersPage)
 
 
 
@@ -61,6 +63,7 @@ const initWebRoute = (app) => {
     router.get('/user-cart', profileController.getCartPage)
 
     router.get('/user-order', profileController.getOrderPage)
+    router.post('/user-order/remove', orderController.deleteOrder)
 
     //cart
     router.post('/add-to-cart/:id', cartController.addToCart)
@@ -69,7 +72,7 @@ const initWebRoute = (app) => {
         res.cookie('myCart', req.body.myCart, { maxAge: 900000, httpOnly: true });
         res.sendStatus(200);
     })
-    router.post('/getCartPage', cartController.getCartPage)
+    router.get('/getCartPage', cartController.getCartPage)
     router.post('/remove-from-cart', cartController.removeFromCart)
     router.post('/decrease-quantity-item-cart', cartController.decreaseQuantityItemCart)
     router.post('/increase-quantity-item-cart', cartController.increaseQuantityItemCart)

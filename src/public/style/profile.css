@@ -317,3 +317,114 @@ table{
     text-decoration: underline;
 }
 
+/* user Order Detail Page */
+.user-profile__content{
+    padding-left: 12px;
+}
+.order-page-info__number{
+    margin-bottom: 20px;
+    font-size: 2rem;
+    line-height: 4rem;
+    border-top: 1px solid var(--border-color);
+    padding:20px 0;
+    margin: 0;
+}
+.order-page-info__number div:nth-child(1){
+    border-right: 1px solid var(--border-color);
+}
+.order-page-info__number div{
+   text-align: center;
+}
+.order-page-return{
+    margin: 0;
+}
+.order-page-return a{
+    padding:10px;
+}
+.order-page-return a:hover{
+    background-color: var(--hover-color);
+}
+.order-page-info__number div span{
+    font-weight: 600;
+}
+.order-page-info__action{
+    float: right;
+    margin-bottom: 20px;
+}
+.order-page-info__action div{
+    padding:10px;
+    margin-left: 10px;
+    cursor: pointer;
+    border: 1px solid var(--black-color);
+    background-color: var(--hover-color);
+}
+.order-page-info__action div:hover{
+    background-color: var(--hover-color1);
+}
+.order-page-info__action .order-review{
+    background-color: var(--black-color);
+    color: white;
+}
+.order-page-info__action .order-review:hover{
+    text-decoration: underline;
+    color: black;
+}
+.order-page-info__table{
+    border-collapse: collapse;
+}
+.order-page-info__table th{
+    text-wrap: nowrap;
+    background-color: var(--hover-color);
+}
+.order-page-info__table .order-item__info--data{
+    display: flex;
+    padding: 10px;
+    border-top: none;
+    border-right: none;
+}
+.order-item--action{
+    color: var(--primary-color);
+    cursor: pointer;
+}
+.order-item--action a:hover{
+    text-decoration: underline;
+}
+.order-page-info__total{
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    margin-top: 20px;
+    padding: 10px;
+}
+.order-page-info__total>div{
+    width: 30%;
+    border-bottom: 1px solid var(--border-color);
+}
+.order-page-info__total>div>div{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.order-page-info__item--total{
+    font-weight: 600;
+}
+.order-page-info__tracking{
+    margin-top: 20px;
+}
+.order-page-info__tracking--title{
+    font-size: 2rem;
+    font-weight: 600;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 10px;
+}
+.order-page-info__tracking--item div{
+    margin-bottom: 10px;
+
+}
+
+/* Order Detail Page */
+.order-user-img img{
+    width: 10px;
+}

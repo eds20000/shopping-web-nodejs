@@ -110,9 +110,19 @@ let addUser = async (req, res) => {
     }
 }
 
+//Order-Page
+let getOrdersPage = async (req, res) => {
+    if (req.session.user) {
+        const users = await usersEdit.getUsers()
+        const orders = await modelCourse.getOrders(req.session.user.user_id)
+        req.session.logoutBack = req.originalUrl;
+        return res.render('admin/orders-edit.ejs', { orders, users })
+    }
+    return res.redirect('/login')
+}
 
 module.exports = {
     getadminPage, productEdit, DeleteItem, DeleteItemColorSize, itemUpdate, productImgUpload,
     getUsersPage, getUsersEditPage, DeleteUserById, userInforUpdate,
-    addUserPage, addUser
+    addUserPage, addUser, getOrdersPage
 }

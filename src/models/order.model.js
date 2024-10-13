@@ -1,7 +1,7 @@
 import pool from '../configs/connectDB';
 
 let takeOrder = async (data, myCart, orderNumber, userId) => {
-    let shipAddress = data['adress-prefecture'] + data['adress-city'] + data['adress-add'] + data['adress-building']
+    let shipAddress = '〒' + data['adress-zip-code'] + '  ' + data['adress-prefecture'] + data['adress-city'] + data['adress-add'] + data['adress-building']
     let userName = data['adress-name']
     let userPhone = data['adress-phone']
     let paymentMethod = data['payment']
@@ -29,5 +29,13 @@ let takeOrder = async (data, myCart, orderNumber, userId) => {
     }
 }
 
-module.exports = { takeOrder }
+let deleteOrder = async (orderId) => {
+    try {
+        await pool.query(`DELETE FROM orders WHERE order_id = ?`, [orderId])
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = { takeOrder, deleteOrder }
 

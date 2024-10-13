@@ -7,4 +7,10 @@ let takeOrder = async (req, res) => {
     console.log(result);
 }
 
-export default { takeOrder }
+let deleteOrder = async (req, res) => {
+    const orderId = req.body.order_id;
+    const result = await modelOrder.deleteOrder(orderId);
+    return res.redirect(req.session.logoutBack);
+}
+
+export default { takeOrder, deleteOrder }

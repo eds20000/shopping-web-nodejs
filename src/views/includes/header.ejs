@@ -1,0 +1,98 @@
+<!-- Header start1-->
+        <header class="header">
+            <div class="grid wide">
+                <div class="header-category-box">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+                <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+                <form class="header__search" method="get" action="/category.html">
+                    <input type="text" placeholder="何にをお探しですか？" class="header__search-input" name ="word">
+                    <button class="header__search-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <div class="header__search-box">
+                    </div>
+                </form>
+                <ul class="header__navbar">
+                    <li class="header__navbar-user">
+                        <!-- ログインしてないとき -->
+                        <% if (!user) { %>
+                        <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
+                        <!-- ログインしたとき -->
+                        <% } else{ %>
+                        <a href="/user-profile"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                        <div class="user_navbar">
+                            <div class="dropdown-username"><%= user.user_name %></div>
+                            <% if(user.user_role === 'admin'){ %>
+                                <a href="/admin-page" class="dropdown-account">管理ページ</a>
+                            <% } %>
+                            <a href="/user-profile" class="dropdown-account">プロフィール</a>
+                            <a href="/user-order" class="dropdown-purchase-history">注文履歴</a>
+                            <a href="/logout" class="dropdown-logout">サインアウト</a>
+                        </div>
+                        <% } %>
+
+                    </li>
+                    <li class="header__navbar-like icon-center">
+                        <a href="/user-favorite">
+                            <i class="fa-regular fa-heart"></i>
+                            <% if(user){if (user.favorItems.length > 0){ %>
+                                <div class="header__navbar--favor-quality"><%=user.favorItems.length %></div>
+                            <% }else{ %>
+                                <div class="header__navbar--favor-quality" style="display: none;"></div>
+                            <% }} %>
+                        </a>
+                    </li>
+                    <div class="navbar-cart">
+                        <li class="header__navbar-cart icon-center">
+                            <a href="/getCartPage" >
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </a>
+                            <div class="header__navbar-cart-count"></div>
+                        </li>
+                    </div>
+                    <li class="header__navbar-support"><a href=""><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
+                    <div class="header__navbar-cart-box-container">
+                        <div class="header__navbar-cart-box">
+                        </div>
+                        <div class="row header__navbar-cart-box-closeBtn">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+            
+            <div class="swiper tab">  
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide tab__list-start"><a href="">すべて</a></div>
+                    <div class="swiper-slide"><a href="#section__recommend">おすすめ</a></div>
+                    <div class="swiper-slide"><a href="#section__new">新着</a></div>
+                    <div class="swiper-slide"><a href="">マイリスト</a></div>
+                    <div class="swiper-slide"><a href="">ベストセラ</a></div>
+                    <div class="swiper-slide"><a href="">メンズ</a></div>
+                    <div class="swiper-slide"><a href="">レディース</a></div>
+                    <div class="swiper-slide"><a href="">コスメ</a></div>
+                </div>
+            </div>
+            
+        </header>
+        
+        <div class="category-box">
+            <ul class="category__list">
+                <p class="category_header">カテゴリー</p>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                <li class="category_list-item"><a href=""><div class="category_list-item-text tab-suport">サポート<i class="fa-solid fa-headset"></i></a></li>    
+            </ul>
+            <div class="category-box-closeBtn"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+        <div class="tab__list-close"></div>
+        <!-- Header end -->

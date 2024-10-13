@@ -136,11 +136,10 @@ let increaseQuantityItemCart = async (userId, itemId, colorId, size) => {
 };
 
 //Order
-let getOrders = async (userId) => {
+let getOrders = async () => {
     const [rows] = await pool.query(
         `SELECT * FROM orders
-        LEFT JOIN order_details ON orders.order_id = order_details.order_id
-        WHERE user_id = ?`, [userId]);
+        LEFT JOIN order_details ON orders.order_id = order_details.order_id`);
 
     let orders = {};
 
@@ -206,11 +205,75 @@ let getOrderDetails = async (orderIds) => {
     return rows;
 }
 
+let getOrdersById = async (userId) => {
+    const [rows] = await pool.query(
+        `SELECT * FROM orders
+        LEFT JOIN order_details ON orders.order_id = order_details.order_id
+        WHERE user_id = ?`, [userId]);
+
+    let orders = {};
+
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+
+        // Format the order_date
+        const date = new Date(row.order_date);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+
+        // Nếu đơn hàng chưa tồn tại trong đối tượng orders, thêm nó
+        if (!orders[row.order_id]) {
+            orders[row.order_id] = {
+                order_id: row.order_id,
+                user_id: row.user_id,
+                order_username: row.order_username,
+                order_userphone: row.order_userphone,
+                order_date: formattedDate,
+                status: row.status,
+                total_amount: row.total_amount,
+                shipping_address: row.shipping_address,
+                shipping_method: row.shipping_method,
+                payment_method: row.payment_method,
+                payment_status: row.payment_status,
+                shipping_fee: row.shipping_fee,
+                created_at: row.created_at,
+                updated_at: row.updated_at,
+                delivery_time: row.delivery_time,
+                order_number: row.order_number,
+                order_details: [] // Tạo mảng để chứa order_details
+            };
+        }
+
+        // Thêm chi tiết đơn hàng vào mảng order_details
+        orders[row.order_id].order_details.push({
+            order_detail_id: row.order_detail_id,
+            item_id: row.item_id,
+            item_name: row.item_name,
+            quantity: row.quantity,
+            price: row.price,
+            size: row.size,
+            color: row.color,
+            colorId: row.colorId,
+            brand: row.brand,
+            category: row.category,
+            img: JSON.parse(row.img), // Giả sử img là chuỗi JSON, cần parse thành mảng
+            subtotal: row.subtotal
+        });
+    }
+
+    // Trả về mảng các đơn hàng (chỉ lấy các giá trị từ đối tượng orders)
+    return Object.values(orders);
+}
 module.exports = {
     getFavoriteItems,
     addToFavorites,
     resetUserSession,
     getFavoriteItemList, getFavoriteItemIds, removeFromFavorites,
     addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart,
-    getOrders, getOrderDetails
+    getOrders, getOrderDetails, getOrdersById
 }

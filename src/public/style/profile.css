@@ -425,6 +425,8 @@ table{
 }
 
 /* Order Detail Page */
-.order-user-img img{
-    width: 10px;
+.order-remove{
+    margin-top: 10px;
+    cursor: pointer;
 }
+

@@ -237,7 +237,7 @@ let getOrderPage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
 
-        const orders = await modelCourse.getOrders(req.session.user.user_id);
+        const orders = await modelCourse.getOrdersById(req.session.user.user_id);
         req.session.logoutBack = req.originalUrl;
         return res.render('user/user-order.ejs', { items, user: req.session.user, myCart: fullCartItems, orders });
     } else {

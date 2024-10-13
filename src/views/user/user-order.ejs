@@ -57,10 +57,6 @@
                                 <tr>
                                     <td colspan="5" class="order-list__item--data">
                                         <div class="order-date"><%= order.order_date %>&nbsp;&nbsp;&nbsp;<strong>注文番号</strong>&nbsp;NO.<%= order.order_number %></div>
-                                        <form action="/user-order/remove" method="post">
-                                            <input type="hidden" name="order_id" value="<%= order.order_id %>">
-                                            <div class="order-remove"><button type="submit">削除</button></div>
-                                        </form>
                                     </td>
                                 </tr>
                                 <tr>
@@ -93,7 +89,13 @@
                                            注文詳細
                                         </div>
                                     </td>
-                                    <td><a href="" class="order-item--review">レビュー</a></td>
+                                    <td>
+                                        <a href="" class="order-item--review">レビュー</a>
+                                        <form action="/user-order/remove" method="post">
+                                            <input type="hidden" name="order_id" value="<%= order.order_id %>">
+                                            <div class="order-remove"><button type="submit">削除</button></div>
+                                        </form>
+                                    </td>
                                 </tr>
                                 <% }) %>
                             </table>

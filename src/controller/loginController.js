@@ -26,19 +26,24 @@ let userCheck = async (req, res) => {
                 const cartItems = await modelCourse.getCartItems(req.session.user.user_id)
                 req.session.user.favorItems = favorItems
                 req.session.user.cartItems = cartItems
-                return res.redirect(req.session.loginBack);
+                if (req.session.loginBack) {
+                    return res.redirect(req.session.loginBack);
+                }
+                else {
+                    return res.redirect('/')
+                }
             } else {
                 // Phản hồi nếu mật khẩu không đúng
                 res.status(401).json({ message: 'Invalid credentials' });
             }
         } else {
-            // Phản hồi nếu không tìm thấy người dùng
-            res.status(404).json({ message: 'User not found' });
+            req.flash('error_msg', 'ユーザー名またはパスワードが間違っています');
+            return res.redirect('/login');
         }
     } catch (error) {
         // Xử lý lỗi
-        console.error(error);
-        res.status(500).json({ message: 'An error occurred during login' });
+        req.flash('error_msg', 'ユーザー名またはパスワードが間違っています');
+        return res.redirect('/login');
     }
 };
 let userLogout = (req, res) => {

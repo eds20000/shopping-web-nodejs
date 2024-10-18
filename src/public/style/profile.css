@@ -430,3 +430,65 @@ table{
     cursor: pointer;
 }
 
+.user-profile__order-tracking--section-title{
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    overflow: hidden;
+}
+.user-profile__order-tracking--number{
+    background-color: var(--primary-color-hover);
+    color: var(--white-color);
+    padding: 20px;
+
+}
+.user-profile__order-tracking--number span{
+    font-size: 2rem;
+    font-weight: 600;
+}
+.user-profile__order-tracking--icon{
+    padding:20px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.user-profile__order-tracking--icon-orderCompleted{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.user-profile__order-tracking--icon-orderCompleted.available{
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-weight: 600;
+}
+.icon-chain.available{
+    width: 50px;
+    height: 5px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+}
+.icon-chain{
+    width: 50px;
+    background-color: var(--hover-color);
+    height: 5px;
+    border-radius: 10px;
+}
+.user-profile__order-tracking--date{
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-top: none;
+}
+.user-profile__order-tracking--infor{
+    border: 1px solid var(--border-color);
+    padding: 20px 0;
+}
+.user-profile__order-tracking--infor-title{
+    margin:0 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+.user-profile__order-tracking--info-content{
+    padding: 20px;
+}
+

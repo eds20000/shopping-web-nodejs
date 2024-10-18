@@ -48,7 +48,7 @@ const initWebRoute = (app) => {
 
     //admin-order-page
     router.get('/admin-orders', adminPageController.getOrdersPage)
-
+    router.post('/admin-orders/edit', adminPageController.editOrder)
 
 
 
@@ -64,6 +64,7 @@ const initWebRoute = (app) => {
 
     router.get('/user-order', profileController.getOrderPage)
     router.post('/user-order/remove', orderController.deleteOrder)
+    router.get('/user-order/tracking/:orderId', orderController.orderTracking)
 
     //cart
     router.post('/add-to-cart/:id', cartController.addToCart)

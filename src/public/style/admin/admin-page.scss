@@ -500,7 +500,6 @@
     padding:10px;
     margin-left: 10px;
     cursor: pointer;
-    border: 1px solid var(--black-color);
     background-color: var(--hover-color);
 }
 .order-page-info__action div:hover{
@@ -576,4 +575,20 @@
 .order-item--img img{
     width: 50px;
     margin-right: 10px;
+}
+.order-page-info__tracking--button{
+    margin-top: 30px;
+    display: grid;
+    place-items: center;
+    height: 50px;
+    min-height: 50px;
+    color:var(--white-color);
+    border-radius: 20px;
+    background-color: var(--primary-color);
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    &:hover{
+        opacity: .8;
+    }
 }

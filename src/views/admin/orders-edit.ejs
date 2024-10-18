@@ -101,7 +101,7 @@
                                     <td>
                                         <div class="order-page-info__action">
                                             <div class="order-check" onclick="showOrderInfo('<%= order.order_id %>')">詳細</div>
-                                            <div class="order-edit">編集</div>
+                                            <div class="order-edit" onclick="editOrderInfo('<%= order.order_id %>')">編集</div>
                                             <form action="/user-order/remove" method="post">
                                                 <input type="hidden" name="order_id" value="<%= order.order_id %>">
                                                 <button type="submit" class="order-delete">削除</button>
@@ -245,9 +245,125 @@
     <div class="order-page-info__tracking">
         <div class="order-page-info__tracking--title">配送方法</div>
         <div class="order-page-info__tracking--item">
-            <div>お急ぎ便<br>推定配達時間：到着予定日： ${order.estimated_delivery_time ? order.estimated_delivery_time : '未定'}</div>
+            <div>${order.shipping_method}<br>推定配達時間：到着予定日： ${order.delivery_time ? order.delivery_time : '未定'}</div>
         </div>
         </div>
+        `;
+    }   
+    function editOrderInfo(order_id) {
+        const order = orders.find(order => order.order_id == order_id);
+        const formatted_order_date = order.order_date.replace(' ', 'T').substring(0, 16);
+        const [delivery_time_min, delivery_time_max] = order.delivery_time.split(' ~ ');
+    $('.ad_page-content').innerHTML =
+        `
+    <div class="row">
+        <div class="content-title">
+            <a href="/admin-orders">注文</a> > 
+            <div class="ad-content-title-checked">編集</div>
+        </div>
+    </div>
+    <div class="row order-page-info__number">
+        <div class="col l-6">
+            <span>注文番号No</span><br>
+            ${order.order_number}
+        </div>
+        <div class="col l-6">
+            <span>注文日</span><br>
+            ${order.order_date}
+        </div>
+    </div>
+    <table class="order-page-info__table">
+    <tr>        
+        <th>商品情報</th>
+        <th>数量</th>
+        <th>金額</th>
+        <th>アクション</th>
+        </tr>
+        ${order.order_details.map(order_detail => {
+            return `
+                    <tr>            
+                        <td class="order-item__info--data">
+                            <div class="order-item--img">
+                                <a href="/product/${order_detail.item_id}">
+                                    <img src="/image/item-image/${order_detail.img[0]}" alt="">
+                                </a>
+                                </div>
+                                <div class="order-item--info">
+                                    <div class="order-item--name"><strong>${order_detail.item_name}</strong></div>
+                                    <div class="order-item--brand"><strong>ブランド: </strong>${order_detail.brand}</div>
+                                        <div class="order-item--color"><strong>カラー: </strong>${order_detail.color}</div>
+                                    <div class="order-item--size"><strong>サイズ: </strong>${order_detail.size}</div>
+                                      </div>
+                                </td>
+                                <td>${order_detail.quantity}</td>
+                                <td>${order_detail.price}</td>
+                                <td class="order-item--action"><a href="">${order.status == 'pending' ? 'キャンセル' : ''}</a></td>
+                            </tr>
+        `;
+        }).join('')}
+    </table>
+    <div class="order-page-info__total">
+        <div>
+            <div class="order-page-info__item--price">
+                <div>小計:</div>
+                <div>¥${order.total_amount}</div>
+            </div>
+            <div class="order-page-info__item--shipping">
+                <div>送料:</div>
+            <div>¥${order.shipping_fee}</div>
+            </div>
+            <div class="order-page-info__item--total">
+                <div>合計</div>
+                <div>¥${order.total_amount + order.shipping_fee}</div>
+            </div>
+        </div>
+    </div>
+    <div class="order-page-info__tracking">
+        <div class="order-page-info__tracking--title">配送情報</div>
+        <div class="order-page-info__tracking--item">
+            <div>${order.order_username}  ${order.order_userphone}</div>
+            <div>${order.shipping_address.split('\n').join('<br>')}</div>
+        </div>
+    </div>
+    <div class="order-page-info__tracking">
+        <div class="order-page-info__tracking--title">お支払い情報</div>
+        <div class="order-page-info__tracking--item">
+            <div>${order.payment_method}</div>
+        </div>
+    </div>
+    <form action="/admin-orders/edit" method="post">
+        <input type="hidden" name="orderId" value="${order.order_id}">
+        <div class="order-page-info__tracking">
+            <div class="order-page-info__tracking--title">配送方法</div>
+            <div class="order-page-info__tracking--item">
+                <select type="" name="shipping_method" >                
+                    <option value="お急ぎ便" ${order.shipping_method == 'お急ぎ便' ? 'selected' : ''}>お急ぎ便</option>
+                    <option value="通常便" ${order.shipping_method == '通常便' ? 'selected' : ''}>通常便</option>
+                </select>
+            </div>
+            <div class="order-page-info__tracking--item">
+                推定配達時間：到着予定日： ${order.delivery_time == '未定' ? `<input type="datetime-local" name="delivery_time_min" min="${formatted_order_date}"> ~ <input type="datetime-local" name="delivery_time_max" min="${formatted_order_date}">` :
+                `<input type="datetime-local" name="delivery_time_min" value="${delivery_time_min}"> ~ <input type="datetime-local" name="delivery_time_max" value="${delivery_time_max}">`
+                }</div>
+            </div>
+        </div>
+        <div class="order-page-info__tracking">
+            <div class="order-page-info__tracking--title">配送状況</div>
+                <div class="order-page-info__tracking--item">
+                    <select type="" name="status">
+                        <option value="pending" ${order.status == 'pending' ? 'selected' : ''}>未処理</option>
+                        <option value ="delivered" ${order.status == 'delivered' ? 'selected' : ''}>配送待ち</option>
+                        <option value="shipping" ${order.status == 'shipping' ? 'selected' : ''}>配送中</option>
+                        <option value="shipped" ${order.status == 'shipped' ? 'selected' : ''}>配送済み</option>
+                        <option value="failed" ${order.status == 'failed' ? 'selected' : ''}>配送失敗</option>
+                        <option value="returned" ${order.status == 'returned' ? 'selected' : ''}>返品</option>
+                        <option value="canceled" ${order.status == 'canceled' ? 'selected' : ''}>キャンセル</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button class="order-page-info__tracking--button" type="submit">変更確認</button>
+    </form>
         `;
     }   
 </script>

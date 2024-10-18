@@ -225,6 +225,7 @@ let getOrdersById = async (userId) => {
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const seconds = date.getSeconds().toString().padStart(2, '0');
         const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+        const formatDeliveryTime = row.delivery_time.replaceAll('T', ' ')
 
         // Nếu đơn hàng chưa tồn tại trong đối tượng orders, thêm nó
         if (!orders[row.order_id]) {
@@ -243,7 +244,7 @@ let getOrdersById = async (userId) => {
                 shipping_fee: row.shipping_fee,
                 created_at: row.created_at,
                 updated_at: row.updated_at,
-                delivery_time: row.delivery_time,
+                delivery_time: formatDeliveryTime,
                 order_number: row.order_number,
                 order_details: [] // Tạo mảng để chứa order_details
             };

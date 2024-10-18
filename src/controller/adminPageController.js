@@ -1,6 +1,8 @@
 import models from '../models/admin/adminPage.model'
 import usersEdit from '../models/admin/userEdit.model'
 import modelCourse from '../models/course'
+import modelOrder from '../models/order.model'
+
 
 
 let getadminPage = async (req, res) => {
@@ -13,7 +15,7 @@ let productEdit = async (req, res) => {
     const itemId = req.params.id
     const users = await usersEdit.getUsers()
     const item = (await models.getItemById(itemId))[0]
-    return res.render('admin/product-edit.ejs', { item, users })
+    return res.render('admin/product-edit.ejs', { item, users, filePaths: null, colorInput: null })
 
 }
 //product-Img-Upload
@@ -121,8 +123,15 @@ let getOrdersPage = async (req, res) => {
     return res.redirect('/login')
 }
 
+let editOrder = async (req, res) => {
+    const { orderId, shipping_method, delivery_time_min, delivery_time_max, status } = req.body;
+    const delivery_time = `${delivery_time_min} ~ ${delivery_time_max}`
+    await modelOrder.editOrder(orderId, shipping_method, delivery_time, status);
+    return res.redirect('/admin-orders');
+}
+
 module.exports = {
     getadminPage, productEdit, DeleteItem, DeleteItemColorSize, itemUpdate, productImgUpload,
     getUsersPage, getUsersEditPage, DeleteUserById, userInforUpdate,
-    addUserPage, addUser, getOrdersPage
+    addUserPage, addUser, getOrdersPage, editOrder
 }

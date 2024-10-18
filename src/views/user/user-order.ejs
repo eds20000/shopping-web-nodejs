@@ -78,6 +78,7 @@
                                     <% }) %>
                                     <td>¥<%= order.total_amount %></td>
                                     <td>
+                                        <div class="order-item--return"><a href="/user-order/tracking/<%=order.order_id %>" style="text-wrap: nowrap;padding: 10px; color: var(--white-color);background-color: black;padding: 5px 10px; ">追跡</a></div>
                                         <div class="order-item--return" style="text-wrap: nowrap;padding: 10px; color: var(--primary-color); "><a href="">商品を返品</a></div>
                                         <div class="order-item--repurchase" style="text-wrap: nowrap;padding: 10px; color: var(--primary-color);"><a href="">再購入</a></div>
                                     </td>

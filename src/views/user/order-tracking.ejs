@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style/responsive.css">
+    <link rel="stylesheet" href="/style/profile.css">
+    <script>
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+        const orderTracking = JSON.parse('<%- JSON.stringify(orderTracking) %>');
+        console.log(orderTracking)
+    </script>
+    <title>TS-shop</title>
+</head>
+<body>
+    <!-- Container start -->
+    <div class="app">
+        <div class="over-play"></div>
+        <!-- Header start1-->
+        <%- include('../includes/header-only.ejs') %>
+        <!-- Header end -->
+
+        <!-- Container start -->
+        <div class="container">
+            <div class="grid wide">
+                <div class="row">
+                    <ul class="col l-3 user-profile__category">
+                        <li class="user-profile__category--myacount"><a href="/user-profile"><i class="fa-solid fa-file-invoice"></i>アカウント管理</a></li>
+                        <li class="user-profile__category--favor"><a href="/user-favorite"><i class="fa-solid fa-heart"></i>お気に入り</a></li>
+                        <li class="user-profile__category--cart"><a href="/user-cart"><i class="fa-solid fa-cart-shopping"></i>買い物かご</a></li>
+                        <li class="user-profile__category--hitory profile__category--checked"><a href="/user-order"><i class="fa-solid fa-clock-rotate-left"></i>注文履歴</a></li>
+                        <li class="user-profile__category--signout"><a href="/logout"><i class="fa-solid fa-right-from-bracket"></i>サインアウト</a></li>
+                    </ul>
+                    <div class="col l-9 user-profile__content">
+                        <div class="user-profile__content--title">追跡</div>
+                        <% if(orderTracking){ %>
+                        <div class="user-profile__order-tracking--section-title">
+                            <div class="user-profile__order-tracking--number">
+                                注文番号<br>
+                                <span><%= orderTracking.order_number %></span>
+                            </div>
+                            <div class="user-profile__order-tracking--icon">
+                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.payment_status == 'paid'?'available' :''%>">
+                                    注文完了
+                                </div>
+                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.payment_status == 'delivered'?'available' :''%>">
+                                    <div class="icon-chain <%= orderTracking.payment_status == 'delivered'?'available' :''%>"></div>
+                                    注文処理
+                                </div>
+                                <div class="user-profile__order-tracking--icon-orderCompleted">
+                                    <div class="icon-chain"></div>
+                                    配送済み
+                                </div>
+                                <div class="user-profile__order-tracking--icon-orderCompleted">
+                                    <div class="icon-chain"></div>
+                                    注文配達完了
+                                </div>
+                            </div>
+                            <div class="user-profile__order-tracking--date">
+                                <strong>配達予定日：</strong>
+                                到着予定日：<%=orderTracking.delivery_time %>
+                            </div>
+                        </div>
+                        <div class="user-profile__order-tracking--infor">
+                            <div class="user-profile__order-tracking--infor-title">
+                                配送情報
+                            </div>
+                            <div class="user-profile__order-tracking--info-content">
+                                <div class="user-profile__order-tracking--info-content-userName">
+                                    <i class="fa-solid fa-user"></i>
+                                    <%=orderTracking.order_username %>
+                                </div>
+                                <div class="user-profile__order-tracking--info-content-address">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <%=orderTracking.shipping_address %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-profile__order-tracking--image">
+                            <% orderTracking.order_details.forEach ( orderTrackingDetail => {%>
+                               <img src="/image/item-image/<%=orderTrackingDetail.img[0] %>" alt="">
+                            <% }) %>
+                        </div>
+
+                        
+                        <% } else { %>
+                            <div class="cart-empty-box">
+                                <p>現在注文履歴がありません。</p>
+                            </div>  
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container end -->
+
+        <!-- Footer Start -->
+        <%- include('../includes/footer.ejs') %>
+        <!-- Footer End -->
+    </div>
+</body>
+<script src="/script/script.js"></script>
+</html>

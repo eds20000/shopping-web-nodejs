@@ -37,5 +37,13 @@ let deleteOrder = async (orderId) => {
     }
 }
 
-module.exports = { takeOrder, deleteOrder }
+let editOrder = async (orderId, shipping_method, delivery_time, status) => {
+    try {
+        await pool.query(`UPDATE orders SET shipping_method = ?, delivery_time = ?, status = ? WHERE order_id = ?`, [shipping_method, delivery_time, status, orderId])
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = { takeOrder, deleteOrder, editOrder }
 

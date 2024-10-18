@@ -482,13 +482,31 @@ table{
 .user-profile__order-tracking--infor{
     border: 1px solid var(--border-color);
     padding: 20px 0;
+    margin: 20px 0;
 }
 .user-profile__order-tracking--infor-title{
     margin:0 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
 }
-.user-profile__order-tracking--info-content{
+.user-profile__order-tracking--info-content{            
     padding: 20px;
 }
-
+.user-profile__order-tracking--info-content-userName{
+    margin-bottom: 10px;
+}
+.user-profile__order-tracking--image-box{
+    display: inline;
+    position: relative;
+}
+.user-profile__order-tracking--image img{
+    width: 100px;
+}
+.user-profile__order-tracking--image-quantity{
+    position: absolute;
+    color: rgb(0, 0, 0);
+    bottom: 0;
+    right:0;
+    background-color: var(--border-color);
+    padding: 2px 5px;
+}

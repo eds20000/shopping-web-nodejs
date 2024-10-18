@@ -43,6 +43,9 @@
                     </ul>
                     <div class="col l-9 user-profile__content">
                         <div class="user-profile__content--title">追跡</div>
+                        <div class ="row order-page-return">
+                            <a href="/user-order"><i class="fa-solid fa-chevron-left"></i>戻る</a>
+                        </div>
                         <% if(orderTracking){ %>
                         <div class="user-profile__order-tracking--section-title">
                             <div class="user-profile__order-tracking--number">
@@ -50,19 +53,19 @@
                                 <span><%= orderTracking.order_number %></span>
                             </div>
                             <div class="user-profile__order-tracking--icon">
-                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.payment_status == 'paid'?'available' :''%>">
+                                <div class="user-profile__order-tracking--icon-orderCompleted available">
                                     注文完了
                                 </div>
-                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.payment_status == 'delivered'?'available' :''%>">
-                                    <div class="icon-chain <%= orderTracking.payment_status == 'delivered'?'available' :''%>"></div>
+                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.status == 'delivered' || orderTracking.status == 'shipping'  || orderTracking.status == 'shipped' ? 'available' :''%>">
+                                    <div class="icon-chain <%= orderTracking.status == 'delivered'|| orderTracking.status == 'shipping'  || orderTracking.status == 'shipped' ? 'available' :''%>"></div>
                                     注文処理
                                 </div>
-                                <div class="user-profile__order-tracking--icon-orderCompleted">
-                                    <div class="icon-chain"></div>
+                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.status == 'shipping' || orderTracking.status == 'shipped' ? 'available' :''%>">
+                                    <div class="icon-chain <%= orderTracking.status == 'shipping' || orderTracking.status == 'shipped' ? 'available' :''%>"></div>
                                     配送済み
                                 </div>
-                                <div class="user-profile__order-tracking--icon-orderCompleted">
-                                    <div class="icon-chain"></div>
+                                <div class="user-profile__order-tracking--icon-orderCompleted <%= orderTracking.status == 'shipped' ? 'available' :''%>">
+                                    <div class="icon-chain <%= orderTracking.status == 'shipped'?'available' :''%>"></div>  
                                     注文配達完了
                                 </div>
                             </div>
@@ -88,7 +91,10 @@
                         </div>
                         <div class="user-profile__order-tracking--image">
                             <% orderTracking.order_details.forEach ( orderTrackingDetail => {%>
-                               <img src="/image/item-image/<%=orderTrackingDetail.img[0] %>" alt="">
+                                <div class="user-profile__order-tracking--image-box">
+                                    <img src="/image/item-image/<%=orderTrackingDetail.img[0] %>" alt="">
+                                    <div class="user-profile__order-tracking--image-quantity">x<%=orderTrackingDetail.quantity %></div>
+                                </div>
                             <% }) %>
                         </div>
 

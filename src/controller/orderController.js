@@ -56,8 +56,12 @@ let orderTracking = async (req, res) => {
         console.log(orders)
         const orderTracking = orders.find(order => order.order_id == req.params.orderId)
         req.session.logoutBack = req.originalUrl;
+        if (!orderTracking) {
+            return res.redirect('/user-order')
+        }
         return res.render('user/order-tracking.ejs', { user: req.session.user, myCart: fullCartItems, orderTracking })
     }
+
     else {
         req.session.loginBack = req.originalUrl;
         return res.redirect('/login')

@@ -1,5 +1,6 @@
 import models from '../models/admin/adminPage.model'
 import modelCourse from '../models/course'
+import modelReview from '../models/review.model'
 
 let addToFavorites = async (req, res) => {
     const { itemId } = req.body;
@@ -69,6 +70,20 @@ let signupPage = async (req, res) => {
 let productPage = async (req, res) => {
     const items = await models.getItems();
     const itemId = req.params.id;
+    const reviews = await modelReview.getReviewByItemid(itemId);
+    const ratingSum = reviews.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.rating;
+    }, 0);
+    // Nếu muốn trả về cả reviews và ratingSum
+    const reviewsList = {
+        reviews,
+        ratingSum
+    };
+    await Promise.all(reviewsList.reviews.map(async (review) => {
+        const reviewLikes = await modelReview.getReviewLike(review.id);
+        review.reviewLikeUserId = reviewLikes;
+    }));
+
     let item;
     if (itemId) {
         item = (await models.getItemById(itemId))[0];
@@ -113,14 +128,73 @@ let productPage = async (req, res) => {
         }).filter(item => item !== null);
 
         req.session.logoutBack = req.originalUrl;
-        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId });
+        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId, reviewsList });
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId });
+        res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId, reviewsList });
     }
 };
 
+let handleReviewLike = async (req, res) => {
+    const reviewId = req.params.reviewId;
+
+    // Kiểm tra xem user có đăng nhập không
+    if (req.session.user) {
+        try {
+            const result = await modelReview.handleReviewLike(reviewId, req.session.user.user_id);
+            if (result) {
+                return res.status(200).json({ message: "Review like deleted successfully." });
+            } else {
+                return res.status(400).json({ message: result.message });
+            }
+        } catch (error) {
+            console.error("Error deleting review like:", error);
+            return res.status(500).json({ message: "An internal server error occurred." });
+        }
+    } else {
+        return res.status(401).json({ message: "User not logged in." });
+    }
+}
+
+let addReview = async (req, res) => {
+    if (req.session.user) {
+        const itemId = req.params.itemId
+        const userId = req.session.user.user_id
+        const rating = req.body.rating
+        const reviewText = req.body.review_text
+        const [colorName, size] = req.body.color_name.split('-');
+        console.log(itemId, userId, colorName, size, rating, reviewText)
+        await modelReview.addReview(itemId, userId, colorName, size, rating, reviewText)
+        req.session.logoutBack = req.originalUrl;
+        return res.redirect(`/product/${itemId}`);
+    }
+
+    else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+}
+let updateReview = async (req, res) => {
+    if (req.session.user) {
+        const itemId = req.params.itemId
+        const userId = req.session.user.user_id
+        const rating = req.body.rating
+        const reviewText = req.body.review_text
+        const [colorName, size] = req.body.color_name.split('-');
+        console.log(itemId, userId, colorName, size, rating, reviewText)
+        await modelReview.updateReview(itemId, userId, colorName, size, rating, reviewText)
+        req.session.logoutBack = req.originalUrl;
+        return res.redirect(`/product/${itemId}`);
+    }
+
+    else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+}
+
+
 
 module.exports = {
-    getHomepage, signupPage, productPage, addToFavorites
+    getHomepage, signupPage, productPage, addToFavorites, handleReviewLike, addReview,updateReview
 }

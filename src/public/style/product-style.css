@@ -304,17 +304,154 @@ ul{
     }
 }
 .product-item-data-infor{
-    margin-top: 50px;
+    padding: 30px 0;
 }
-.product-item-data-infor_title{
-    font-size: 2rem;
+.product-item-data-infor_title,
+.product-item-data-review_title{
+    font-size: 3rem;
     font-weight: 600;
-    margin-bottom: 10px;
+    padding-bottom: 20px;
 }
 .product-item-data-infor_content{
     font-size: var(--font-size);
     border: 1px solid var(--border-color);
     padding: 10px;
+}
+.product-item-data-review{
+    padding: 30px 0;
+}
+.product-item-data-review_title{
+    
+}
+
+
+.stars-outer {
+    display: inline-block;
+    position: relative;
+    font-family: FontAwesome;
+    color: #ccc;
+    font-size: 24px;
+  }
+  
+  /* Định dạng phần ngôi sao đầy */
+.stars-inner {
+    position: absolute;
+    top: -4px;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #f4d34c;
+    height: 24px;
+    line-height: 24px;
+}
+  
+ 
+.stars-outer::before {
+    content: "\f005 \f005 \f005 \f005 \f005";
+    font-family: FontAwesome;
+}
+  
+.stars-inner::before {
+    content: "\f005 \f005 \f005 \f005 \f005";
+    font-family: FontAwesome;
+}
+.product-item-data-review_content-tensu{
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    background-color: var(--hover-color1);
+}
+.product-item-data-review_content-score{
+    font-size: 3rem;
+    margin: 20px;
+    display: inline;
+}
+.product-item-data-review_content-number{
+    display: inline;
+    font-size: 2rem;
+    margin: 10px;
+}
+.product-item-data-review_content-box{
+    margin: 40px 0;
+}
+.product-item-data-review_content-item{
+    border-top: 1px solid var(--border-color);
+    padding: 20px 0;
+    margin: 20px 0;
+}
+.product-item-data-review_content-item div{
+    margin-bottom: 10px;
+}
+
+.product-item-data-review_content-star i{
+    color: #f4d34c;
+
+}
+.product-item-data-review_content-product{
+    opacity: 0.4;
+}
+.product-item-data-review_content-like{
+    float: right;
+}
+.product-item-data-review_content-like a {
+    display: inline;
+    margin-right: 5px;
+    font-size:2rem;
+}
+.product-item-data-review_content-like .like-icon-checked{
+    color: blue;
+}
+.product-item-data-review_content-text{
+    font-size: 2rem;
+    padding: 10px 0;
+}
+.review-like{
+    cursor: pointer;
+}
+.product-item-data-review_add{
+    padding: 20px 10px;
+    background-color: var(--hover-color);
+}
+.product-item-data-review_add--username{
+    font-weight: 600;
+}
+.form-group{
+    margin-top: 20px;
+}
+.review-submit-btn{
+    width: auto;
+    margin-top: 10px;
+    border-radius: 20px;
+    margin-right: 0;
+    margin-left: auto;
+}
+.star-rating-title{
+    display: inline;
+}
+.star-rating {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    text-align: left;
+    display: inline;
+}
+  
+.star-rating input {
+    display: none;
+}
+.star-rating label::before {
+    content: "\f005";
+    font-family: FontAwesome;
+}
+.star-rating label{
+    color: #ccc;
+    cursor: pointer;
+}
+.star-rating input:checked ~ label::before {
+    color: #f4d34c;
+}
+.product-item-data-review_add-btn{
+    width: 100px;
+    margin: 0 auto;
 }
 
 /* Tablet */

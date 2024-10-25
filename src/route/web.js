@@ -25,6 +25,9 @@ const initWebRoute = (app) => {
     //product-page
     router.get('/product/:id', homeController.productPage);
     router.post('/add-to-favorites', homeController.addToFavorites);
+    router.get('/review-like/:reviewId', homeController.handleReviewLike);
+    router.post('/add-review/:itemId', homeController.addReview)
+    router.post('/update-review/:itemId', homeController.updateReview)
 
     //admin-page
     router.get('/admin-page', adminPageController.getadminPage)

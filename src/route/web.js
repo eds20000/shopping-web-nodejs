@@ -5,7 +5,9 @@ import adminPageController from '../controller/adminPageController';
 import profileController from '../controller/profileController';
 import cartController from '../controller/cartController';
 import orderController from '../controller/orderController';
+import categoryController from '../controller/categoryController';
 import { userImgUpload, itemImgUpload } from '../middleware/userInfor-updateimg'
+
 const multer = require('multer');
 const upload = multer();
 
@@ -28,10 +30,12 @@ const initWebRoute = (app) => {
     router.get('/review-like/:reviewId', homeController.handleReviewLike);
     router.post('/add-review/:itemId', homeController.addReview)
     router.post('/update-review/:itemId', homeController.updateReview)
+    router.get('/delete-review/:reviewId',homeController.deleteReview)
 
     //admin-page
     router.get('/admin-page', adminPageController.getadminPage)
     router.get('/product-edit/:id', adminPageController.productEdit)
+
     //item-update
     router.post('/product-edit/update-item', upload.none(), adminPageController.itemUpdate)
     router.post('/upload-img/:id', itemImgUpload.array('image-add', 10), adminPageController.productImgUpload)
@@ -53,6 +57,8 @@ const initWebRoute = (app) => {
     router.get('/admin-orders', adminPageController.getOrdersPage)
     router.post('/admin-orders/edit', adminPageController.editOrder)
 
+    //admin-review-page
+    router.get('/admin-reviews',adminPageController.getReviewsPage)
 
 
     //Profile
@@ -77,12 +83,21 @@ const initWebRoute = (app) => {
         res.sendStatus(200);
     })
     router.get('/getCartPage', cartController.getCartPage)
+    router.get('/getCartPage-reset', cartController.getCartPage)
     router.post('/remove-from-cart', cartController.removeFromCart)
     router.post('/decrease-quantity-item-cart', cartController.decreaseQuantityItemCart)
     router.post('/increase-quantity-item-cart', cartController.increaseQuantityItemCart)
 
+    //address-add
+    router.post('/user-address-add',profileController.addAddress)
+    router.get('/user-address-delete/:addressId',profileController.deleteAddress)
+
     //take-order
     router.post('/take-order', orderController.takeOrder)
+
+
+    //Category
+    router.get('/category/:category', categoryController.getCategoryPage)
 
     return app.use('/', router)
 }

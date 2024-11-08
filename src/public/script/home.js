@@ -3,8 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   var swiperTab = new Swiper('.tab', {
     direction: 'horizontal',
-    loop: true,
-    slidesPerView: window.innerWidth < 740 ? 3 : 8,
+    slidesPerView: window.innerWidth > 740 ? 8 : 3,
     spaceBetween: 1,
   });
 

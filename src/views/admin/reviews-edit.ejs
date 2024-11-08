@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>  
+    <link rel="stylesheet" href="/style/responsive.css">
+    <link rel="stylesheet" href="/style/admin/admin-page.css">
+    <title>Admin-page</title>
+    <script>
+        const reviews = JSON.parse('<%- JSON.stringify(reviews) %>');
+        const users = JSON.parse('<%- JSON.stringify(users) %>');
+        const items = JSON.parse('<%- JSON.stringify(items) %>');
+        console.log(reviews,users,items)
+    </script>
+</head>
+
+<body>
+    <header class="header header-only">
+        <div class="grid wide">
+            <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+        </div> 
+    </header>
+    <div class="container_ad">
+        <div class="grid wide">
+            <div class="row">
+                <div class="col l-2 ad_page-category">
+                    <% users.forEach(user => { %>
+                        <% if(user.user_role == 'admin'){ %>
+                    <div class="ad_category-img"><img src="/image/user-image/<%=user.user_img %>" alt="user-image"></div>
+                    <div class="ad_category-name"><%=user.user_name %></div>
+                        <% } %>
+                    <% }) %>
+                    <ul class="ad_page-category-content">
+                        <li class="ad_category"><a href="http://">カテゴリー</a></li>
+                        <li class="ad_item"><a href="/admin-page">製品</a></li>
+                        <li class="ad_order"><a href="/admin-orders">注文</a></li>
+                        <li class="ad_cutomer ad-checked"><a href="/admin-users">顧客</a></li>
+                        <li class="ad_review"><a href="/admin-reviews">レビュー</a></li>
+                    </ul>
+                </div>
+                <div class="col l-10 ad_page-content">
+                    <div class="row content-title ">
+                        <div class="ad_page-review-title ad-content-title-checked">レビュー</div>
+                    </div>
+                    <div class="row" style="margin-bottom: 20px;">
+                        <div class="item-total">
+                            数量：
+                            <div class="number"><%= reviews.length %></div>レビュー
+                        </div>
+                    </div>
+                    <table class="ad_page-review-list">
+                        <% if (reviews.length>0){ %>
+                        <tr>
+                            <th>商品</th>
+                            <th>ユーザー</th>
+                            <th>評価</th>
+                            <th>レビュー</th>
+                            <th>作成日付</th>
+                            <th>更新日付</th>
+                        </tr>
+                        <% } %>
+                        <% items.forEach(item =>{ %>
+                            <% const review = reviews.filter(review => review.item_id === item.id); %>
+                            <% if (review.length>0){ %>
+                            <tr>
+                                <td rowspan="<%=review.length %>" class="ad_page-review-product--td">
+                                    <div class="ad_page-review-product">
+                                        <div class="ad_page-review-product--img">
+                                            <a href="/product/<%=item.id %>">
+                                                <img src="/image/item-image/<%=item.color_img[0].img[0] %>" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="ad_page-review-product--name"><%=item.name %></div>
+                                    </div>
+                                    <div class="ad_page-review-product--review">
+                                        <div class="ad_page-review-product--review-star">
+                                            <% const ratingSum = review.reduce((sum, r) => sum + r.rating, 0); %>
+                                            <div class="product-item-data-review_content-score">
+                                                <%= (ratingSum > 0 ? (ratingSum / review.length).toFixed(1) : "0") %>
+                                            </div>
+                                            <div class="stars-outer">
+                                                <div class="stars-inner" style="width: <%= (ratingSum > 0 ? (ratingSum / review.length) / 5 * 100 : 0) %>%"></div>
+                                            </div>
+                                            (<%=review.length %>)
+                                        </div>
+                                    </div>
+                                </td>
+                                <% reviews.forEach(review => { %>
+                                    <% if(review.item_id == item.id){ %>
+                                <td>
+                                    <div class="ad_page-review-user">
+                                        <div class="ad_page-review-user--img">
+                                            <% const user = users.find(user => user.user_name === review.user_name); %>
+                                            <img src="/image/user-image/<%=user.user_img %>" alt="">
+                                        </div>
+                                        <div class="ad_page-review-user--name"><%=review.user_name %></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ad_page-review-star">
+                                        <div class="ad_page-review-star--product">
+                                            <strong>カラー：</strong><%=review.color_name %> 
+                                            <strong>サイズ：</strong><%=review.size %>
+                                        </div>
+                                        <div class="ad_page-review-star--number">
+                                            <% for(let i = 1;i <= review.rating;i++ ){ %>
+                                                <i class="fa-solid fa-star"></i>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ad_page-review-content">
+                                        <div class="ad_page-review-content--title">タイトル：<strong><%=review.review_title %></strong></div>
+                                        <div class="ad_page-review-content--text">内容：<%=review.review_text %></div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="ad_page-review-createdTime"><%=review.created_at %></div>
+                                </td>
+                                <td>
+                                    <div class="ad_page-review-updateTime"><%=review.updated_at %></div>
+                                </td>
+                            </tr>
+                                    <% } %>
+                                <% }) %>
+                        <% }}) %>
+                    </table>
+                    <div class="bar-page">
+                        <div class="bar-page_list">
+                                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="warning-delete-box-background">
+            <div class="warning-delete-box">
+            </div>
+        </div>
+    </div>
+    <div class="footer" style="height: 200px;">
+    </div>
+</body>
+</html>

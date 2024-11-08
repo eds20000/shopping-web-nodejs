@@ -1,7 +1,7 @@
 var cartItemQuanityBtn = document.querySelector(".cart__list-item-quantily i");
 var cartItemSelect = document.querySelector(".cart__list-item-count");
 
-TakeCart();
+
 function updateTotalPrice() {
     let totalPrice = 0;
 
@@ -118,7 +118,7 @@ function TakeCart() {
                     </div>`}
                 </div>
             </div>`// Tính tổng tiền khi render giỏ hàng
-    if (myCart.length > 0) {
+    if (myCart.length  > 0) {
         updateTotalPrice();
         // Sự kiện thay đổi số lượng sản phẩm
         $('.header__navbar-cart-item_info-quantity-num').onchange = function () {
@@ -134,7 +134,7 @@ function TakeCart() {
 
 }
 
-function TakeCartInfor(data) {
+function TakeCartInfor() {
     if (user) {
         $('.container').innerHTML =
             `
@@ -156,133 +156,40 @@ function TakeCartInfor(data) {
                     </div>
             
                     </div>
+                    
                     <form action="post" id ="cart__pay-form" class="row cart-content">
                         <div class="col l-8 m-8 c-12">
-                            <div class="cart__pay-form">
-                                    <div class="address-form">
-                                         <div class="row">
-                                        <div class="cart__pay-form-title">届け先</div>
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-name" class="address-id" >
-                                                名前
-                                                <span class="required_label">必須</span>
-                                            </label>
-                                        </div>
-                                        
-                                        <div class="col l-8 m-8 c-12">
-                                            <input type="text" class="pay-form-input pay-form-input_name" name="adress-name" id="adress-name" value="${data ? data['adress-name'] : ''}">
-                                            <span class="form-message"></span>
-                                        </div>
-                                        
-    
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-phone" class="address-phone">電話番号
-                                                <span class="required_label">必須</span>
-                                            </label>
-                                        </div>
-                                        <div class="col l-8 m-8 c-12">
-                                            <input type="text" class="pay-form-input pay-form-input_phone" name="adress-phone" id="adress-phone" value="${data ? data['adress-phone'] : ''}">                                  
-                                            <span class="form-message"></span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-zipcode" class="address-zip-code">郵便番号
-                                                <span class="required_label">必須</span>
-                                            </label>
-                                        </div>
-                                        <div class="col l-8 m-8 c-12">
-                                            <div class="input_zip-code-box">
-                                                <input type="text" class="pay-form-input pay-form-input_zip-code" name="adress-zip-code" id="adress-zip-code" value="${data ? data['adress-zip-code'] : ''}">
-                                                <div class="zip-code-checkBtn primary-btn" onclick = "AjaxZip3.zip2addr('adress-zip-code','','adress-prefecture','adress-city');">住所を自動入力</div>
-                                            </div>
-                                            <span class="form-message"></span>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-prefecture" class="address-prefecture">都道府県
-                                                <span class="required_label">必須</span>
-                                            </label>
-                                        </div>
-                                        <div class="col l-8 m-8 c-12">
-                                            <input type="text" class="pay-form-input pay-form-input_prefecture" name="adress-prefecture" id="adress-prefecture" value="${data ? data['adress-prefecture'] : ''}">
-                                            <span class="form-message"></span>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-city" class="address-city">市区町村
-                                                <span class="required_label">必須</span>
-                                            </label>
-                                        </div>
-                                        <div class="col l-8 m-8 c-12">
-                                            <input type="text" class="pay-form-input pay-form-input_city" name="adress-city" id="adress-city" value="${data ? data['adress-city'] : ''}">
-                                            <span class="form-message"></span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-add" class="address-add">町名・丁番地等
-                                                <span class="required_label">必須</span>
-                                            </label>
-                                        </div>
-                                        <div class="col l-8 m-8 c-12">
-                                            <input type="text" class="pay-form-input pay-form-input_add" name="adress-add" id="adress-add" value="${data ? data['adress-add'] : ''}">
-                                            <span class="form-message"></span>
-                                        </div>
-                                    </div>
-                                    <div class="input-group row">
-                                        <div class="col l-4 m-4 c-12">
-                                            <label for="adress-building" class="address-building">マンション名・号室等</label>
-                                        </div>
-                                        <div class="col l-8 m-8 c-12">
-                                            <input type="text" class="pay-form-input pay-form-input_building" name="adress-building" id="adress-building" value="${data ? data['adress-building'] : ''}">
-                                            <span class="form-message"></span>
-                                        </div>
-                                    </div>
-                                   
+                        <div class ="row user-address__box--list">
+                        <div class="user-address__box--title">
+                            届け先リスト
+                        </div>
+                    ${userAddress.length > 0 ? 
+                        userAddress.map(Address => `
+                            <div class="user-address col l-4">
+                                <a class="user-address__box--delete" href="user-address-delete/${Address.id}">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                                <div class="user-address__box " 
+                                    data-name="${Address.name}" data-phone="${Address.phone}"
+                                    data-zipcode ="${Address['address_zip_code']}" data-prefecture="${Address['address_prefecture']}"
+                                    data-city="${Address['address_city']}" data-building="${Address['address_building']}" data-add="${Address['address_add']}">
+                                    <div class="user-address__box--name">${Address.name}</div>
+                                    <div class="user-address__box--phone">${Address.phone}</div>
+                                    <div class="user-address__box--address">
+                                    ${Address['address_zip_code']}${Address['address_prefecture']}${Address['address_city']}${Address['address_add']}${Address['address_building']}</div>
                                 
-                                
-                                    <div class="payment-form">
-                                        <div id ="payment-form" class="form-close input-group">
-                                            <div class="row">
-                                                <div class="payment-form-title">お支払方法</div>
-                                            </div>
-                                            <div class="radio-group row">
-                                                <input type="radio" name="payment" id="payment-cashon" class="payment-cashon" value ="代金引換" ${data && data['payment'] === '代金引換' ? 'checked' : ''}>
-                                                <label for="payment-cashon">代金引換</label>
-                                            </div> 
-                                            <div class="radio-group row">
-                                                <input type="radio" name="payment" id="payment-credit" class="payment-credit" value ="クレジットカード決済" ${data && data['payment'] === 'クレジットカード決済' ? 'checked' : ''}>
-                                                <label for="payment-credit">クレジットカード決済</label>
-                                            </div>
-                                            <div class="radio-group row">
-                                                <input type="radio" name="payment" id="payment-paypay" class="payment-paypay" value ="PayPay" ${data && data['payment'] === 'PayPay' ? 'checked' : ''}>
-                                                <label for="payment-paypay">PayPay</label>
-                                            </div>
-                                           
-                                            <div class="radio-group row">
-                                                <input type="radio" name="payment" id="payment-d" class="payment-d" value = "d払い" ${data && data['payment'] === 'd払い' ? 'checked' : ''}>
-                                                <label for="payment-d">d払い ｄポイントがたまる・つかえる</label>
-                                            </div>
-                                            <div class="radio-group row">
-                                                <input type="radio" name="payment" id="payment-paydy" class="payment-paydy" value ="Paidyあと払い" ${data && data['payment'] === 'Paidyあと払い' ? 'checked' : ''}>
-                                                <label for="payment-paydy">Paidyあと払い（3･6･12回払いも可能）</label>
-                                            
-                                            </div>
-                                            <span class="form-message payment-error"></span>
-                                        </div>
-                                        
-                                        <div class="close-formBtn">他のお支払い方法で支払う<i class="fa-solid fa-chevron-down"></i></div>
-                                    </div>
                                 </div>
+                            </div>
+
+
+                        `).join('') 
+                    : ''}
+                    </div>
+                    <div class="user-address__addBtn primary-btn">
+                        +追加        
+                    </div>                    
+                            <div class="cart__pay-form">
+                                    
                             </div>
                         </div>
                         <div class="col l-4 m-4 c-12">
@@ -306,17 +213,284 @@ function TakeCartInfor(data) {
                 </div>
         `
         updateTotalPrice();
-        let paymentCloseBtn = $('.close-formBtn')
-        paymentCloseBtn.onclick = function () {
-            let paymentForm = $('#payment-form')
-            paymentForm.classList.toggle('form-close');
-            if (paymentForm.classList.contains('form-close')) {
-                paymentCloseBtn.innerHTML = '他のお支払い方法で支払う<i class="fa-solid fa-chevron-down"></i>';
-            }
-            else {
-                paymentCloseBtn.innerHTML = '閉じる<i class="fa-solid fa-chevron-up"></i>';
-            }
+        document.querySelectorAll(".user-address__box").forEach(addressBox =>
+            addressBox.onclick =function(){
+                $(".cart__pay-form").innerHTML =
+                `
+                                <div class="address-form">
+                                    <div class="row">
+                                        <div class="cart__pay-form-title">届け先</div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-name" class="address-id" >
+                                                名前
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_name" name="adress-name" id="adress-name" value="${ this.dataset.name}" disabled>
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-phone" class="address-phone">電話番号
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_phone" name="adress-phone" id="adress-phone" value="${this.dataset.phone}" disabled>                                  
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-zipcode" class="address-zip-code">郵便番号
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <div class="input_zip-code-box">
+                                                <input type="text" class="pay-form-input pay-form-input_zip-code" name="adress-zip-code" id="adress-zip-code" value="${this.dataset.zipcode}" disabled>
 
+                                            </div>
+                                            <span class="form-message"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-prefecture" class="address-prefecture">都道府県
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_prefecture" name="adress-prefecture" id="adress-prefecture" value="${this.dataset.prefecture}" disabled>
+                                            <span class="form-message"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-city" class="address-city">市区町村
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_city" name="adress-city" id="adress-city" value="${this.dataset.city}" disabled>
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-add" class="address-add">町名・丁番地等
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_add" name="adress-add" id="adress-add" value="${this.dataset.add}" disabled>
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-building" class="address-building">マンション名・号室等</label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_building" name="adress-building" id="adress-building" value="${this.dataset.building}" disabled>
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                   
+                                
+                                
+                                    <div class="payment-form">
+                                        <div id ="payment-form" class="form-close input-group">
+                                            <div class="row">
+                                                <div class="payment-form-title">お支払方法</div>
+                                            </div>
+                                            <div class="radio-group row">
+                                                <input type="radio" name="payment" id="payment-cashon" class="payment-cashon" value ="代金引換">
+                                                <label for="payment-cashon">代金引換</label>
+                                            </div> 
+                                            <div class="radio-group row">
+                                                <input type="radio" name="payment" id="payment-credit" class="payment-credit" value ="クレジットカード決済">
+                                                <label for="payment-credit">クレジットカード決済</label>
+                                            </div>
+                                            <div class="radio-group row">
+                                                <input type="radio" name="payment" id="payment-paypay" class="payment-paypay" value ="PayPay">
+                                                <label for="payment-paypay">PayPay</label>
+                                            </div>
+                                           
+                                            <div class="radio-group row">
+                                                <input type="radio" name="payment" id="payment-d" class="payment-d" value = "d払い">
+                                                <label for="payment-d">d払い ｄポイントがたまる・つかえる</label>
+                                            </div>
+                                            <div class="radio-group row">
+                                                <input type="radio" name="payment" id="payment-paydy" class="payment-paydy" value ="Paidyあと払い">
+                                                <label for="payment-paydy">Paidyあと払い（3･6･12回払いも可能）</label>
+                                            
+                                            </div>
+                                            <span class="form-message payment-error"></span>
+                                        </div>
+                                        
+                                        <div class="close-formBtn">他のお支払い方法で支払う<i class="fa-solid fa-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                `
+                let paymentCloseBtn = $('.close-formBtn')
+                paymentCloseBtn.onclick = function () {
+                    let paymentForm = $('#payment-form')
+                    paymentForm.classList.toggle('form-close');
+                    if (paymentForm.classList.contains('form-close')) {
+                        paymentCloseBtn.innerHTML = '他のお支払い方法で支払う<i class="fa-solid fa-chevron-down"></i>';
+                    }
+                    else {
+                        paymentCloseBtn.innerHTML = '閉じる<i class="fa-solid fa-chevron-up"></i>';
+                    }
+        
+                }
+            }
+        )
+        document.querySelector('.user-address__addBtn').onclick = function () {
+            $(".cart__pay-form").innerHTML = 
+            `
+                                <div class="address-form">
+                                    <div class="row">
+                                        <div class="cart__pay-form-title">届け先</div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-name" class="address-id" >
+                                                名前
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_name" name="adress-name" id="adress-name" value="" >
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-phone" class="address-phone">電話番号
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_phone" name="adress-phone" id="adress-phone" value="">                                  
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-zipcode" class="address-zip-code">郵便番号
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <div class="input_zip-code-box">
+                                                <input type="text" class="pay-form-input pay-form-input_zip-code" name="adress-zip-code" id="adress-zip-code" value="">
+                                                <div class="zip-code-checkBtn primary-btn" onclick = "AjaxZip3.zip2addr('adress-zip-code','','adress-prefecture','adress-city');">住所を自動入力</div>
+                                            </div>
+                                            <span class="form-message"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-prefecture" class="address-prefecture">都道府県
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_prefecture" name="adress-prefecture" id="adress-prefecture" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-city" class="address-city">市区町村
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_city" name="adress-city" id="adress-city" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-add" class="address-add">町名・丁番地等
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_add" name="adress-add" id="adress-add" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-building" class="address-building">マンション名・号室等
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_building" name="adress-building" id="adress-building" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="primary-btn address-add-btn">住所を追加</div>
+                                </div>
+                `
+        $('.address-add-btn').onclick = function (){
+            let addressName = this.parentElement.querySelector('input[name="adress-name"]').value;
+            let addressPhone = this.parentElement.querySelector('input[name="adress-phone"]').value;
+            let addressZipcode = this.parentElement.querySelector('input[name="adress-zip-code"]').value;
+            let addressPrefecture = this.parentElement.querySelector('input[name="adress-prefecture"]').value;
+            let addressCity = this.parentElement.querySelector('input[name="adress-city"]').value;
+            let addressAdd = this.parentElement.querySelector('input[name="adress-add"]').value;
+            let addressBuilding = this.parentElement.querySelector('input[name="adress-building"]').value;
+            if (addressName !== "" &&
+                addressPhone !== "" &&
+                addressZipcode !== "" &&
+                addressPrefecture !== "" &&
+                addressCity !== "" &&
+                addressAdd !== "" &&
+                addressBuilding !== "") {
+                    const formData = {
+                        addressName:addressName,
+                        addressPhone:addressPhone,
+                        addressZipcode:addressZipcode,
+                        addressPrefecture:addressPrefecture,
+                        addressCity:addressCity,
+                        addressAdd:addressAdd,
+                        addressBuilding:addressBuilding
+                    };
+                    fetch('/user-address-add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json' // Thiết lập Content-Type
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                    })
+                    .then(data => {
+                        window.location.pathname = '/getCartPage-reset'
+                    })
+                   
+                    .catch((error) => {
+                        console.error('Error:', error);
+                    });
+            }
+            else{
+                $('.address-form').innerHTML +=`<div class="address-add-error">すべての項目を入力してください</div>`
+            }
+            
+        }
         }
         $('.cart-heading-cartshow.cart-active').addEventListener("click", TakeCart);
         Validator({
@@ -477,8 +651,6 @@ function TakeCartInfor(data) {
                     return letters + numbers;
                 }
                 $('.payment-agree-btn').onclick = function TakeCartAgree() {
-                    console.log(data);
-                    console.log(myCart)
                     let orderNumber = generateOrderNumber();
                     const payload = {
                         data: data,
@@ -555,6 +727,10 @@ function TakeCartInfor(data) {
 
 }
 
+TakeCart();
+if (window.location.pathname === '/getCartPage-reset') {
+    TakeCartInfor();
+}
 
 
 if (window.innerWidth < 1023) {

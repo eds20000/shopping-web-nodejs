@@ -1,21 +1,13 @@
 import modelCourse from '../models/course'
 import models from '../models/admin/adminPage.model'
-import { json } from 'body-parser';
+import modelReview from '../models/review.model'
 
-let addToCart = async (req, res) => {
-    const userId = req.params.id;
-    const { itemId, colorId, size } = req.body;
-    try {
-        await modelCourse.addToCart(userId, itemId, colorId, size);
-    } catch (error) {
-        return res.json({ success: false, error: error.message });
-    }
-}
 
-let getCartPage = async (req, res) => {
+let getCategoryPage = async (req, res) => {
     const items = await models.getItems()
     let myCart = []
-    let userAddress = []
+
+    const category = req.params.category
     if (req.cookies && req.cookies.myCart) {
         myCart = req.cookies.myCart
     }
@@ -28,8 +20,6 @@ let getCartPage = async (req, res) => {
         }
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
-        //user - address 
-        userAddress = await modelCourse.getUserAddress(req.session.user.user_id)
         req.session.user.favorItems = favorItems;
         req.session.user.cartItems = cartItems;
 
@@ -53,46 +43,14 @@ let getCartPage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        res.render('cart.ejs', { user: req.session.user, myCart: fullCartItems, userAddress });
+        res.render('category', { items, user: req.session.user, myCart: fullCartItems, category });
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('cart.ejs', { user: null, myCart,userAddress });
+        res.render('category', { items, user: null, myCart: myCart, category });
     }
-};
 
-
-let removeFromCart = async (req, res) => {
-    const { userId, itemId, colorId, size } = req.body;
-    try {
-        await modelCourse.removeFromCart(userId, itemId, colorId, size);
-    } catch (error) {
-        return res.json({ success: false, error: error.message });
-    }
-}
-
-let decreaseQuantityItemCart = async (req, res) => {
-    const { userId, itemId, colorId, size } = req.body;
-    try {
-        await modelCourse.decreaseQuantityItemCart(userId, itemId, colorId, size);
-    } catch (error) {
-        return res.json({ success: false, error: error.message });
-    }
-}
-
-let increaseQuantityItemCart = async (req, res) => {
-    const { userId, itemId, colorId, size } = req.body;
-    try {
-        await modelCourse.increaseQuantityItemCart(userId, itemId, colorId, size);
-    } catch (error) {
-        return res.json({ success: false, error: error.message });
-    }
 }
 
 module.exports = {
-    addToCart,
-    getCartPage,
-    removeFromCart,
-    decreaseQuantityItemCart,
-    increaseQuantityItemCart
+    getCategoryPage
 }
-

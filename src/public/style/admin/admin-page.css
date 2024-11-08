@@ -593,5 +593,70 @@
 .order-page-info__tracking--button:hover {
   opacity: 0.8;
 }
+.ad_page-review-product--img img{
+  margin-right: 10px;
+}
+.ad_page-review-product--img img,
+.ad_page-review-user--img img{
+  width: 50px;
+}
+.ad_page-review-product--td{
+  width: 300px;
+  text-align: center;
+}
+.ad_page-review-product{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.ad_page-review-content{
+  width: 200px;
+  text-align: left;
+}
+.ad_page-review-star--number i {
+  color: #f4d34c;
+}
+.ad_page-review-user div{
+  padding: 10px;
+}
+
+.ad_page-review-product--review-star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  width: 100%;
+}
+
+.product-item-data-review_content-score {
+  margin-right: 8px;
+}
+
+.stars-outer {
+  position: relative;
+  display: inline-block;
+  font-size: 1.5rem;
+  color: #d3d3d3; /* Màu sao chưa đánh giá */
+}
+
+.stars-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  color: #f4d34c; /* Màu sao được đánh giá */
+}
+
+.stars-outer::before {
+  content: "\f005 \f005 \f005 \f005 \f005";
+  font-family: FontAwesome;
+}
+
+.stars-inner::before {
+  content: "\f005 \f005 \f005 \f005 \f005";
+  font-family: FontAwesome;
+}
 
 /*# sourceMappingURL=admin-page.css.map */

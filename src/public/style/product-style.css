@@ -411,6 +411,7 @@ ul{
 .product-item-data-review_add{
     padding: 20px 10px;
     background-color: var(--hover-color);
+    margin-top: 10px;
 }
 .product-item-data-review_add--username{
     font-weight: 600;
@@ -418,13 +419,18 @@ ul{
 .form-group{
     margin-top: 20px;
 }
-.review-submit-btn{
-    width: auto;
+.action-btn{
+    display: flex;
+    gap:50px;
+}
+.review-submit-btn,
+.review-delete-btn{
     margin-top: 10px;
     border-radius: 20px;
     margin-right: 0;
     margin-left: auto;
 }
+
 .star-rating-title{
     display: inline;
 }

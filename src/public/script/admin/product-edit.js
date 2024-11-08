@@ -197,8 +197,7 @@ function itemColorSizeAdd(a) {
         <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value=""></input>                                           
         <label for="item-colorImgSize-stock">在庫</label>                                                      
         <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value=""></input>
-        <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>
-             
+        <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div> 
     </div>
     `
 }

@@ -42,6 +42,16 @@ let getFavoriteItemList = async (userId) => {
     }
 }
 
+//user-address
+let getUserAddress = async (userId) => {
+    try{
+        const[rows] = await pool.query(`SELECT * FROM user_address WHERE user_id = ?`, [userId])
+        return rows
+    }catch(error){
+        return error
+    }
+}
+
 let addToFavorites = async (userId, itemId) => {
     try {
         const [existingFavorite] = await pool.query('SELECT * FROM favorite_items WHERE user_id = ? AND item_id = ?', [userId, itemId]);
@@ -276,5 +286,5 @@ module.exports = {
     resetUserSession,
     getFavoriteItemList, getFavoriteItemIds, removeFromFavorites,
     addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart,
-    getOrders, getOrderDetails, getOrdersById
+    getOrders, getOrderDetails, getOrdersById,getUserAddress
 }

@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="./style/base.css">
-    <link rel="stylesheet" href="./style/grid.css">
-    <link rel="stylesheet" href="./style/main.css">
-    <link rel="stylesheet" href="./style/responsive.css">
-    <link rel="stylesheet" href="./style/category.css">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/responsive.css">
+    <link rel="stylesheet" href="/style/category.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,10 +17,19 @@
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
     
     <!-- Swiper -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
     <title>TS-shop</title>
+    <script>
+        const list_item = JSON.parse('<%- JSON.stringify(items) %>');
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+        const category = JSON.parse('<%- JSON.stringify(category) %>');
+        console.log(myCart)
+        console.log(list_item)
+    </script>
 </head>
 <body>
     <div class="app">
@@ -35,19 +44,19 @@
                 <div class="row">
                     <ul class="category__list col l-2">
                         <p class="category_header">カテゴリー</p>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item"><a href=""><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'トップス' ? 'available' : '' %>"><a href="/category/トップス"><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'ジャケット・アウター' ? 'available' : '' %>"><a href="/category/ジャケット・アウター"><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'パンツ' ? 'available' : '' %>"><a href="/category/パンツ"><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'スカート' ? 'available' : '' %>"><a href="/category/スカート"><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'ワンピース/ドレス' ? 'available' : '' %>"><a href="/category/ワンピース・ドレス"><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == '小物' ? 'available' : '' %>"><a href="/category/小物"><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'バッグ' ? 'available' : '' %>"><a href="/category/バッグ"><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'シューズ' ? 'available' : '' %>"><a href="/category/シューズ"><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'ファッション雑貨' ? 'available' : '' %>"><a href="/category/ファッション雑貨"><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == '帽子' ? 'available' : '' %>"><a href="/category/帽子"><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == '腕時計' ? 'available' : '' %>"><a href="/category/腕時計"><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'アクセサリー' ? 'available' : '' %>"><a href="/category/アクセサリー"><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'その他' ? 'available' : '' %>"><a href="/category/その他"><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></a></li>
                     </ul>
                     <div class="content_body col l-10">
                         <div class="row">
@@ -55,30 +64,24 @@
                                 <div class="content__title-text">すべてのアイテム</div>
                                 <div class="content__title-sort">
                                     <div class="content__title-sort-text">並び替え：</div> 
-                                    <input type ="input" class="content__title-sort-selected" value="価格が高い順"></input>
+                                    <input type ="input" class="content__title-sort-selected" value="価格が安い順"></input>
                                     <i class="fa-solid fa-chevron-down"></i> 
                                     <div class="sort__tab">
-                                    <div class="sort__tab-list sort__tab-ascen selected" >価格が高い順</div>
-                                    <div class="sort__tab-list sort__tab-descen"  >価格が安い順</div>  
-                                </div>
+                                        <div class="sort__tab-descen sort__tab-list selected">価格が安い順</div>  
+                                        <div class="sort__tab-ascen sort__tab-list " >価格が高い順</div>
+                                        <div class="sort__tab-ascen sort__tab-list " >高評価商品</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row sort__item-list">
+                        <div class="row category__item-list">
+                           
                         </div>
                         <!---------------Page-bar--------Start--> 
                         <div class="row">
                             <div class="bar-page">
                                 <div class="bar-page_list">
-                                    <a  class="bar-page_list-item page-checked">1</a>
-                                    <a  class="bar-page_list-item">2</a>
-                                    <a  class="bar-page_list-item">3</a>
-                                    <a  class="bar-page_list-item">4</a>
-                                    <a  class="bar-page_list-item">5</a>
-                                    <nav  class="bar-page_list-item page-dotted ">...</nav>
-                                    <a  class="bar-page_list-item">100</a>
-                                    <a  class="bar-page_list-item page-next"><i class="fa-solid fa-angle-right"></i></a>
-                                </div>
+                                    
                             </div>
                         </div>
                         <!---------------Page-bar--------End--> 
@@ -93,16 +96,16 @@
         <%- include('./includes/footer.ejs') %>
         <!-- Footer End -->
     </div>
-<script type ="module" src="./script/script.js"></script>
+    <script src="/script/script.js"></script>
+    <script src="/script/category.js"></script>
 <script>
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-    var swiperTab = new Swiper('.tab',{
-        direction:'horizontal',
-        loop:true,
-        slidesPerView:window.innerWidth < 740 ?3:8,
-        spaceBetween: 1,
-    })
+    document.addEventListener('DOMContentLoaded', function () {
+  var swiperTab = new Swiper('.tab', {
+    direction: 'horizontal',
+    slidesPerView: window.innerWidth < 740 ? 3 : 8,
+    spaceBetween: 1,
+  });
+})
 
 </script>
 </body>

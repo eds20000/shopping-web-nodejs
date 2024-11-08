@@ -18,6 +18,8 @@
         const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+        const userAddress = JSON.parse('<%- JSON.stringify(userAddress) %>');
+        console.log(userAddress)
     </script>
     <title>TS-shop</title>
 </head>
@@ -110,7 +112,6 @@
                                 <div class="profile__content--value user-profile__content--email-value">
                                     <%= user.user_email %>
                                     <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--email')">変更</div>
-                                    </div>
                                     <form action="/user-profile/edit/<%=user.user_id %>" class="user-profile__content--email-form" style="display: none;" method="post">
                                         <input type="text" name="user_email" id="user_email" style="display: inline-block; " value=<%= user.user_email %>>
                                         <input type="text" name="section" value="user_email" hidden>
@@ -123,8 +124,18 @@
                                 <div class="profile__content--value user-profile__content--password-value">
                                     *********
                                     <div class="user-profile__content--value-reset" style="display: inline;" onclick="userProfileReset('user-profile__content--password')">変更</div>
-                                    </div>
-                                    <form action="/user-profile/edit/pass/<%=user.user_id %>" class="user-profile__content--password-form" style="display: none;" method="post">
+                                </div>
+                                <form action="/user-profile/edit/pass/<%=user.user_id %>" class="user-profile__content--password-form" style="display: none;" method="post">
+                                    <label for="user_password-check">旧パスワード</label>
+                                    <input type="password" name="user_password_check" id="user_password-check" style="display: inline-block; " value="">
+                                    <label for="user_password-new">新パスワード</label>
+                                    <input type="password" name="user_password_new" id="user_password-new" style="display: inline-block; " value="">
+                                    <label for="user_password-confirm">パスワード確認</label>
+                                    <input type="password" name="user_password_confirm" id="user_password-confirm" style="display: inline-block; " value="">
+                                    <button type="submit" class="user-profile__content--value-reset">確認</button>
+                                </form>
+                                <% if (error_msg.length > 0) { %>
+                                    <form action="/user-profile/edit/pass/<%=user.user_id %>" class="user-profile__content--password-form"  method="post">
                                         <label for="user_password-check">旧パスワード</label>
                                         <input type="password" name="user_password_check" id="user_password-check" style="display: inline-block; " value="">
                                         <label for="user_password-new">新パスワード</label>
@@ -133,21 +144,131 @@
                                         <input type="password" name="user_password_confirm" id="user_password-confirm" style="display: inline-block; " value="">
                                         <button type="submit" class="user-profile__content--value-reset">確認</button>
                                     </form>
-                                    <% if (error_msg.length > 0) { %>
-                                        <form action="/user-profile/edit/pass/<%=user.user_id %>" class="user-profile__content--password-form"  method="post">
-                                            <label for="user_password-check">旧パスワード</label>
-                                            <input type="password" name="user_password_check" id="user_password-check" style="display: inline-block; " value="">
-                                            <label for="user_password-new">新パスワード</label>
-                                            <input type="password" name="user_password_new" id="user_password-new" style="display: inline-block; " value="">
-                                            <label for="user_password-confirm">パスワード確認</label>
-                                            <input type="password" name="user_password_confirm" id="user_password-confirm" style="display: inline-block; " value="">
-                                            <button type="submit" class="user-profile__content--value-reset">確認</button>
-                                        </form>
-                                        <div class="user_password-warning"><%= error_msg %></div>
-                                    <% } %>
-                                    <% if (success_msg.length > 0) { %>
-                                        <div class="user_password-success"><%= success_msg %></div>
-                                    <% } %>
+                                    <div class="user_password-warning"><%= error_msg %></div>
+                                <% } %>
+                                <% if (success_msg.length > 0) { %>
+                                    <div class="user_password-success"><%= success_msg %></div>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="row user-profile__content--address">
+                            <div class=" col l-12 profile__content--label">住所リスト</div>
+                            <%if(userAddress.length > 0 ) {%>
+                               <%userAddress.forEach(Address => {%>
+                            <div class="user-address col l-3">
+                                <a class="user-address__box--delete" href="user-address-delete/<%= Address.id %>">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                                <div class="user-address__box " 
+                                    data-name="${Address.name}" data-phone="${Address.phone}"
+                                    data-zipcode ="${Address['address_zip_code']}" data-prefecture="${Address['address_prefecture']}"
+                                    data-city="${Address['address_city']}" data-building="${Address['address_building']}" data-add="${Address['address_add']}">
+                                    <div class="user-address__box--name"><%=Address.name %></div>
+                                    <div class="user-address__box--phone"><%=Address.phone %></div>
+                                    <div class="user-address__box--address">
+                                    〒<%= Address['address_zip_code'] %> <%=Address['address_prefecture'] %> <%=Address['address_city'] %> <%=Address['address_add'] %> <%=Address['address_building'] %></div>
+                                </div>
+                            </div>
+                                <% }) %>
+                            <% }else{ %>
+                                 No address
+                            <% } %>
+                            <div class="col l-12">
+                                <div class="user-address__addBtn primary-btn ">
+                                    +追加        
+                                </div> 
+                            </div>
+                            <div class ="address-form-container" style="display: none;">
+                                <div class="address-form">
+                                    <div class="row">
+                                        <div class="cart__pay-form-title">届け先</div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-name" class="address-id" >
+                                                名前
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_name" name="adress-name" id="adress-name" value="" >
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-phone" class="address-phone">電話番号
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_phone" name="adress-phone" id="adress-phone" value="">                                  
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-zipcode" class="address-zip-code">郵便番号
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <div class="input_zip-code-box">
+                                                <input type="text" class="pay-form-input pay-form-input_zip-code" name="adress-zip-code" id="adress-zip-code" value="">
+                                                <div class="zip-code-checkBtn primary-btn" onclick = "AjaxZip3.zip2addr('adress-zip-code','','adress-prefecture','adress-city');">住所を自動入力</div>
+                                            </div>
+                                            <span class="form-message"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-prefecture" class="address-prefecture">都道府県
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_prefecture" name="adress-prefecture" id="adress-prefecture" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-city" class="address-city">市区町村
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_city" name="adress-city" id="adress-city" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-add" class="address-add">町名・丁番地等
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_add" name="adress-add" id="adress-add" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="input-group row">
+                                        <div class="col l-4 m-4 c-12">
+                                            <label for="adress-building" class="address-building">マンション名・号室等
+                                                <span class="required_label">必須</span>
+                                            </label>
+                                        </div>
+                                        <div class="col l-8 m-8 c-12">
+                                            <input type="text" class="pay-form-input pay-form-input_building" name="adress-building" id="adress-building" value="">
+                                            <span class="form-message"></span>
+                                        </div>
+                                    </div>
+                                    <div class="primary-btn address-add-btn">住所を追加</div>
+                                    <div class="address-boxClose-btn"><i class="fa-solid fa-xmark"></i></div>
                                 </div>
                             </div>
                         </div>
@@ -180,7 +301,68 @@
        
         // Đọc file ảnh được chọn
            reader.readAsDataURL(event.target.files[0])
-        })        
+        })
+        document.querySelector('.user-address__addBtn').onclick = function () {
+            document.querySelector('.address-form-container').style.display = "block" 
+            $('.address-add-btn').onclick = function (){
+                const existingErrors = document.querySelectorAll('.address-add-error');
+                existingErrors.forEach(error => error.remove());
+                let addressName = this.parentElement.querySelector('input[name="adress-name"]').value;
+                let addressPhone = this.parentElement.querySelector('input[name="adress-phone"]').value;
+                let addressZipcode = this.parentElement.querySelector('input[name="adress-zip-code"]').value;
+                let addressPrefecture = this.parentElement.querySelector('input[name="adress-prefecture"]').value;
+                let addressCity = this.parentElement.querySelector('input[name="adress-city"]').value;
+                let addressAdd = this.parentElement.querySelector('input[name="adress-add"]').value;
+                let addressBuilding = this.parentElement.querySelector('input[name="adress-building"]').value;
+                if (addressName !== "" &&
+                    addressPhone !== "" &&
+                    addressZipcode !== "" &&
+                    addressPrefecture !== "" &&
+                    addressCity !== "" &&
+                    addressAdd !== "" &&
+                    addressBuilding !== "") {
+                        const formData = {
+                            addressName:addressName,
+                            addressPhone:addressPhone,
+                            addressZipcode:addressZipcode,
+                            addressPrefecture:addressPrefecture,
+                            addressCity:addressCity,
+                            addressAdd:addressAdd,
+                            addressBuilding:addressBuilding
+                        };
+                        fetch('/user-address-add', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json' // Thiết lập Content-Type
+                            },
+                            body: JSON.stringify(formData)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                        })
+                        .then(data => {
+                            window.location.pathname = '/user-profile'
+                        })
+                    
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    }
+                    else{
+                        const errorMessage = document.createElement('div');
+                        errorMessage.className = 'address-add-error';
+                        errorMessage.textContent = 'すべての項目を入力してください'; // "Vui lòng nhập tất cả các mục"
+                        document.querySelector('.address-form').appendChild(errorMessage);
+                    }
+                
+                }
+            }        
+        document.querySelector('.address-boxClose-btn').onclick = function () {
+            document.querySelector('.address-form-container').style.display = "none"
+            }
     </script>
+    <script src="https://ajaxzip3.github.io/ajaxzip3.js"></script>
 </body>
 </html>

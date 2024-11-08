@@ -151,41 +151,12 @@ productItemContainer.innerHTML =
                                 (${reviews.reviews.length})
                             </div>
                         </div>
-                        <div class="product-item-data-review_content-box">
-                        ${reviews.reviews.map(review => `
-                            <div class="product-item-data-review_content-item">
-                                <div class="product-item-data-review_content-name">
-                                    <strong>${review.user_name[0] + '*'.repeat(review.user_name.length - 2) + review.user_name.slice(-1)}</strong>
-                                    <span class="product-item-data-review_content-date">${review.created_at}</span>
-                                </div>
-                                <div class="product-item-data-review_content-star">
-                                    ${Array.from({ length: review.rating }).map(() => '<i class="fa-solid fa-star"></i>').join('')}
-                                </div>
-                                <div class="product-item-data-review_content-product">
-                                    <strong>カラー：</strong> ${review.color_name}
-                                    <strong>サイズ：</strong> ${review.size}
-                                </div>
-                                <div class="product-item-data-review_content-text">
-                                    ${review.review_text}
-                                </div>
-                                <div class="product-item-data-review_content-like">
-                                    ${user ?
-                                        review.reviewLikeUserId != null && review.reviewLikeUserId.includes(user.user_id) ?
-                                        `
-                                        <a onclick="ReviewLike(${review.id},this)" class="review-like like-icon-checked">
-                                        ` 
-                                        : 
-                                        `
-                                        <a onclick="ReviewLike(${review.id},this)" class="review-like">
-                                        ` 
+                        <div class="product-item-data-review_content-box">                     
+                        </div>
+                        <div class="bar-page">
+                            <div class="bar-page_list">
                                         
-                                    :
-                                    `<a href = "/login" class="review-like">`}
-                                        <i class="fa-regular fa-thumbs-up"></i>
-                                    </a> いいね！(<span class="reviewLikeQuantity">${review.reviewLikeUserId != null ? review.reviewLikeUserId.length : 0}</span>)
-                                </div >
-                            </div >
-                        `).join('')}                        
+                            </div>
                         </div>
                         ${user ? 
                             // Kiểm tra xem người dùng có đánh giá không
@@ -196,9 +167,9 @@ productItemContainer.innerHTML =
                                     review.user_name === user.user_name ? `
                                         <div class="product-item-data-review_add">
                                             <div class="product-item-data-review_add--username">${user.user_name}</div>
-                                            <form action="/update-review/${productItem.id}" method="post">
+                                            <form action="/update-review/${productItem.id}" method="post" id="review-form">
                                                 <div class="form-group">
-                                                    <label for="name">カラー - サイズ：：</label>
+                                                    <label for="name">カラー - サイズ：</label>
                                                     <select name="color_name">
                                                         ${item.color_img.map(colorImg =>
                                                             colorImg.color_size.map(colorSize =>
@@ -208,6 +179,7 @@ productItemContainer.innerHTML =
                                                             ).join('')
                                                         ).join('')}
                                                     </select>
+                                                    <span class="form-message"></span>
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="star-rating-title">評価：</div>
@@ -217,11 +189,23 @@ productItemContainer.innerHTML =
                                                              <label for="rating-${rating}"></label>`
                                                         ).join('')}
                                                     </div>
+                                                    <span class="form-message"></span>
+
+                                                </div>
+                                                <div class ="form-group">
+                                                    <label for="review_title">タイトル</label>
+                                                    <input type="text" name="review_title" id="review_title" class"review_title" value="${review.review_title}">
+                                                    <span class="form-message"></span>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label for="review_text">内容</label>
                                                     <textarea id="review_text" name="review_text" rows="4" placeholder="レビュー" style="width:100%">${review.review_text}</textarea>
+                                                    <span class="form-message"></span>
                                                 </div>
-                                                <button type="submit" class="primary-btn review-submit-btn">レビューを変更</button>
+                                                <div class="action-btn">
+                                                    <button type="submit" class="primary-btn review-submit-btn">レビューを変更</button>
+                                                    <a class="primary-btn review-delete-btn" href ="/delete-review/${review.id}">レビューを削除</a>
+                                                </div>
                                             </form>
                                         </div>` : ''
                                 ).join('') 
@@ -230,9 +214,9 @@ productItemContainer.innerHTML =
                                 `
                                 <div class="product-item-data-review_add">
                                     <div class="product-item-data-review_add--username">${user.user_name}</div>
-                                    <form action="/add-review/${productItem.id}" method="post">
+                                    <form action="/add-review/${productItem.id}" method="post" id="review-form">
                                         <div class="form-group">
-                                            <label for="name">カラー - サイズ：：</label>
+                                            <label for="name">カラー - サイズ：</label>
                                             <select name="color_name">
                                                 ${item.color_img.map(colorImg =>
                                                     colorImg.color_size.map(colorSize =>
@@ -240,6 +224,7 @@ productItemContainer.innerHTML =
                                                     ).join('')
                                                 ).join('')}
                                             </select>
+                                            <span class="form-message"></span>
                                         </div>
                                         <div class="form-group">
                                             <div class="star-rating-title">評価：</div>
@@ -249,9 +234,17 @@ productItemContainer.innerHTML =
                                                      <label for="rating-${rating}"></label>`
                                                 ).join('')}
                                             </div>
+                                            <span class="form-message"></span>
+                                        </div>
+                                        <div class ="form-group">
+                                            <label for="review_title">タイトル</label>
+                                            <input type="text" name="review_title" id="review_title" class"review_title" value="">
+                                            <span class="form-message"></span>
                                         </div>
                                         <div class="form-group">
+                                            <label for="review_text">内容</label>
                                             <textarea id="review_text" name="review_text" rows="4" placeholder="レビュー" style="width:100%"></textarea>
+                                            <span class="form-message"></span>
                                         </div>
                                         <button type="submit" class="primary-btn review-submit-btn">レビューを書く</button>
                                     </form>
@@ -260,13 +253,21 @@ productItemContainer.innerHTML =
                             // Nếu người dùng chưa đăng nhập, hiển thị nút đăng nhập
                             `<a href="/login" class="primary-btn product-item-data-review_add-btn">レビューを書く</a>`
                         }
-                        
                         </div>
                 </div>
             </div>
         </div>
     </div>`;
-
+Validator({
+    form:'#review-form',
+    formGroupSelector:'.form-group',
+    errorSelector:'.form-message',
+    rules:[
+        Validator.isRequired('input[name="review_title"]','タイトルを入力してください。'),
+        Validator.isRequired('textarea[name="review_text"]','内容を入力してください。'),
+        Validator.isRequired('input[name="rating"]','評価を入力してください。'),
+    ]
+    })
 function ReviewLike(reviewId, a) {
     fetch(`/review-like/${reviewId}`, {
         method: 'GET',
@@ -274,19 +275,111 @@ function ReviewLike(reviewId, a) {
     })
         .then(response => {
             if (!response.ok) {
+                const currentReview = window.currentList.find(review => review.id === reviewId);
                 const likeCountElement = a.nextElementSibling;
                 if (a.classList.contains('like-icon-checked')) {
                     a.classList.remove('like-icon-checked')
                     likeCountElement.innerText = parseInt(likeCountElement.innerText) - 1
+                    if (currentReview && currentReview.reviewLikeUserId) {
+                        const index = currentReview.reviewLikeUserId.indexOf(user.user_id);
+                        if (index > -1) currentReview.reviewLikeUserId.splice(index, 1);
+                    }
                 }
                 else {
                     a.classList.add('like-icon-checked')
                     likeCountElement.innerText = parseInt(likeCountElement.innerText) + 1
+                    if (currentReview) {
+                        currentReview.reviewLikeUserId = currentReview.reviewLikeUserId || [];
+                        currentReview.reviewLikeUserId.push(user.user_id);
+                    }
                 }
             }
             return response.json();
         })
 }
+
+//Pagination ------------------------------------------
+let currentPage = 1 //元のページ
+let perPage = 4 //so trang di chuyen 
+let totalPage = 0// ページの数
+let perItem = [] //アイテムが表示される
+function getItem(list) {
+    perItem = list.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage)
+    renderPageNumber(list)
+    reviewRender()
+}
+function handlerPageNumber(num, element) {
+    $$('.bar-page_list-item').forEach(item => {
+        item.classList.remove('page-checked');
+    });
+    // Thêm class 'page-checked' vào trang hiện tại
+    element.classList.add('page-checked');
+    currentPage = num
+    perItem = window.currentList.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage)
+    reviewRender()
+}
+
+function renderPageNumber(list) {
+    window.currentList = list;
+    totalPage = Math.ceil(list.length / perPage);
+    for (let i = 1; i <= totalPage; i++) {
+        if (totalPage > 1) {
+            if (i == 1) {
+                $('.bar-page_list').innerHTML += `<a class="bar-page_list-item page-checked" onclick="handlerPageNumber(${i},this)"> ${i}</a>`
+            } else {
+                $('.bar-page_list').innerHTML += `<a class="bar-page_list-item" onclick="handlerPageNumber(${i},this)"> ${i}</a>`
+            }
+        }
+    }
+
+}
+
+//レビューリストを抽出
+function reviewRender() {
+    if($('.product-item-data-review_content-box')){
+        $('.product-item-data-review_content-box').innerHTML = 
+        `${perItem.map(review => `
+            <div class="product-item-data-review_content-item">
+                <div class="product-item-data-review_content-name">
+                    <strong>${review.user_name[0] + '*'.repeat(review.user_name.length - 2) + review.user_name.slice(-1)}</strong>
+                    <span class="product-item-data-review_content-date">${review.created_at}</span>
+                </div>
+                <div class="product-item-data-review_content-product">
+                    <strong>カラー：</strong> ${review.color_name}
+                    <strong>サイズ：</strong> ${review.size}
+                </div>
+                <div class="product-item-data-review_content-star">
+                    ${Array.from({ length: review.rating }).map(() => '<i class="fa-solid fa-star"></i>').join('')}
+                    <strong>${review.review_title}</strong>
+                </div>
+                <div class="product-item-data-review_content-text">
+                    ${review.review_text}
+                </div>
+                <div class="product-item-data-review_content-like">
+                    ${user ?
+                        review.reviewLikeUserId != null && review.reviewLikeUserId.includes(user.user_id) ?
+                        `
+                        <a onclick="ReviewLike(${review.id},this)" class="review-like like-icon-checked">
+                        ` 
+                        : 
+                        `
+                        <a onclick="ReviewLike(${review.id},this)" class="review-like">
+                        ` 
+                        
+                    :
+                    `<a href = "/login" class="review-like">`}
+                        <i class="fa-regular fa-thumbs-up"></i>
+                    </a> いいね！(<span class="reviewLikeQuantity">${review.reviewLikeUserId != null ? review.reviewLikeUserId.length : 0}</span>)
+                </div >
+            </div >
+        `).join('')}
+        `
+    }
+}
+if (Array.isArray(reviews.reviews) && reviews.reviews.length > 0) {
+    getItem(reviews.reviews);
+}
+
 // Tạo nội dung hình ảnh và sản phẩm
 CreateImgItem();
 itemProductCreat();
@@ -402,5 +495,7 @@ else {
 
     });
 }
+
+
 
 

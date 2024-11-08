@@ -41,6 +41,40 @@
 .content_body{
     min-height: 900px;
 }
+
+.stars-outer {
+    display: inline-block;
+    position: relative;
+    font-family: FontAwesome;
+    color: #ccc;
+    font-size: 1.5rem;
+  }
+  
+  /* Định dạng phần ngôi sao đầy */
+.stars-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #f4d34c;
+    height: 1.5rem;
+    line-height: 1.5rem;
+}
+  
+ 
+.stars-outer::before {
+    content: "\f005 \f005 \f005 \f005 \f005";
+    font-family: FontAwesome;
+}
+  
+.stars-inner::before {
+    content: "\f005 \f005 \f005 \f005 \f005";
+    font-family: FontAwesome;
+}
+.sort__item-star-number{
+    margin-left: 10px;
+}
 /* RESPONSIVE  */
 
 /* Tablet and Mobile */

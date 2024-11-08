@@ -31,8 +31,10 @@
 .profile__content--label{
     font-size: 2rem;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
+
 .user-profile__content--profile{
     margin-left: 12px;
 }
@@ -65,10 +67,129 @@ input,select{
     padding: 10px;
     font-size: 2rem;
 }
-.user-profile__content--account,
-.user-profile__content--password{
+.user-address__addBtn{
+    width: 80px;
+    margin: 20px;
+
+}
+.user-profile__content--accountd{
     padding: 10px;
     margin-left: 12px;
+}
+.user-profile__content--address{
+    margin: 20px 0;
+}
+.user-address{
+    border: 1px solid var(--black-color);
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.user-address__box--delete{
+    padding:0 10px 10px;
+    margin: 10px 0;
+}
+.user-address__box--delete i{
+    float: right;
+}
+.user-address__box div:not(:nth-last-child(1)){
+    margin-bottom: 10px;
+}
+.address-form-container{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    opacity: 1;
+    transition: all 0.2s linear;
+    display: none;
+}
+.address-form{
+    padding: 10px ;
+    margin: 40px  0;
+    background-color: var(--hover-color);
+    width: auto;
+    position: relative;
+}
+.address-boxClose-btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px 15px;
+    font-size: 2rem;
+}
+.address-boxClose-btn:hover{
+    cursor: pointer;
+    background-color: rgb(170, 166, 166);
+}
+.cart__pay-form-title{
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+#cart__pay-form label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 20px;
+}
+.input-group label {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 40px;
+}
+.required_label {
+    width: auto;
+    font-size: 1.2rem;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 1px 5px;
+    height: 20px;
+    line-height: 19px;
+}
+.pay-form-input {
+    width: 100%;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    outline-color: var(--primary-color);
+}
+.input_zip-code-box {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
+}
+
+.address-form .row {
+    border-bottom: 1px solid var(--border-color);
+}
+.input-group {
+    font-size: var(--font-size);
+    align-items: center;
+    margin-bottom: 0;
+}
+.address-add-btn {
+    width: 100px;
+    margin: 10px 10px 0 auto;
+}
+.address-add-error {
+    color: var(--primary-color);
+    text-align: right;
+    padding: 10px;
+}
+.zip-code-checkBtn {
+    padding: 0 10px;
+    width: 30%;
+    border-radius: 20px;
 }
 .user-profile__content--password-form label,
 .user-profile__content--password-form input{

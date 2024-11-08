@@ -13,6 +13,8 @@ let getProfilePage = async (req, res) => {
     if (req.session.user) {
         const items = await models.getItems();
         let myCart;
+        let userAddress = []
+
         if (req.cookies && req.cookies.myCart) {
             myCart = JSON.parse(req.cookies.myCart)
             myCart.forEach(async item => {
@@ -22,6 +24,9 @@ let getProfilePage = async (req, res) => {
         }
         const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
         const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        //user - address 
+        userAddress = await modelCourse.getUserAddress(req.session.user.user_id)
+
         req.session.user.favorItems = favorItems;
         req.session.user.cartItems = cartItems;
 
@@ -45,7 +50,7 @@ let getProfilePage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        return res.render('user/profile.ejs', { items, user: req.session.user, myCart: fullCartItems });
+        return res.render('user/profile.ejs', { items, user: req.session.user, myCart: fullCartItems,userAddress });
     } else {
         req.session.loginBack = req.originalUrl;
         return res.redirect('/login');
@@ -246,8 +251,31 @@ let getOrderPage = async (req, res) => {
     }
 }
 
+let addAddress = async (req,res) =>{
+    if (req.session.user) {
+        await userProfileEdit.addAddress(req.session.user.user_id,req.body)
+        return res.status(200).send("Address added successfully");
+    }else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+
+}
+let deleteAddress = async (req,res) =>{
+    if (req.session.user) {
+        await userProfileEdit.deleteAddress(req.params.addressId)
+        if (req.headers.referer && req.headers.referer.includes('/getCartPage')) {
+            return res.redirect('/getCartPage-reset');
+        } else {
+            return res.redirect(req.session.logoutBack);
+        }
+    }else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+}
 module.exports = {
     getProfilePage, profileEdit, profilePasswordEdit,
     profileImageEdit, getFavoritePage, removeFavoriteItem,
-    getCartPage, getOrderPage
+    getCartPage, getOrderPage,addAddress,deleteAddress
 }

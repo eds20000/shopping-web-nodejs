@@ -9,7 +9,7 @@ function getItem() {
     renderPageNumber()
     renderItem()
 }
-
+console.log(list_items)
 function handlerPageNumber(num, element) {
     $$('.bar-page_list-item').forEach(item => {
         item.classList.remove('page-checked');

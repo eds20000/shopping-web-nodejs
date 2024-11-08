@@ -23,6 +23,11 @@ let addToFavorites = async (req, res) => {
 let getHomepage = async (req, res) => {
     const items = await models.getItems()
     let myCart = []
+    const reviews = await modelReview.getReview();
+    await Promise.all(reviews.map(async (review) => {
+        const reviewLikes = await modelReview.getReviewLike(review.id);
+        review.reviewLikeUserId = reviewLikes;
+    }));
     if (req.cookies && req.cookies.myCart) {
         myCart = req.cookies.myCart
     }
@@ -58,10 +63,10 @@ let getHomepage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        res.render('index', { items, user: req.session.user, myCart: fullCartItems });
+        res.render('index', { items, user: req.session.user, myCart: fullCartItems,reviews });
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('index', { items, user: null, myCart: myCart });
+        res.render('index', { items, user: null, myCart: myCart,reviews });
     }
 }
 let signupPage = async (req, res) => {
@@ -161,10 +166,11 @@ let addReview = async (req, res) => {
         const itemId = req.params.itemId
         const userId = req.session.user.user_id
         const rating = req.body.rating
+        const reviewTitle = req.body.review_title
         const reviewText = req.body.review_text
         const [colorName, size] = req.body.color_name.split('-');
         console.log(itemId, userId, colorName, size, rating, reviewText)
-        await modelReview.addReview(itemId, userId, colorName, size, rating, reviewText)
+        await modelReview.addReview(itemId, userId, colorName, size, rating,reviewTitle, reviewText)
         req.session.logoutBack = req.originalUrl;
         return res.redirect(`/product/${itemId}`);
     }
@@ -179,10 +185,11 @@ let updateReview = async (req, res) => {
         const itemId = req.params.itemId
         const userId = req.session.user.user_id
         const rating = req.body.rating
+        const reviewTitle = req.body.review_title
         const reviewText = req.body.review_text
         const [colorName, size] = req.body.color_name.split('-');
         console.log(itemId, userId, colorName, size, rating, reviewText)
-        await modelReview.updateReview(itemId, userId, colorName, size, rating, reviewText)
+        await modelReview.updateReview(itemId, userId, colorName, size, rating,reviewTitle, reviewText)
         req.session.logoutBack = req.originalUrl;
         return res.redirect(`/product/${itemId}`);
     }
@@ -192,9 +199,21 @@ let updateReview = async (req, res) => {
         return res.redirect('/login');
     }
 }
+let deleteReview = async (req,res) =>{
+    if(req.session.user){
+        const reviewId = req.params.reviewId
+        console.log(reviewId)
+        await modelReview.deleteReview(reviewId)
+        return res.redirect(req.session.logoutBack);
+    }
+    else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+}
 
 
 
 module.exports = {
-    getHomepage, signupPage, productPage, addToFavorites, handleReviewLike, addReview,updateReview
+    getHomepage, signupPage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview
 }

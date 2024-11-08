@@ -121,6 +121,9 @@
     position: absolute;
     bottom: 0;
 }
+.category-item-title .available{
+    background-color: var(--hover-color);
+}
 
 /* CATEGORY -HOMEPAGE-------------------------------------END */
 

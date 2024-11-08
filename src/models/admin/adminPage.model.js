@@ -3,12 +3,43 @@ import pool from '../../configs/connectDB';
 const getItems = async () => {
     try {
         const [rows] = await pool.execute(`
-            SELECT items.id, brand, name, price, category,infor, sizes.size,colors.id AS color_id, colors.color_nameEng, colors.color_name, color_sizes.size AS color_size, images.img_url, color_sizes.zaiko AS zaiko
-            FROM items
+            SELECT 
+                items.id, 
+                items.brand, 
+                items.name, 
+                items.price, 
+                items.category, 
+                items.infor, 
+                sizes.size, 
+                colors.id AS color_id, 
+                colors.color_nameEng, 
+                colors.color_name, 
+                color_sizes.size AS color_size, 
+                images.img_url, 
+                color_sizes.zaiko AS zaiko,
+                ROUND(AVG(reviews.rating), 1) AS average_rating,
+                COUNT(reviews.id) AS count_rating
+            FROM 
+                items
             LEFT JOIN sizes ON items.id = sizes.item_id
             LEFT JOIN colors ON items.id = colors.item_id
             LEFT JOIN color_sizes ON colors.id = color_sizes.color_id
             LEFT JOIN images ON colors.id = images.color_id
+            LEFT JOIN reviews ON items.id = reviews.item_id
+            GROUP BY 
+                items.id, 
+                items.brand, 
+                items.name, 
+                items.price, 
+                items.category, 
+                items.infor, 
+                sizes.size, 
+                colors.id, 
+                colors.color_nameEng, 
+                colors.color_name, 
+                color_sizes.size, 
+                images.img_url, 
+                color_sizes.zaiko;
         `);
 
         // Transform the data into the desired format
@@ -24,7 +55,9 @@ const getItems = async () => {
                     size: [],
                     category: row.category,
                     color_img: [],
-                    infor: row.infor
+                    infor: row.infor,
+                    rating: row.average_rating || 0,  // Default to 0 if no rating
+                    ratingCount : row.count_rating
                 };
                 acc.push(item);
             }
@@ -54,7 +87,7 @@ const getItems = async () => {
                     if (!colorSize) {
                         colorSize = {
                             size: row.color_size,
-                            zaiko: row.zaiko
+                            zaiko: row.zaiko || 0  // Default to 0 if no zaiko
                         };
                         color.color_size.push(colorSize);
                     }
@@ -73,6 +106,7 @@ const getItems = async () => {
         throw error;
     }
 };
+
 
 const getItemById = async (id) => {
     try {

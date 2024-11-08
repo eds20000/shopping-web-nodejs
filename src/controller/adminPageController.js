@@ -2,6 +2,7 @@ import models from '../models/admin/adminPage.model'
 import usersEdit from '../models/admin/userEdit.model'
 import modelCourse from '../models/course'
 import modelOrder from '../models/order.model'
+import modelReview from '../models/review.model'
 
 
 
@@ -130,8 +131,28 @@ let editOrder = async (req, res) => {
     return res.redirect('/admin-orders');
 }
 
+//Reviews Page
+
+let getReviewsPage =async (req,res) => {
+    const items = await models.getItems();
+    const users = await usersEdit.getUsers()
+    const reviews = await modelReview.getReview();
+    await Promise.all(reviews.map(async (review) => {
+        const reviewLikes = await modelReview.getReviewLike(review.id);
+        review.reviewLikeUserId = reviewLikes;
+    }));
+    if (req.session.user && req.session.user.user_role =="admin" ) {
+        req.session.logoutBack = req.originalUrl;
+        res.render('admin/reviews-edit.ejs', { items, user: req.session.user,users, reviews });
+    } else {
+        req.session.loginBack = req.originalUrl;
+        res.redirect('/login');
+    }
+}
 module.exports = {
     getadminPage, productEdit, DeleteItem, DeleteItemColorSize, itemUpdate, productImgUpload,
     getUsersPage, getUsersEditPage, DeleteUserById, userInforUpdate,
-    addUserPage, addUser, getOrdersPage, editOrder
+    addUserPage, addUser, getOrdersPage, editOrder,
+    getReviewsPage
+
 }

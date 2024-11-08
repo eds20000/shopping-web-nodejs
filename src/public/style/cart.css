@@ -335,9 +335,59 @@ input[type="radio"]{
 .payment-form {
     position: relative;
 }
+.user-address{
+    border: 1px solid var(--black-color);
+    border-radius: 20px;
+    margin: 0 5px;
+    overflow: hidden;
+}
+.user-address__box--title{
+    width: 100%;
+    font-size: 2.5rem;
+    padding: 10px;
+    font-weight: 600;
+    margin: 10px 0;
+}
+.user-address__box{
+    padding: 10px;
+    cursor: pointer;
+}
+.user-address__box:hover{
+    background-color: var(--hover-color);
+}
+.user-address__box {
+    height: 150px;
+}
+.user-address__box div{
+    padding: 10px 0 5px;
+}
+.user-address__box--list{
+    border-bottom: none !important;
+}
+.user-address__box--name{
+    font-size: 2rem;
+    font-weight: 600;
+}
+.user-address__addBtn{
+    width: 100px;
+    margin: 20px;
+    
+}
+.address-add-btn{
+    width: 100px;
+    margin: 10px 10px 0 auto ;
 
-
-
+}
+.address-add-error{
+    color: var(--primary-color);
+    text-align: right;
+    padding: 10px;
+}
+.user-address__box--delete{
+    text-align: right;
+    cursor: pointer;
+    margin: 10px;
+}
 
 /*<-----------------------PAY-FORM-------------------------------->END*/
 
@@ -393,6 +443,9 @@ input[type="radio"]{
 .payment-success__content-keepBtn{
     margin: 40px auto 0;
     width: 50%;
+}
+.pay-form-input:disabled{
+    border:none;
 }
 /* Payment Success Layout------------------------------------------>END */
 

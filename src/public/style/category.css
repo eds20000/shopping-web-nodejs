@@ -75,6 +75,96 @@
 .sort__item-star-number{
     margin-left: 10px;
 }
+
+/* filler tool */
+.content__title-filter{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin: 10px 20px;
+}
+.content__title-filter--title{
+    font-size: 2rem;
+    font-weight: 600;
+}
+.content__title-filter--price-box,
+.content__title-filter--color-box,
+.content__title-filter--brand-box,
+.content__title-filter--size-box{
+    position: relative;
+}
+.content__title-filter--price,
+.content__title-filter--color,
+.content__title-filter--brand,
+.content__title-filter--size{
+    padding: 10px;
+    border: 1px solid var(--black-color);
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+}
+.content__title-filter--price span,
+.content__title-filter--color span,
+.content__title-filter--brand span,
+.content__title-filter--size span{
+    margin: 10px;
+}
+
+.content__title-filter--price:hover,
+.content__title-filter--color:hover,
+.content__title-filter--brand:hover,
+.content__title-filter--size:hover{
+    background-color: var(--hover-color);
+}
+
+.content__title-filter--box{
+    border: 1px solid var(--black-color);
+    position: absolute;
+    display: none;
+    z-index: 99;
+    background-color: var(--white-color);
+    box-shadow: var(--box-shadow);
+    white-space: nowrap;
+}
+.content__title-filter--box.unhide{
+    display: block;
+}
+.content__title-filter--box div{
+    padding: 20px 10px;
+    font-size: 1.5rem;
+}
+.content__title-filter--box div:hover{
+    cursor: pointer;
+    background-color: var(--hover-color);
+}
+.content__title-filter--box div:not(:nth-last-child(1)){
+    border-bottom: 1px solid var(--border-color);
+}
+.colorList-box{
+    display: flex;
+    gap: 10px;
+    width: 100px;
+    flex-wrap: wrap;
+    padding: 5px;
+}
+.colorList-box .filter-color:hover{
+    border: 2px solid var(--white-color);
+}
+.content__title-filter--value{
+    padding: 5px;
+    text-align: center;
+    font-weight: 400;
+}
+
+.filter-color-full{
+    width: 100%;
+    text-align: center;
+    padding: 5px 0;
+}
+.colorList-box:hover{
+    background-color: var(--white-color) !important;
+}
 /* RESPONSIVE  */
 
 /* Tablet and Mobile */

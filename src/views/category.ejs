@@ -27,8 +27,13 @@
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
         const category = JSON.parse('<%- JSON.stringify(category) %>');
+        const colorList = JSON.parse('<%- JSON.stringify(colorList) %>');
+        const brandList = JSON.parse('<%- JSON.stringify(brandList) %>');
+        const sizeList = JSON.parse('<%- JSON.stringify(sizeList) %>');
         console.log(myCart)
         console.log(list_item)
+        console.log(colorList)
+        console.log(sizeList)
     </script>
 </head>
 <body>
@@ -62,6 +67,65 @@
                         <div class="row">
                             <div class="content__title">
                                 <div class="content__title-text">すべてのアイテム</div>
+                                <div class="content__title-filter">
+                                    <div class="content__title-filter--title">絞り込み：</div>
+                                    
+                                    <div class="content__title-filter--price-box">
+                                        <div class="content__title-filter--price" onclick="showFilterBox(this)">
+                                            <span>価格帯</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div class="content__title-filter--value" data-price-min="0" data-price-max="Infinity">すべて</div>
+                                        </div>
+                                        <div class="content__title-filter--box">
+                                            <div onclick="filterItemsByPrice(0, Infinity)">すべて</div>
+                                            <div onclick="filterItemsByPrice(0, 5000)">¥0 ~ ¥5000</div>
+                                            <div onclick="filterItemsByPrice(5000, 10000)">¥5000 ~ ¥10000</div>
+                                            <div onclick="filterItemsByPrice(10000, Infinity)">¥10000 ~</div>
+                                        </div>
+                                    </div>
+                                    <div class="content__title-filter--color-box ">
+                                        <div class="content__title-filter--color" onclick="showFilterBox(this)">
+                                            <span>カラー</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div class="content__title-filter--value" data-colorname="full" data-colorengname >すべて</div>
+                                        </div>
+                                        <div class="content__title-filter--box">
+                                            <div class="colorList-box">
+                                                <div class="filter-color-full" onclick="filterItemsByColor('full')" style="padding: 5px 0">すべて</div>
+                                                <%colorList.forEach(color =>{ %>
+                                                    <div class="filter-color" onclick="filterItemsByColor('<%=color.color_name%>','<%=color.color_nameEng %>')" style="padding:0; border-radius: 50%; width: 20px; height: 20px; background-color:<%=color.color_nameEng %>;"></div>
+                                                <%}) %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="content__title-filter--brand-box">
+                                        <div class="content__title-filter--brand" onclick="showFilterBox(this)">
+                                            <span>ブランド</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div class="content__title-filter--value" data-brand = "full">すべて</div>
+                                        </div>
+                                        <div class="content__title-filter--box" style="width: 100%;">
+                                            <div class="filter-brand-full" onclick="filterItemsByBrand('full')">すべて</div>
+                                            <% brandList.forEach( brand => {%>
+                                            <div class="content__title-filter--brand-item" onclick="filterItemsByBrand('<%=brand %>')"><%=brand %></div>
+                                            <% }) %>
+                                        </div> 
+                                    </div>
+                                    <div class="content__title-filter--size-box">
+                                        <div class="content__title-filter--size" onclick="showFilterBox(this)">
+                                            <span>サイズ</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div class="content__title-filter--value" data-size = "full">すべて</div>
+                                        </div>
+                                        <div class="content__title-filter--box" style="width: 100%;">
+                                            <div class="filter-size-full" onclick="filterItemsBySize('full')">すべて</div>
+                                            <% sizeList.forEach( size => {%>
+                                            <div class="content__title-filter--size-item" onclick="filterItemsBySize('<%=size %>')"><%=size %></div>
+                                            <% }) %>
+                                        </div> 
+                                    </div>
+                                    
+                                </div>
                                 <div class="content__title-sort">
                                     <div class="content__title-sort-text">並び替え：</div> 
                                     <input type ="input" class="content__title-sort-selected" value="価格が安い順"></input>

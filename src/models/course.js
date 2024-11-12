@@ -280,11 +280,41 @@ let getOrdersById = async (userId) => {
     // Trả về mảng các đơn hàng (chỉ lấy các giá trị từ đối tượng orders)
     return Object.values(orders);
 }
+
+let getColor = async () =>{
+    try {
+        const [rows] =await pool.query("SELECT color_nameEng,color_name FROM colors GROUP BY color_name")
+        return rows
+    } catch (error) {
+        return error
+    }
+}
+
+let getBrand = async () =>{
+    try {
+        const [rows] =await pool.query("SELECT brand FROM items GROUP BY brand")
+        const brands = rows.map(row => row.brand);
+        
+        return brands;
+    } catch (error) {
+        return error
+    }
+}
+let getSize = async () =>{
+    try {
+        const [rows] =await pool.query("SELECT size FROM color_sizes GROUP BY size")
+        const brands = rows.map(row => row.size);
+        
+        return brands;
+    } catch (error) {
+        return error
+    }
+}
 module.exports = {
     getFavoriteItems,
     addToFavorites,
     resetUserSession,
     getFavoriteItemList, getFavoriteItemIds, removeFromFavorites,
     addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart,
-    getOrders, getOrderDetails, getOrdersById,getUserAddress
+    getOrders, getOrderDetails, getOrdersById,getUserAddress,getColor,getBrand,getSize
 }

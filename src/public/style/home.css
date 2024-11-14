@@ -4,7 +4,6 @@
     height: auto;
     width: 100%;
     font-size: var(--font-size);
-    padding: 0 125px;
     box-shadow: 0px 5px 6px -6px #999999;
 }
 .swiper.tab .swiper-slide{
@@ -15,7 +14,7 @@
     border-bottom: 3px solid var(--primary-color);
 }
 .header{
-    z-index: 2;
+    z-index: 10;
 }
 .category-box{
     background-color: var(--white-color);
@@ -40,6 +39,7 @@
     margin: 0 auto;
 }
 .swiper .swiper-wrapper{
+    margin: 0 auto;
     width: 90%;
 }
 .swiper .swiper-slide{
@@ -130,10 +130,15 @@
 /* recommend item */
 .section__recommend,
 .section__brand,
-.section__new
+.section__new,
+.section__best_sellers,
+.section__mens,
+.section__womens,
+.section__cosmetics
 {
     display: flex;
     justify-content: center;
+    margin: 100px 0 50px;
     
 }
 .section_title{
@@ -141,8 +146,8 @@
     text-align: center;
     font-size: 3rem;
     font-weight: 600;
-    margin: 50px 0;
     border-bottom: 3px solid var(--primary-color);
+    margin: 20px 0;
 }
 .section__brand-list{
     background-color: var(--hover-color);
@@ -162,8 +167,52 @@
     height: 100%;
     width: 100%;
 }
-
-
+.section__recommend{
+    padding: 10px;
+    background-color: rgb(248, 168, 182);
+}
+.section__new{
+}
+.section__new-list{
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 15px;
+}
+.section__new-list::before{
+    display: block;
+    content: "NEW";
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-weight: 900;
+    font-size: 3rem;
+    height: 50px;
+    width: 300px;
+    background-color: red;
+    position: absolute;
+    top: 13px;
+    left:-106px;
+    transform: rotate(-45deg);
+    z-index: 9;
+}
+.section__new-list::after{
+    display: block;
+    content: "NEW";
+    text-align: center;
+    line-height: 50px;
+    color: white;
+    font-weight: 900;
+    font-size: 3rem;
+    height: 50px;
+    width: 300px;
+    background-color: red;
+    position: absolute;
+    bottom: 13px;
+    right:-106px;
+    transform: rotate(135deg);
+    z-index: 9;
+}
 
 /* Responsive */
 @media (max-width:1023px){

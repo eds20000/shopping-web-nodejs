@@ -22,6 +22,7 @@ let addToFavorites = async (req, res) => {
 
 let getHomepage = async (req, res) => {
     const items = await models.getItems()
+    const categories = await modelCourse.getCategories()
     let myCart = []
     const reviews = await modelReview.getReview();
     await Promise.all(reviews.map(async (review) => {
@@ -63,10 +64,10 @@ let getHomepage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        res.render('index', { items, user: req.session.user, myCart: fullCartItems,reviews });
+        res.render('index', { items, user: req.session.user, myCart: fullCartItems,reviews,categories });
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('index', { items, user: null, myCart: myCart,reviews });
+        res.render('index', { items, user: null, myCart: myCart,reviews,categories });
     }
 }
 let signupPage = async (req, res) => {

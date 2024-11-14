@@ -70,17 +70,29 @@ const handlerCartProxy = {
 };
 const proxyCart = new Proxy(myCart, handlerCartProxy);
 
-var sort__item_list = $('.sort__item-list')
 var recommendList = $('.section__recommend-list')
-if (sort__item_list) {
-    exportItem(sort__item_list, 'l-2-4');
-    CreatItemSelectBox();//ham tao ra muc takcartitembox
-    changeImage();
-    takeCart();
-    productRedirect();
-}
+var newList = $('.section__new-list')
+var bestsellersList = $('.section__best_sellers-list')
+var mensList = $('.section__mens-list')
+var womensList = $('.section__womens-list')
+var cosmeticsList = $('.section__cosmetics-list')
 if (recommendList) {
-    exportItem(recommendList, 'l-2');
+    exportItemByCategory(recommendList,'recommended', 'l-2');
+}
+if (newList) {
+    exportItemByCategory(newList,'new_arrivals', 'l-2');
+}
+if (bestsellersList) {
+    exportItemByCategory(bestsellersList,'best_sellers', 'l-2');
+}
+if (mensList) {
+    exportItemByCategory(mensList,'mens', 'l-2');
+}
+if (womensList) {
+    exportItemByCategory(womensList,'womens', 'l-2');
+}
+if (cosmeticsList) {
+    exportItemByCategory(cosmeticsList,'cosmetics', 'l-2');
     CreatItemSelectBox();//ham tao ra muc takcartitembox
     changeImage();
     takeCart();
@@ -129,6 +141,47 @@ function exportItem(itemList, column) {
     }
 
 }
+
+function exportItemByCategory(itemList,categoryName, column){
+    const getItemIdsByCategory = categories.filter(category => category.category_name === categoryName).map(category => category.item_id);
+    const categoryItems = list_item.filter(item => getItemIdsByCategory.includes(item.id))
+    itemList.innerHTML = '';
+    for (let i = 0; i < categoryItems.length; ++i) {
+        itemList.innerHTML +=
+            `<div class="col ${column} c-4 m-3">
+            <div class="sort__item" item-index = "${i}">
+                <a class="sort__item-link" data-id="${categoryItems[i].id}" >
+                    <div class="sort__item-img">
+                        <img src="/image/item-image/${categoryItems[i].color_img[0].img[0]}" alt="">
+                    </div>
+                    <div class="sort__item-brand">${categoryItems[i].brand}</div>
+                    <div class="sort__item-text">${categoryItems[i].name}</div>
+                </a>
+                <div class="sort__item-img_btn sort__item-img_btn-left"><i class="fa-solid fa-angle-left"></i></div>
+                <div class="sort__item-img_btn sort__item-img_btn-right"><i class="fa-solid fa-angle-right"></i></div>
+                <div class="sort__item-content">
+                    <div class="sort__item-title">
+                        <div class="sort__item-price">￥${categoryItems[i].price}</div>
+                        <div class="sort__item-takeit">
+                            <a class="sort__item-favorite ${user && user.favorItems.find(favorItem => favorItem.item_id == categoryItems[i].id) ? 'sort__item-takecart-enable' : 'sort__item-takecart-disable'} " ${user ? `onclick="addToFavorites(${categoryItems[i].id},this)"` : 'href="/login"'}></a>
+                            <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="sort__item-star">
+                        <div class="stars-outer">
+                            <div class="stars-inner" style="width: ${categoryItems[i].rating > 0 ? categoryItems[i].rating / 5 * 100 : 0}%;"></div>
+                        </div>
+                        <div class="sort__item-star-number">
+                            (<p>${categoryItems[i].ratingCount}</p>)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`
+    }
+
+}
+
 
 function CreatItemSelectBox() {
     const container = document.querySelector('.container');
@@ -816,3 +869,11 @@ if (categoryBoxBtnClose) {
         document.body.style.position = ''
     }
 }
+
+$$('.swiper-slide').forEach(tabSlide =>{
+    
+    tabSlide.onclick = function(){
+    $('.swiper.tab').querySelector('.swiper-slide.tab__list-start').classList.remove('tab__list-start')
+    this.classList.add('tab__list-start')
+    }
+})

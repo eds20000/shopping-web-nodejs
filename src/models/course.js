@@ -310,11 +310,38 @@ let getSize = async () =>{
         return error
     }
 }
+
+//Category
+
+let getCategories = async() =>{
+    try {
+        const [rows] = await pool.query('SELECT * from categories;')
+        return rows
+    } catch (error) {
+        return console.log(error)
+    }
+}
+let getCategoriesItem = async(categories) =>{
+    try {
+        if(categories != "all"){
+            var [rows] = await pool.query('SELECT item_id from categories WHERE category_name = ?',[categories])
+        }
+        else{
+            var [rows] = await pool.query('SELECT item_id from categories GROUP BY item_id ')
+        }
+        return rows.map(category => category.item_id)
+    } catch (error) {
+        return console.log(error)
+    }
+}
+
+
 module.exports = {
     getFavoriteItems,
     addToFavorites,
     resetUserSession,
     getFavoriteItemList, getFavoriteItemIds, removeFromFavorites,
     addToCart, getCartItems, removeFromCart, decreaseQuantityItemCart, increaseQuantityItemCart,
-    getOrders, getOrderDetails, getOrdersById,getUserAddress,getColor,getBrand,getSize
+    getOrders, getOrderDetails, getOrdersById,getUserAddress,getColor,getBrand,getSize,
+    getCategories,getCategoriesItem
 }

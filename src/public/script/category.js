@@ -6,45 +6,58 @@ list_item.forEach(item => {
         // Tạo phần tử div cho sản phẩm
     }
 })
+category_item = category_item.filter(item => categoriesItemid.includes(item.id))
+
 
 function renderItembyCategory(perItem) {
     const itemListContainer = document.querySelector('.category__item-list');
     itemListContainer.innerHTML = ''; 
 
-    perItem.forEach(item => {
-        itemListContainer.innerHTML += `
-        <div class="col l-2-4 c-4 m-3">
-            <div class="sort__item" item-index="${item.id}">
-                <a class="sort__item-link" data-id="${item.id}">
-                    <div class="sort__item-img">
-                        <img src="/image/item-image/${item.color_img[0].img[0]}" alt="">
-                    </div>
-                    <div class="sort__item-brand">${item.brand}</div>
-                    <div class="sort__item-text">${item.name}</div>
-                </a>
-                <div class="sort__item-img_btn sort__item-img_btn-left"><i class="fa-solid fa-angle-left"></i></div>
-                <div class="sort__item-img_btn sort__item-img_btn-right"><i class="fa-solid fa-angle-right"></i></div>
-                <div class="sort__item-content">
-                    <div class="sort__item-title">
-                        <div class="sort__item-price">￥${item.price}</div>
-                        <div class="sort__item-takeit">
-                            <a class="sort__item-favorite ${user && user.favorItems.find(favorItem => favorItem.item_id === item.id) ? 'sort__item-takecart-enable' : 'sort__item-takecart-disable'}" ${user ? `onclick="addToFavorites(${item.id},this)"` : 'href="/login"'}></a>
-                            <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>
+    if(perItem.length > 0){
+        perItem.forEach(item => {
+            itemListContainer.innerHTML += `
+            <div class="col l-2-4 c-4 m-3">
+                <div class="sort__item" item-index="${item.id}">
+                    <a class="sort__item-link" data-id="${item.id}">
+                        <div class="sort__item-img">
+                            <img src="/image/item-image/${item.color_img[0].img[0]}" alt="">
                         </div>
-                    </div>
-                    <div class="sort__item-star">
-                        <div class="stars-outer">
-                            <div class="stars-inner" style="width: ${item.rating > 0 ? item.rating / 5 * 100 : 0}%;"></div>
+                        <div class="sort__item-brand">${item.brand}</div>
+                        <div class="sort__item-text">${item.name}</div>
+                    </a>
+                    <div class="sort__item-img_btn sort__item-img_btn-left"><i class="fa-solid fa-angle-left"></i></div>
+                    <div class="sort__item-img_btn sort__item-img_btn-right"><i class="fa-solid fa-angle-right"></i></div>
+                    <div class="sort__item-content">
+                        <div class="sort__item-title">
+                            <div class="sort__item-price">￥${item.price}</div>
+                            <div class="sort__item-takeit">
+                                <a class="sort__item-favorite ${user && user.favorItems.find(favorItem => favorItem.item_id === item.id) ? 'sort__item-takecart-enable' : 'sort__item-takecart-disable'}" ${user ? `onclick="addToFavorites(${item.id},this)"` : 'href="/login"'}></a>
+                                <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>
+                            </div>
                         </div>
-                        <div class="sort__item-star-number">
-                            (<p>${item.ratingCount}</p>)
+                        <div class="sort__item-star">
+                            <div class="stars-outer">
+                                <div class="stars-inner" style="width: ${item.rating > 0 ? item.rating / 5 * 100 : 0}%;"></div>
+                            </div>
+                            <div class="sort__item-star-number">
+                                (<p>${item.ratingCount}</p>)
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        `;
-    })
+            `;
+        })
+    }
+    else{
+        itemListContainer.innerHTML =
+        `
+        <div class ="empty-item-found" style="text-align:center;width:100%;">
+            <img src="/image/noitem.png">
+        </div>    
+        `
+    }
+
 
     // Gọi lại các hàm cần thiết sau khi thêm các phần tử vào
     changeImage();
@@ -91,7 +104,7 @@ function renderPageNumber() {
 if (category) {
     getItem(category_item)
     CreatItemSelectBox();
-    filterSort ()
+    filterSort (category_item)
 }
 // Lắng nghe sự kiện DOMContentLoaded để thêm sự kiện click vào các tab
 document.addEventListener("DOMContentLoaded", function() {
@@ -113,16 +126,16 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function filterSort (){
+function filterSort (categoryItem){
     const sortValue = $('.content__title-sort-selected').value 
     if (sortValue == "価格が安い順") {
-        perItem.sort((a, b) => a.price - b.price);
+        categoryItem.sort((a, b) => a.price - b.price);
     } else if (sortValue == "価格が高い順") {
-        perItem.sort((a, b) => b.price - a.price);
+        categoryItem.sort((a, b) => b.price - a.price);
     }else if(sortValue == "高評価商品"){
-        perItem.sort((a, b) => b.rating - a.rating);
+        categoryItem.sort((a, b) => b.rating - a.rating);
     }
-    renderItembyCategory(perItem)
+    getItem(categoryItem)
 }
 
 function showFilterBox(thisElement) {
@@ -230,5 +243,6 @@ function runFilter (){
         );
     }
 
+    filterSort (filterItem)
     getItem(filterItem)
 }

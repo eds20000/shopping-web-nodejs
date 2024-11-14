@@ -98,6 +98,7 @@ const initWebRoute = (app) => {
 
     //Category
     router.get('/category/:category', categoryController.getCategoryPage)
+    router.post('/category/:category', categoryController.getCategoryPage)
 
     return app.use('/', router)
 }

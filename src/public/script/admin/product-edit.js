@@ -104,30 +104,29 @@ function addColor() {
         // Tạo cấu trúc HTML cho item-color-list
         itemColorList.innerHTML = `
         <div class="itemColorImg-box">
+        <form action="/upload-img/${itemId}" method="POST" enctype="multipart/form-data" class="image-upload-form" style="display:block;">
             <div class="item-color-box">
                 <div class="colorSelected" style="background-color:${colorInput};"></div>
-                <input type="text" name="color_name" value=""> 
+                <input type="text" name="color_name"> 
             </div>
             <div class="item-colorImg-box">
-                <form action="/upload-img/${itemId}" method="POST" enctype="multipart/form-data" class="image-upload-form" style="display:block;">
-                    <input type="file" name="image-add" id="${uniqueId}" multiple accept="image/*" hidden>
-                    <input type="text" name="colorInput" value="${colorInput}" hidden> 
-                    <label for="${uniqueId}" class="image-upload-label">
-                        <span class="material-symbols-rounded"> 画像アップロード </span> 
-                    </label>
-                </form>
+                <input type="file" name="image-add" id="${uniqueId}" multiple accept="image/*" hidden>
+                <input type="text" name="colorInput" value="${colorInput}" hidden> 
+                <label for="${uniqueId}" class="image-upload-label">
+                    <span class="material-symbols-rounded"> 画像アップロード </span> 
+                </label>
             </div>
-        </div>
-        <div class="itemColorImgSize-box">                           
+            <div class="itemColorImgSize-box">                           
                 <div class="item-colorImg-size-list">
                     <label for="item-colorImg-size">サイズ</label>
-                    <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value=""></input>                                           
+                    <input type="text" class="item-colorImg-size" name ="item-colorImg-size"></input>                                           
                     <label for="item-colorImg-size">在庫</label>                                                      
-                    <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value=""></input>
+                    <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock"></input>
                     <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>     
                 </div>
-               <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
-        </div>
+                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
+            </div>
+        </form>
         <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
         `;
 
@@ -142,6 +141,7 @@ function addColor() {
 
             // Tìm phần tử cha item-color-list
             let imgBox = event.target.closest('.item-colorImg-box');
+            let itemColorBox = event.target.closest('.itemColorImg-box');
 
             // Sử dụng Promise.all để đọc tất cả các file
             const fileReaders = Array.from(files).map(file => {
@@ -165,12 +165,12 @@ function addColor() {
             await Promise.all(fileReaders);
 
             // Thêm liên kết xác nhận vào cuối cùng
-            if (imgBox) {
+            if (itemColorBox) {
                 const agreeButton = document.createElement('button');
                 agreeButton.type = "submit";
                 agreeButton.className = "item-colorImg-agree";
                 agreeButton.textContent = "確認";
-                imgBox.querySelector('.image-upload-form').appendChild(agreeButton);
+                itemColorBox.querySelector('.image-upload-form').appendChild(agreeButton);
             }
 
             // Xóa nhãn tải lên
@@ -203,9 +203,8 @@ function itemColorSizeAdd(a) {
 }
 
 function handleSubmit(event) {
-    event.preventDefault(); // Ngăn chặn hành động submit mặc định của form
+    event.preventDefault();  // Prevent default form submission
 
-    // Tạo FormData để gửi dữ liệu
     const formData = new FormData();
     try {
         const itemId = document.querySelector('input[name="item-id"]').value;
@@ -216,6 +215,20 @@ function handleSubmit(event) {
         const itemZaiko = document.querySelector('input[name="item-zaiko"]').value;
         const itemInfo = document.querySelector('textarea[name="item-info"]').value;
 
+        // Debugging: Log values to check if they are not empty
+        console.log("itemId:", itemId);
+        console.log("itemName:", itemName);
+        console.log("itemBrand:", itemBrand);
+        console.log("itemCategory:", itemCategory);
+        console.log("itemPrice:", itemPrice);
+        console.log("itemZaiko:", itemZaiko);
+        console.log("itemInfo:", itemInfo);
+
+        if (!itemId || !itemName || !itemBrand || !itemCategory || !itemPrice || !itemZaiko || !itemInfo) {
+            throw new Error('All fields are required!');
+        }
+
+        // Append item details to formData
         formData.append('id', itemId);
         formData.append('name', itemName);
         formData.append('brand', itemBrand);
@@ -224,27 +237,27 @@ function handleSubmit(event) {
         formData.append('zaiko', itemZaiko);
         formData.append('infor', itemInfo);
 
-        // Thu thập kích thước
+        // Collect size information
         const itemSize = [];
         document.querySelectorAll('input[name="item-size"]').forEach(item_size => {
             itemSize.push(item_size.value);
         });
         formData.append('size', JSON.stringify(itemSize));
 
-        // Thu thập màu sắc và hình ảnh
+        // Collect color and image information
         const colorImgList = [];
-        document.querySelectorAll('.item-color-list').forEach((colorItem) => {
+        document.querySelectorAll('.item-color-list').forEach(colorItem => {
             const colorNameEng = colorItem.querySelector('.colorSelected').style.backgroundColor;
             const colorName = colorItem.querySelector('input[name="color_name"]').value;
-            const colorId = colorItem.querySelector('input[name="color_id"]').value;
+            const colorId = colorItem.querySelector('input[name="color_id"]')? colorItem.querySelector('input[name="color_id"]').value :'';
 
             const imgUrls = [];
-            colorItem.querySelectorAll('.item-colorImg').forEach((img) => {
+            colorItem.querySelectorAll('.item-colorImg').forEach(img => {
                 imgUrls.push(img.src.split('/').pop());
             });
 
             const colorSize = [];
-            colorItem.querySelectorAll('.item-colorImg-size-list').forEach((sizeItem) => {
+            colorItem.querySelectorAll('.item-colorImg-size-list').forEach(sizeItem => {
                 const size = sizeItem.querySelector('input[name="item-colorImg-size"]').value;
                 const stock = sizeItem.querySelector('input[name="item-colorImgSize-stock"]').value;
                 colorSize.push({ size, zaiko: stock });
@@ -258,10 +271,9 @@ function handleSubmit(event) {
                 color_size: colorSize
             });
         });
-
         formData.append('color_img', JSON.stringify(colorImgList));
 
-        // Gửi dữ liệu đến server
+        // Send data to the server
         fetch('/product-edit/update-item', {
             method: 'POST',
             body: formData
@@ -275,12 +287,12 @@ function handleSubmit(event) {
             .catch(error => {
                 console.error('Lỗi:', error);
             });
-    }
-    catch (err) {
+    } catch (err) {
         alert('情報をすべてご記入ください!');
+        console.error(err);
     }
-    // Thu thập dữ liệu từ form
 }
+
 
 
 

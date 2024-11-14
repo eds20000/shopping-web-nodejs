@@ -16,7 +16,7 @@ let productEdit = async (req, res) => {
     const itemId = req.params.id
     const users = await usersEdit.getUsers()
     const item = (await models.getItemById(itemId))[0]
-    return res.render('admin/product-edit.ejs', { item, users, filePaths: null, colorInput: null })
+    return res.render('admin/product-edit.ejs', { item, users, filePaths: null, colorInput: null,stockInput:null,sizeInput:null,colorNameInput:null })
 
 }
 //product-Img-Upload
@@ -26,7 +26,18 @@ let productImgUpload = async (req, res) => {
     const item = (await models.getItemById(itemId))[0]
     const filePaths = req.files.map(file => file.filename);
     const colorInput = req.body.colorInput
-    return res.render('admin/product-edit.ejs', { users, item, filePaths, colorInput });
+    const colorNameInput = req.body['color_name']
+    const sizeInput = req.body['item-colorImg-size']
+    const stockInput = req.body['item-colorImgSize-stock']
+
+    const sizeItemInput = [] 
+    for(let i = 0 ; i < sizeInput.length ;i++){
+        sizeItemInput.push({
+            size:sizeInput[i],
+            stock:stockInput[i]
+        })
+    }
+    return res.render('admin/product-edit.ejs', { users, item, filePaths, colorInput ,colorNameInput,sizeItemInput});
 }
 let DeleteItem = async (req, res) => {
     const itemId = req.params.id
@@ -43,6 +54,7 @@ let DeleteItemColorSize = async (req, res) => {
 
 const itemUpdate = async (req, res) => {
     const { id, name, brand, category, price, zaiko, infor, size, color_img } = req.body;
+    console.log(id, name, brand, category, price, zaiko, infor, size, color_img)
     try {
         // Gọi hàm cập nhật database
         await models.updateItemById(id, name, brand, category, price, zaiko, infor, size, color_img);

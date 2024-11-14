@@ -9,7 +9,7 @@ let getCategoryPage = async (req, res) => {
 
     const category = req.params.category
     const categoriesNow = req.body.categoriesNow ? req.body.categoriesNow : "all"
-    const categoriesItemid = await modelCourse.getCategoriesItem(categoriesNow)
+    const categoriesItemid =  await modelCourse.getCategoriesItem(categoriesNow)
     console.log(categoriesItemid)
     const colorList = await modelCourse.getColor()
     const brandList = await modelCourse.getBrand()

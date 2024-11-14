@@ -250,25 +250,47 @@ const updateItemById = async (id, name, brand, category, price, zaiko, infor, si
         // Xử lý màu sắc
         if (Array.isArray(color_img) && color_img.length > 0) {
             console.log('Xử lý màu sắc và hình ảnh:', color_img);
+        
+            // Xóa dữ liệu liên quan trong `cart` và `color_sizes` trước khi xóa trong `colors`
+            await connection.query('DELETE FROM cart WHERE item_id = ?', [id]);
+            await connection.query('DELETE FROM color_sizes WHERE item_id = ?', [id]);
+        
+            // Xóa và đặt lại AUTO_INCREMENT cho `colors`
             await connection.query('DELETE FROM colors WHERE item_id = ?;', [id]);
-            await connection.query('ALTER TABLE colors AUTO_INCREMENT = 1; ')
+            await connection.query('ALTER TABLE colors AUTO_INCREMENT = 1;');
+        
             for (const colorImgs of color_img) {
-                await connection.query('INSERT INTO colors (id,item_id,color_nameEng,color_name) VALUES (?,?,?,?)', [colorImgs.color_id, id, colorImgs.color_nameEng, colorImgs.color_name]);
-
-
-                await connection.query('DELETE FROM color_sizes WHERE item_id = ? AND color_id = ?;', [id, colorImgs.color_id]);
+                await connection.query(
+                    'INSERT INTO colors (item_id, color_nameEng, color_name) VALUES (?, ?, ?)',
+                    [id, colorImgs.color_nameEng, colorImgs.color_name]
+                );
+        
+                // Lấy `color_id` mới chèn vào
+                const [rows] = await connection.query(
+                    'SELECT id FROM colors WHERE item_id = ? AND color_name = ?',
+                    [id, colorImgs.color_name]
+                );
+                const colorIdNEW = rows[0].id;
+        
+                // Thêm dữ liệu vào `color_sizes` và `images`
                 for (const colorSize of colorImgs.color_size) {
-                    await connection.query('INSERT INTO color_sizes (color_id,size,item_id,zaiko) VALUE (?,?,?,?); ', [colorImgs.color_id, colorSize.size, id, colorSize.zaiko])
+                    await connection.query(
+                        'INSERT INTO color_sizes (color_id, size, item_id, zaiko) VALUES (?, ?, ?, ?);',
+                        [colorIdNEW, colorSize.size, id, colorSize.zaiko]
+                    );
                 }
-                await connection.query('DELETE FROM images WHERE color_id = ? ', [colorImgs.color_id]);
+        
                 for (const colorImg of colorImgs.img) {
-                    await connection.query('INSERT INTO images (color_id,img_url) VALUE (?,?); ', [colorImgs.color_id, colorImg])
+                    await connection.query(
+                        'INSERT INTO images (color_id, img_url) VALUES (?, ?);',
+                        [colorIdNEW, colorImg]
+                    );
                 }
-
-
             }
-
-        } else {
+        }
+        
+        
+         else {
             console.log('Không có màu sắc để cập nhật.');
         }
 

@@ -92,31 +92,35 @@
                                         <div class="color-push" onclick="addColor()"> + 追加</div>
                                     </div>
                                     <div class="item-color-list-box">
-                                        <% if (filePaths && colorInput) { filePaths.forEach(fileName => { %>
+                                        <% if (filePaths && colorInput) { %>
                                         <div class="item-color-list">
                                             <div class="itemColorImg-box">
                                                 <div class="item-color-box">
                                                     <div class="colorSelected" style="background-color:<%=colorInput %>;"></div>
-                                                    <input type="text" name="color_name" value=""> 
+                                                    <input type="text" name="color_name" value = "<%=colorNameInput %>"> 
+                                                    <input type="text" name="color_id" value = ""> 
                                                 </div>
                                                 <div class="item-colorImg-box">
+                                                    <% filePaths.forEach(fileName => { %>
                                                     <img alt="item-img" class="item-colorImg" src="/image/item-image/<%=fileName %>">
+                                                    <% }) %>
                                                 </div>
                                             </div>
-                                                <div class="itemColorImgSize-box">                           
+                                            <div class="itemColorImgSize-box">
+                                                <% sizeItemInput.forEach (sizeItem =>{ %>
                                                     <div class="item-colorImg-size-list">
                                                         <label for="item-colorImg-size">サイズ</label>
-                                                        <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value=""></input>                                           
+                                                        <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value = "<%=sizeItem.size %>">                                          
                                                         <label for="item-colorImg-size">在庫</label>                                                      
-                                                        <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value=""></input>
+                                                        <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value = "<%=sizeItem.stock %>">
                                                         <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>     
                                                     </div>
-                                                    <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
-                                                </div>
-                                                <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
+                                                <%})%>                           
+                                                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
                                             </div>
+                                            <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
                                         </div> 
-                                        <% })} %>
+                                        <% } %>
                                         <% item.color_img.forEach(colorImg => { %>
                                         <div class="item-color-list">
                                             <div class="itemColorImg-box">

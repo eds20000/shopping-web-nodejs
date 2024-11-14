@@ -325,11 +325,12 @@ let getCategoriesItem = async(categories) =>{
     try {
         if(categories != "all"){
             var [rows] = await pool.query('SELECT item_id from categories WHERE category_name = ?',[categories])
+            return rows.map(category => category.item_id)
         }
         else{
-            var [rows] = await pool.query('SELECT item_id from categories GROUP BY item_id ')
+            var [rows] = await pool.query('SELECT id from items ')
+            return rows.map(item => item.id)
         }
-        return rows.map(category => category.item_id)
     } catch (error) {
         return console.log(error)
     }

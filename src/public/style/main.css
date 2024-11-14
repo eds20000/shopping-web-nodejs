@@ -856,7 +856,7 @@ body.overlay-open_select-cart-box{
 
 .overlay-open_select-cart-box .item__select-cart-container{
     opacity: 1;
-    z-index: 2;
+    z-index: 11;
 
 }
 

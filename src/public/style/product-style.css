@@ -314,7 +314,6 @@ ul{
 }
 .product-item-data-infor_content{
     font-size: var(--font-size);
-    border: 1px solid var(--border-color);
     padding: 10px;
 }
 .product-item-data-review{

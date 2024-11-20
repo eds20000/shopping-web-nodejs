@@ -79,8 +79,8 @@ if (colorListCookie) {
                         </div>
                     </div>
                     <div class="itemColorImgSize-box">
-                        ${sizeItemsHTML}
                         <div class="item-colorImgSize-add" onclick="itemColorSizeAdd(this)">サイズの追加</div>
+                        ${sizeItemsHTML}
                     </div>
                     <div class="item-colorImg-remove" onclick="itemColorDelete(this)">削除</div>
                 </div>
@@ -242,6 +242,7 @@ function addColor() {
                 </label>
             </div>
             <div class="itemColorImgSize-box">                           
+                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
                 <div class="item-colorImg-size-list">
                     <label for="item-colorImg-size">サイズ</label>
                     <input type="text" class="item-colorImg-size" name ="item-colorImg-size"></input>                                           
@@ -249,7 +250,6 @@ function addColor() {
                     <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock"></input>
                     <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>     
                 </div>
-                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
             </div>
         </form>
         <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>

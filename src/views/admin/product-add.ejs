@@ -102,6 +102,7 @@
                                                 </div>
                                             </div>
                                             <div class="itemColorImgSize-box">
+                                                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
                                                 <% sizeItemInput.forEach (sizeItem =>{ %>
                                                     <div class="item-colorImg-size-list">
                                                         <label for="item-colorImg-size">サイズ</label>
@@ -111,7 +112,6 @@
                                                         <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>     
                                                     </div>
                                                 <%})%>                           
-                                                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
                                             </div>
                                             <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
                                         </div> 

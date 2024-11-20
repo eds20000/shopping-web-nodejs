@@ -262,11 +262,7 @@
   padding: 10px 0;
   border-bottom: 1px solid var(--border-color);
 }
-.ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImg-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-color-box {
   display: flex;
   gap: 10px;
@@ -279,6 +275,7 @@
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box {
   display: flex;
   gap: 5px;
+  margin: 10px 0;
 }
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .item-colorImg {
   width: 50px;
@@ -294,6 +291,9 @@
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .item-colorImg-agree:hover, .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-box .image-upload-label:hover {
   cursor: pointer;
   background-color: rgba(0, 123, 255, 0.838);
+}
+.image-upload-label{
+  margin: 10px 0;
 }
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .item-colorImg-remove {
   background-color: rgb(229, 87, 85);
@@ -338,6 +338,10 @@
   padding: 10px;
   border-radius: 10px;
   display: inline-block;
+}
+.item-colorImg-size-list{
+  display: flex;
+  align-items: center;
 }
 .ad-product-edit-colorImg .ad-product-edit-color .item-color-list .itemColorImgSize-box .item-colorImgSize-add:hover {
   cursor: pointer;
@@ -659,4 +663,21 @@
   font-family: FontAwesome;
 }
 
+.item-color,.colorSelected{
+  border: 1px solid var(--black-color);
+}
+
 /*# sourceMappingURL=admin-page.css.map */
+.item-colorImg-agree{
+  display: block;
+  padding: 10px;
+  float: center;
+  border: 1px solid black;
+  float: right;
+  cursor: pointer;
+  background-color: var(--hover-color);
+  border-radius: 10px;
+}
+.item-colorImg-agree:hover{
+  background-color: var(--hover-color1);
+}

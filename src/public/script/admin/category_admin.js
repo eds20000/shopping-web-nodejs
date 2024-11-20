@@ -1,7 +1,7 @@
 
 //Pagination ------------------------------------------
-let currentPage = 1 //元のページ
-let perPage = 5 //so trang di chuyen 
+let currentPage = 1//元のページ
+let perPage = 4 //so trang di chuyen 
 let totalPage = 0// ページの数
 let perItem = [] //アイテムが表示される
 function getItem() {
@@ -9,7 +9,6 @@ function getItem() {
     renderPageNumber()
     renderItem()
 }
-console.log(list_items)
 function handlerPageNumber(num, element) {
     $$('.bar-page_list-item').forEach(item => {
         item.classList.remove('page-checked');
@@ -23,7 +22,9 @@ function handlerPageNumber(num, element) {
 }
 
 function renderPageNumber() {
-    totalPage = list_items.length / perPage
+    $('.bar-page_list').innerHTML = "";
+
+    totalPage = Math.ceil(list_items.length / perPage);
     for (let i = 1; i <= totalPage; i++) {
         if (totalPage > 1) {
             if (i == 1) {

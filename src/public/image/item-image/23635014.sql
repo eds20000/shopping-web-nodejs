@@ -1,1 +1,0 @@
-SELECT * FROM class_name LEFT OUTER JOIN resource USING (class);

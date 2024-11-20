@@ -39,6 +39,24 @@ let productImgUpload = async (req, res) => {
     }
     return res.render('admin/product-edit.ejs', { users, item, filePaths, colorInput ,colorNameInput,sizeItemInput});
 }
+let productImgUploadAdd = async (req, res) => {
+    const users = await usersEdit.getUsers()
+    const filePaths = req.files.map(file => file.filename);
+    const colorInput = req.body.colorInput
+    const colorNameInput = req.body['color_name']
+    const sizeInput = req.body['item-colorImg-size']
+    const stockInput = req.body['item-colorImgSize-stock']
+
+    const sizeItemInput = [] 
+    for(let i = 0 ; i < sizeInput.length ;i++){
+        sizeItemInput.push({
+            size:sizeInput[i],
+            stock:stockInput[i]
+        })
+    }
+    return res.render('admin/product-add.ejs', { users,filePaths, colorInput ,colorNameInput,sizeItemInput});
+}
+
 let DeleteItem = async (req, res) => {
     const itemId = req.params.id
     await models.deleteItemById(itemId)
@@ -55,9 +73,41 @@ let DeleteItemColorSize = async (req, res) => {
 const itemUpdate = async (req, res) => {
     const { id, name, brand, category, price, zaiko, infor, size, color_img } = req.body;
     console.log(id, name, brand, category, price, zaiko, infor, size, color_img)
+    const sizeItem = size.split(",")
+
     try {
         // Gọi hàm cập nhật database
-        await models.updateItemById(id, name, brand, category, price, zaiko, infor, size, color_img);
+        await models.updateItemById(id, name, brand, category, price, zaiko, infor, sizeItem, color_img);
+
+        // Trả về phản hồi JSON cho phía client
+        return res.status(200).json({ success: true, message: '更新に成功しました！' });
+    } catch (error) {
+        console.error('Error updating item:', error);
+
+        // Trả về lỗi nếu có
+        return res.status(500).json({ success: false, message: '更新に失敗しました！.' });
+    }
+};
+
+//Product-add
+
+const productAdd = async(req,res) =>{
+    if (req.session.user) {
+        const users = await usersEdit.getUsers()
+        return res.render('admin/product-add.ejs', {users, filePaths: null, colorInput: null,stockInput:null,sizeInput:null,colorNameInput:null })
+    }
+    else{
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login')
+    }
+}
+const itemAdd = async (req, res) => {
+    const { name, brand, category, price, zaiko, infor, size, color_img } = req.body;
+    const sizeItem = size.split(",")
+
+    try {
+        // Gọi hàm cập nhật database
+        await models.addItem( name, brand, category, price, zaiko, infor, sizeItem, color_img);
 
         // Trả về phản hồi JSON cho phía client
         return res.status(200).json({ success: true, message: '更新に成功しました！' });
@@ -162,9 +212,9 @@ let getReviewsPage =async (req,res) => {
     }
 }
 module.exports = {
-    getadminPage, productEdit, DeleteItem, DeleteItemColorSize, itemUpdate, productImgUpload,
+    getadminPage, productEdit, DeleteItem, DeleteItemColorSize, itemUpdate, productImgUpload,productImgUploadAdd,
     getUsersPage, getUsersEditPage, DeleteUserById, userInforUpdate,
     addUserPage, addUser, getOrdersPage, editOrder,
-    getReviewsPage
+    getReviewsPage,productAdd,itemAdd
 
 }

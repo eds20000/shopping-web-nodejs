@@ -55,7 +55,10 @@ const getItems = async () => {
                     size: [],
                     category: row.category,
                     color_img: [],
-                    infor: row.infor,
+                    infor: row.infor
+                        .replace(/\n/g, '<br>')   // Convert newlines to <br>
+                        .replace(/\r/g, '')       // Remove carriage returns
+                        .replace(/\t/g, ' '),
                     rating: row.average_rating || 0,  // Default to 0 if no rating
                     ratingCount : row.count_rating
                 };
@@ -140,7 +143,10 @@ const getItemById = async (id) => {
                     size: [],
                     category: row.category,
                     zaiko: row.zaiko,
-                    infor: row.infor,
+                    infor: row.infor
+                        .replace(/\n/g, '<br>')   // Convert newlines to <br>
+                        .replace(/\r/g, '')       // Remove carriage returns
+                        .replace(/\t/g, ' '),
                     color_img: []
                 };
                 acc.push(item);
@@ -217,9 +223,6 @@ const updateItemById = async (id, name, brand, category, price, zaiko, infor, si
         await connection.beginTransaction();
 
         // Parse dữ liệu JSON nếu nó là chuỗi
-        if (typeof size === 'string') {
-            size = JSON.parse(size);
-        }
         if (typeof color_img === 'string') {
             color_img = JSON.parse(color_img);
         }
@@ -307,6 +310,86 @@ const updateItemById = async (id, name, brand, category, price, zaiko, infor, si
     }
 };
 
+const addItem = async (name, brand, category, price, zaiko, infor, size, color_img) => {
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+        if (typeof color_img === 'string') {
+            color_img = JSON.parse(color_img);
+        }
+        await connection.query(
+            'INSERT INTO items(name,brand,category,price,zaiko,infor) VALUES (?,?,?,?,?,?)',
+            [name, brand, category, price, zaiko, infor]
+        );
+        // Lấy `item_id` mới chèn vào
+        const [itemIdNEW] = await connection.query(
+            'SELECT id FROM items WHERE name = ? AND brand = ? AND category = ? AND price = ? AND zaiko = ? AND infor = ?',
+            [name, brand, category, price, zaiko, infor]
+        );
+        const itemId = itemIdNEW[0].id;
+
+        // Xử lý size
+        if (Array.isArray(size) && size.length > 0) {
+            for (const s of size) {
+                await connection.query(
+                    'INSERT INTO sizes (item_id, size) VALUES (?, ?)',
+                    [itemId, s]
+                );
+            }
+        } else {
+            console.log('Không có size để cập nhật.');
+        }
+
+        // Xử lý màu sắc
+        if (Array.isArray(color_img) && color_img.length > 0) {
+        
+            for (const colorImgs of color_img) {
+                await connection.query(
+                    'INSERT INTO colors (item_id, color_nameEng, color_name) VALUES (?, ?, ?)',
+                    [itemId, colorImgs.color_nameEng, colorImgs.color_name]
+                );
+        
+                // Lấy `color_id` mới chèn vào
+                const [rows] = await connection.query(
+                    'SELECT id FROM colors WHERE item_id = ? AND color_name = ?',
+                    [itemId, colorImgs.color_name]
+                );
+                const colorIdNEW = rows[0].id;
+        
+                // Thêm dữ liệu vào `color_sizes` và `images`
+                for (const colorSize of colorImgs.color_size) {
+                    await connection.query(
+                        'INSERT INTO color_sizes (color_id, size, item_id, zaiko) VALUES (?, ?, ?, ?);',
+                        [colorIdNEW, colorSize.size, itemId, colorSize.zaiko]
+                    );
+                }
+        
+                for (const colorImg of colorImgs.img) {
+                    await connection.query(
+                        'INSERT INTO images (color_id, img_url) VALUES (?, ?);',
+                        [colorIdNEW, colorImg]
+                    );
+                }
+            }
+        }
+        
+        
+         else {
+            console.log('Không có màu sắc để cập nhật.');
+        }
+
+        // Commit transaction sau khi mọi việc hoàn thành
+        console.log('Commit transaction');
+        await connection.commit();
+        console.log('Cập nhật thành công!');
+    } catch (err) {
+        await connection.rollback();
+        console.error('Error during transaction, rolling back:', err.message);
+        throw err;
+    } finally {
+        connection.release();
+    }
+};
 
 
 
@@ -315,4 +398,5 @@ const updateItemById = async (id, name, brand, category, price, zaiko, infor, si
 
 
 
-module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById }
+
+module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById,addItem }

@@ -68,12 +68,12 @@ function renderItembyCategory(perItem) {
 
 //Pagination ------------------------------------------
 let currentPage = 1 //元のページ
-let perPage = 16 //so trang di chuyen 
+let perPage = 15 //so trang di chuyen 
 let totalPage = 0// ページの数
 var perItem = [] //アイテムが表示される
 function getItem(itemList) {
     perItem = itemList.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage,)
-    renderPageNumber()
+    renderPageNumber(itemList)
     renderItembyCategory(perItem)
 }
 function handlerPageNumber(num, element) {
@@ -88,8 +88,10 @@ function handlerPageNumber(num, element) {
     renderItembyCategory(perItem)
 }
 
-function renderPageNumber() {
-    totalPage = category_item.length / perPage
+function renderPageNumber(itemList) {
+    ('.bar-page_list').innerHTML = "";
+
+    totalPage = Math.ceil(itemList.length / perPage);
     for (let i = 1; i <= totalPage; i++) {
         if (totalPage > 1) {
             if (i == 1) {

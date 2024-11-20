@@ -70,9 +70,10 @@
                                     <label for="item-price">値段(￥)</label>
                                     <input type="text" name ="item-price" value="<%=item.price %>">
                                 </div>
-                                <% item.size.forEach(itemSize =>{ %>
-                                    <input type="text" name ="item-size" value="<%=itemSize %>">
-                                <% }) %>
+                                <div class="item-size">
+                                    <label for="item-price">サイズ</label>
+                                    <input type="text" name ="item-size" value="<%=item.size %>">
+                                </div>
                                 <div class="item-zaiko">
                                     <label for="item-price">在庫</label>
                                     <input type="text" name ="item-zaiko" value="<%=item.zaiko %>">
@@ -98,7 +99,7 @@
                                                 <div class="item-color-box">
                                                     <div class="colorSelected" style="background-color:<%=colorInput %>;"></div>
                                                     <input type="text" name="color_name" value = "<%=colorNameInput %>"> 
-                                                    <input type="text" name="color_id" value = ""> 
+                                                    <input type="text" name="color_id" value = "" hidden> 
                                                 </div>
                                                 <div class="item-colorImg-box">
                                                     <% filePaths.forEach(fileName => { %>
@@ -118,14 +119,15 @@
                                                 <%})%>                           
                                                 <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
                                             </div>
-                                            <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
+                                            <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">カラー削除</div>
                                         </div> 
                                         <% } %>
                                         <% item.color_img.forEach(colorImg => { %>
                                         <div class="item-color-list">
                                             <div class="itemColorImg-box">
                                                 <div class="item-color-box">
-                                                    <div class="colorSelected" style ="background-color:<%=colorImg.color_nameEng %>;"></div>   
+                                                    <div class="colorSelected" style ="background-color:<%=colorImg.color_nameEng %>;"></div> 
+                                                    <label for="color_name">カラー名：</label>  
                                                     <input type="text" name="color_name" value="<%=colorImg.color_name %>">       
                                                     <input type="text" hidden name="color_id" value="<%=colorImg.id %>">                          
                                                 </div>
@@ -148,7 +150,7 @@
                                                 <% }) %>
                                                     <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
                                             </div>
-                                            <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
+                                            <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">カラー削除</div>
                                         </div>
                                         <% }) %>
                                     </div>

@@ -35,10 +35,14 @@ const initWebRoute = (app) => {
     //admin-page
     router.get('/admin-page', adminPageController.getadminPage)
     router.get('/product-edit/:id', adminPageController.productEdit)
+    router.get('/product-add', adminPageController.productAdd)
+
 
     //item-update
     router.post('/product-edit/update-item', upload.none(), adminPageController.itemUpdate)
+    router.post('/product-edit/add-item', upload.none(), adminPageController.itemAdd)
     router.post('/upload-img/:id', itemImgUpload.array('image-add', 10), adminPageController.productImgUpload)
+    router.post('/upload-img-add/', itemImgUpload.array('image-add', 10), adminPageController.productImgUploadAdd)
     router.get('/item-delete/:id', adminPageController.DeleteItem)
     router.get('/item-colorsize-delete/:itemid/:colorid/:colorsize', adminPageController.DeleteItemColorSize)
 

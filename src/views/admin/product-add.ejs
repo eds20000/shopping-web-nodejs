@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/style/base.css">
+    <link rel="stylesheet" href="/style/grid.css">
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>  
+    <link rel="stylesheet" href="/style/responsive.css">
+    <link rel="stylesheet" href="/style/admin/admin-page.css">
+    <title>Product-page</title>
+</head>
+
+<body>
+    <header class="header header-only">
+        <div class="grid wide">
+            <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+        </div> 
+    </header>
+    <div class="container_ad">
+        <div class="grid wide">
+            <div class="row">
+                <div class="col l-2 ad_page-category">
+                    <% users.forEach(user => { %>
+                        <% if(user.user_role == 'admin'){ %>
+                    <div class="ad_category-img"><img src="/image/user-image/<%=user.user_img %>" alt="user-image"></div>
+                    <div class="ad_category-name"><%=user.user_name %></div>
+                        <% } %>
+                    <% }) %>
+                    <ul class="ad_page-category-content">
+                        <li class="ad_category"><a href="http://">カテゴリー</a></li>
+                        <li class="ad_item ad-checked"><a href="/admin-page">製品</a></li>
+                        <li class="ad_order"><a href="/admin-orders">注文</a></li>
+                        <li class="ad_cutomer"><a href="/admin-users">顧客</a></li>
+                        <li class="ad_review"><a href="/admin-reviews">レビュー</a></li>
+                    </ul>
+                </div>
+                <div class="col l-10 ad_page-content">
+                    <div class="row">
+                        <div class="content-title">
+                            <a href="/admin-page">製品</a>>
+                            <div class="ad-content-title-checked">追加</div>
+                        </div>
+                    </div>
+                    <div class="grid wide">
+                        <form action="" style="width: 100%;" class="row ad-product-edit" onsubmit="return handleSubmit(event)" method="post" enctype="multipart/form-data">        
+                            <div class="ad-product-edit-text col l-6">
+                                <div class="item-name">
+                                    <label for="item-name">商品名</label>
+                                    <input type="text" name ="item-name">
+                                </div>
+                                <div class="item-brand">
+                                    <label for="item-brand">ブランド</label>
+                                    <input type="text" name ="item-brand">
+                                </div>
+                                <div class="item-category">
+                                    <label for="item-category">カテゴリー</label>
+                                    <input type="text" name ="item-category">
+                                </div>
+                                <div class="item-price">
+                                    <label for="item-price">値段(￥)</label>
+                                    <input type="text" name ="item-price">
+                                </div>                               
+                                    <label for="item-price">サイズ</label>
+                                    <input type="text" name ="item-size">
+                                <div class="item-zaiko">
+                                    <label for="item-price">在庫</label>
+                                    <input type="text" name ="item-zaiko">
+                                </div>
+                                <div class="item-info">
+                                    <label for="item-info" style="display: block; margin-bottom: 10px;">商品情報</label>
+                                    <textarea name="item-info" style="width: 100%;" rows="30" id="item-info" ></textarea>
+                                </div>
+                            </div>
+                            <div class="ad-product-edit-colorImg col l-6">
+                                <div class="ad-product-edit-color">
+                                    <label for="item-color">
+                                        カラー：
+                                    </label>    
+                                    <div class="color-push-box">新しい色を選ぶ
+                                        <input type="color" name ="item-color" id="item-color">
+                                        <div class="color-push" onclick="addColor()"> + 追加</div>
+                                    </div>
+                                    <div class="item-color-list-box">
+                                        <% if (filePaths && colorInput) { %>
+                                        <div class="item-color-list">
+                                            <div class="itemColorImg-box">
+                                                <div class="item-color-box">
+                                                    <div class="colorSelected" style="background-color:<%=colorInput %>;"></div>
+                                                    <label for="color_name">カラー名：</label>
+                                                    <input type="text" name="color_name" value = "<%=colorNameInput %>"> 
+                                                </div>
+                                                <div class="item-colorImg-box">
+                                                    <% filePaths.forEach(fileName => { %>
+                                                    <img alt="item-img" class="item-colorImg" src="/image/item-image/<%=fileName %>">
+                                                    <% }) %>
+                                                </div>
+                                            </div>
+                                            <div class="itemColorImgSize-box">
+                                                <% sizeItemInput.forEach (sizeItem =>{ %>
+                                                    <div class="item-colorImg-size-list">
+                                                        <label for="item-colorImg-size">サイズ</label>
+                                                        <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value = "<%=sizeItem.size %>">                                          
+                                                        <label for="item-colorImg-size">在庫</label>                                                      
+                                                        <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value = "<%=sizeItem.stock %>">
+                                                        <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>     
+                                                    </div>
+                                                <%})%>                           
+                                                <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
+                                            </div>
+                                            <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
+                                        </div> 
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit">追加</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <div class="warning-delete-box-background">
+        </div>
+    </div>
+    
+<script src="/script/admin/product-add.js"></script>
+</body>
+</html>

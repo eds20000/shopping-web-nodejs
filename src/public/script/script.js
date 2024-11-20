@@ -235,22 +235,23 @@ function changeImage() {
     $$('.sort__item').forEach(function (item) {//thay doi hinh anh bang nut bam o muc item
         var index = 0;
         let itemId = item.getAttribute('item-index');
+        const product = list_item.find(item => item.id === parseInt(itemId));
         item.querySelector('.sort__item-img_btn-left').onclick = function () {
             index = index - 1
             if (index < 0) {
-                index = list_item[itemId].color_img[0].img.length + index
+                index = product.color_img[0].img.length + index
             }
 
-            item.querySelector('.sort__item-img img').src = '/image/item-image/' + list_item[itemId].color_img[0].img[index]
+            item.querySelector('.sort__item-img img').src = '/image/item-image/' + product.color_img[0].img[index]
         }
 
         item.querySelector('.sort__item-img_btn-right').onclick = function () {
             index = index + 1
-            if (index >= list_item[itemId].color_img[0].img.length) {
+            if (index >= product.color_img[0].img.length) {
                 index = 0
             }
 
-            item.querySelector('.sort__item-img img').src = '/image/item-image/' + list_item[itemId].color_img[0].img[index]
+            item.querySelector('.sort__item-img img').src = '/image/item-image/' + product.color_img[0].img[index]
         }
     })
 }

@@ -107,6 +107,7 @@ function addColor() {
         <form action="/upload-img/${itemId}" method="POST" enctype="multipart/form-data" class="image-upload-form" style="display:block;">
             <div class="item-color-box">
                 <div class="colorSelected" style="background-color:${colorInput};"></div>
+                <label for="color_name">カラー名：</label>  
                 <input type="text" name="color_name"> 
             </div>
             <div class="item-colorImg-box">
@@ -127,7 +128,7 @@ function addColor() {
                 <div class="item-colorImgSize-add" onclick ="itemColorSizeAdd(this)">サイズの追加</div>
             </div>
         </form>
-        <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">削除</div>
+        <div class="item-colorImg-remove" onclick ="itemColorDelete(this)">カラー削除</div>
         `;
 
         // Thêm item-color-list vào item-color-list-box
@@ -190,17 +191,23 @@ function itemColorSizeDelete(a) {
     a.closest('.item-colorImg-size-list').remove()
 }
 function itemColorSizeAdd(a) {
-    a.closest('.itemColorImgSize-box').innerHTML +=
-        `
-    <div class="item-colorImg-size-list">
+    // Tạo phần tử mới
+    const newItem = document.createElement('div');
+    newItem.classList.add('item-colorImg-size-list');
+    
+    // Thêm nội dung HTML vào phần tử mới
+    newItem.innerHTML = `
         <label for="item-colorImg-size">サイズ</label>
-        <input type="text" class="item-colorImg-size" name ="item-colorImg-size" value=""></input>                                           
-        <label for="item-colorImgSize-stock">在庫</label>                                                      
-        <input type="text" class="item-colorImgSize-stock" name ="item-colorImgSize-stock" value=""></input>
-        <div class="item-colorImgSize-Delete" onclick ="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div> 
-    </div>
-    `
+        <input type="text" class="item-colorImg-size" name="item-colorImg-size" value=""></input>
+        <label for="item-colorImgSize-stock">在庫</label>
+        <input type="text" class="item-colorImgSize-stock" name="item-colorImgSize-stock" value=""></input>
+        <div class="item-colorImgSize-Delete" onclick="itemColorSizeDelete(this)" style="display: inline-block;">サイズの削除</div>
+    `;
+
+    // Thêm phần tử mới vào container
+    a.closest('.itemColorImgSize-box').appendChild(newItem);
 }
+
 
 function handleSubmit(event) {
     event.preventDefault();  // Prevent default form submission
@@ -214,15 +221,8 @@ function handleSubmit(event) {
         const itemPrice = document.querySelector('input[name="item-price"]').value;
         const itemZaiko = document.querySelector('input[name="item-zaiko"]').value;
         const itemInfo = document.querySelector('textarea[name="item-info"]').value;
+        const itemSize = document.querySelector('input[name="item-size"]').value
 
-        // Debugging: Log values to check if they are not empty
-        console.log("itemId:", itemId);
-        console.log("itemName:", itemName);
-        console.log("itemBrand:", itemBrand);
-        console.log("itemCategory:", itemCategory);
-        console.log("itemPrice:", itemPrice);
-        console.log("itemZaiko:", itemZaiko);
-        console.log("itemInfo:", itemInfo);
 
         if (!itemId || !itemName || !itemBrand || !itemCategory || !itemPrice || !itemZaiko || !itemInfo) {
             throw new Error('All fields are required!');
@@ -235,14 +235,9 @@ function handleSubmit(event) {
         formData.append('category', itemCategory);
         formData.append('price', itemPrice);
         formData.append('zaiko', itemZaiko);
+        formData.append('size', itemSize);
         formData.append('infor', itemInfo);
 
-        // Collect size information
-        const itemSize = [];
-        document.querySelectorAll('input[name="item-size"]').forEach(item_size => {
-            itemSize.push(item_size.value);
-        });
-        formData.append('size', JSON.stringify(itemSize));
 
         // Collect color and image information
         const colorImgList = [];

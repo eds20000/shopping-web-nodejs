@@ -213,6 +213,15 @@
     transform: rotate(135deg);
     z-index: 9;
 }
+.section__recommend-list,
+.section__new-list,
+.section__best_sellers-list,
+.section__mens-list,
+.section__womens-list,
+.section__cosmetics-list{
+    width: 100%;
+
+}
 
 /* Responsive */
 @media (max-width:1023px){

@@ -18,7 +18,6 @@
         const reviews = JSON.parse('<%- JSON.stringify(reviews) %>');
         const users = JSON.parse('<%- JSON.stringify(users) %>');
         const items = JSON.parse('<%- JSON.stringify(items) %>');
-        console.log(reviews,users,items)
     </script>
 </head>
 
@@ -42,8 +41,8 @@
                         <li class="ad_category"><a href="http://">カテゴリー</a></li>
                         <li class="ad_item"><a href="/admin-page">製品</a></li>
                         <li class="ad_order"><a href="/admin-orders">注文</a></li>
-                        <li class="ad_cutomer ad-checked"><a href="/admin-users">顧客</a></li>
-                        <li class="ad_review"><a href="/admin-reviews">レビュー</a></li>
+                        <li class="ad_cutomer"><a href="/admin-users">顧客</a></li>
+                        <li class="ad_review ad-checked"><a href="/admin-reviews">レビュー</a></li>
                     </ul>
                 </div>
                 <div class="col l-10 ad_page-content">

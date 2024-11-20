@@ -1,5 +1,5 @@
 "use strict";
-var productItem = list_item[productId];
+var productItem = list_item.find(item => item.id == productId);
 
 function categoryItemBtn() {
     var itemData = $$('.product-item-data-color_header');

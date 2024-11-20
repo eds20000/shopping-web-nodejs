@@ -10,9 +10,20 @@ let takeOrder = async (req, res) => {
 }
 
 let deleteOrder = async (req, res) => {
-    const orderId = req.body.order_id;
-    const result = await modelOrder.deleteOrder(orderId);
-    return res.redirect(req.session.logoutBack);
+    if (req.session.user) {
+        if(req.session.user.user_role == 'admin'){
+            const orderId = req.body.order_id;
+            await modelOrder.deleteOrder(orderId);
+            return res.redirect(req.session.logoutBack);
+        }else{
+            alert('あなたのアカウントにはこのページにアクセスする権限がありません。')
+        }
+    }
+    else{
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login')
+    }
+    
 }
 
 let orderTracking = async (req, res) => {

@@ -26,6 +26,7 @@ const initWebRoute = (app) => {
     router.post('/signup/user', loginController.userCreate)
     //product-page
     router.get('/product/:id', homeController.productPage);
+    router.get('/product/:id?scrollToElement=#reviews-section', homeController.productPage);
     router.post('/add-to-favorites', homeController.addToFavorites);
     router.get('/review-like/:reviewId', homeController.handleReviewLike);
     router.post('/add-review/:itemId', homeController.addReview)

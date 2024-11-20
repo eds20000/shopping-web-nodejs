@@ -631,3 +631,6 @@ table{
     background-color: var(--border-color);
     padding: 2px 5px;
 }
+.order-item--review:not(:last-child){
+    margin-bottom: 150px;
+}

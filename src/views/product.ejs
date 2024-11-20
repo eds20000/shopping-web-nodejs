@@ -20,7 +20,7 @@
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
         const reviews = JSON.parse('<%- JSON.stringify(reviewsList) %>')
-        console.log(reviews,user)
+        console.log(productId)
     </script>
     <title>ログイン-TS-shop</title>
 </head>
@@ -72,6 +72,15 @@
             alert('An error occurred. Please try again.');
         });
     }
+    document.addEventListener("DOMContentLoaded", () => {
+        const scrollToElement = "<%= scrollToElement %>";
+        if (scrollToElement) {
+            const element = document.querySelector(scrollToElement);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
 </script>
     
 </body>

@@ -149,7 +149,7 @@ function exportItemByCategory(itemList,categoryName, column){
     for (let i = 0; i < categoryItems.length; ++i) {
         itemList.innerHTML +=
             `<div class="col ${column} c-4 m-3">
-            <div class="sort__item" item-index = "${i}">
+            <div class="sort__item" item-index = "${categoryItems[i].id}">
                 <a class="sort__item-link" data-id="${categoryItems[i].id}" >
                     <div class="sort__item-img">
                         <img src="/image/item-image/${categoryItems[i].color_img[0].img[0]}" alt="">

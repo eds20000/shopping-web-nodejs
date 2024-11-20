@@ -134,7 +134,75 @@ let productPage = async (req, res) => {
         }).filter(item => item !== null);
 
         req.session.logoutBack = req.originalUrl;
-        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId, reviewsList });
+        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId, reviewsList ,scrollToElement: req.query.scrollToElement || null });
+    } else {
+        req.session.loginBack = req.originalUrl;
+        res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId, reviewsList ,scrollToElement: req.query.scrollToElement || null });
+    }
+};
+
+let productReviewPage = async (req, res) => {
+    const items = await models.getItems();
+    const itemId = req.params.id;
+    const reviews = await modelReview.getReviewByItemid(itemId);
+    const ratingSum = reviews.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.rating;
+    }, 0);
+    // Nếu muốn trả về cả reviews và ratingSum
+    const reviewsList = {
+        reviews,
+        ratingSum
+    };
+    await Promise.all(reviewsList.reviews.map(async (review) => {
+        const reviewLikes = await modelReview.getReviewLike(review.id);
+        review.reviewLikeUserId = reviewLikes;
+    }));
+
+    let item;
+    if (itemId) {
+        item = (await models.getItemById(itemId))[0];
+    }
+
+    let myCart = [];
+    if (req.cookies && req.cookies.myCart) {
+        myCart = req.cookies.myCart;
+    }
+
+    if (req.session.user) {
+        if (req.cookies && req.cookies.myCart) {
+            // Sử dụng for...of với await để đảm bảo thực thi tuần tự
+            for (const item of myCart) {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size);
+            }
+            res.clearCookie('myCart');
+        }
+
+        const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        req.session.user.favorItems = favorItems;
+        req.session.user.cartItems = cartItems;
+
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    category: fullItem.category,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
+
+        req.session.logoutBack = req.originalUrl;
+        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId, reviewsList ,});
     } else {
         req.session.loginBack = req.originalUrl;
         res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId, reviewsList });

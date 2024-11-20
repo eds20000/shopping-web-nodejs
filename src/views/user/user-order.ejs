@@ -80,7 +80,6 @@
                                     <td>
                                         <div class="order-item--return"><a href="/user-order/tracking/<%=order.order_id %>" style="text-wrap: nowrap;padding: 10px; color: var(--white-color);background-color: black;padding: 5px 10px; ">追跡</a></div>
                                         <div class="order-item--return" style="text-wrap: nowrap;padding: 10px; color: var(--primary-color); "><a href="">商品を返品</a></div>
-                                        <div class="order-item--repurchase" style="text-wrap: nowrap;padding: 10px; color: var(--primary-color);"><a href="">再購入</a></div>
                                     </td>
                                     <td class="order-item--status-info">
                                         <div class="order-item--status">
@@ -90,12 +89,10 @@
                                            注文詳細
                                         </div>
                                     </td>
-                                    <td>
-                                        <a href="" class="order-item--review">レビュー</a>
-                                        <form action="/user-order/remove" method="post">
-                                            <input type="hidden" name="order_id" value="<%= order.order_id %>">
-                                            <div class="order-remove"><button type="submit">削除</button></div>
-                                        </form>
+                                    <td  class="order-item--review-box">
+                                        <% order.order_details.forEach(order_detail => { %>
+                                        <a href="/product/<%= order_detail.item_id %>?scrollToElement=.product-item-data-review_add" class="order-item--review">レビュー</a>
+                                        <% }) %>
                                     </td>
                                 </tr>
                                 <% }) %>
@@ -138,7 +135,6 @@
         </div>
         </div>
         <div class="row order-page-info__action">
-            <div class="order-repurchase"><a href="">再購入</a></div>
             <div class="order-return">返品</div>
             <div class="order-tracking"><a href="/user-order/tracking/${order.order_id}">追跡</a></div>
             <div class="order-review">レビュー</div>

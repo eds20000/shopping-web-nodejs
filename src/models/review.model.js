@@ -12,6 +12,7 @@ let getReview = async () => {
                 reviews.rating,
                 reviews.review_title,
                 reviews.review_text,
+                reviews.review_img,
                 DATE_FORMAT(reviews.created_at, '%d/%m/%Y') AS created_at,
                 DATE_FORMAT(reviews.updated_at, '%d/%m/%Y') AS updated_at 
             FROM 
@@ -21,11 +22,33 @@ let getReview = async () => {
             ON 
                 reviews.user_id = users.user_id
             `)
-            return rows;
-    }
-    catch (error) {
-        console.log(error);
-    }
+            return rows.reduce((acc, row) => {
+                // Kiểm tra xem review đã tồn tại trong mảng acc chưa
+                let review = acc.find(review => review.id === row.id);
+    
+                if (!review) {
+                    // Nếu chưa tồn tại, tạo review mới
+                    review = {
+                        id: row.id,
+                        item_id: row.item_id,
+                        user_name: row.user_name,
+                        color_name: row.color_name,
+                        size: row.size,
+                        rating: row.rating,
+                        review_title: row.review_title,
+                        review_text: row.review_text,
+                        review_img: row.review_img ? row.review_img.split(',') : [], // Xử lý trường hợp null hoặc undefined
+                        created_at: row.created_at,
+                        updated_at: row.updated_at
+                    };
+                    acc.push(review); // Thêm vào mảng
+                }
+    
+                return acc; // Trả về accumulator
+            }, []); // Khởi tạo acc là mảng rỗng
+        } catch (error) {
+            console.error(error); // Log lỗi nếu xảy ra
+        }
 }
 let getReviewByItemid = async (itemId) => {
     try {
@@ -39,6 +62,7 @@ let getReviewByItemid = async (itemId) => {
                 reviews.rating,
                 reviews.review_title,
                 reviews.review_text,
+                reviews.review_img,
                 DATE_FORMAT(reviews.created_at, '%d/%m/%Y') AS created_at,
                 DATE_FORMAT(reviews.updated_at, '%d/%m/%Y') AS updated_at 
             FROM 
@@ -48,12 +72,38 @@ let getReviewByItemid = async (itemId) => {
             ON 
                 reviews.user_id = users.user_id
             WHERE 
-                reviews.item_id = ? ;`, [itemId])
-        return rows;
+                reviews.item_id = ? ;`, [itemId]);
+
+        // Sử dụng reduce để nhóm dữ liệu
+        return rows.reduce((acc, row) => {
+            // Kiểm tra xem review đã tồn tại trong mảng acc chưa
+            let review = acc.find(review => review.id === row.id);
+
+            if (!review) {
+                // Nếu chưa tồn tại, tạo review mới
+                review = {
+                    id: row.id,
+                    item_id: row.item_id,
+                    user_name: row.user_name,
+                    color_name: row.color_name,
+                    size: row.size,
+                    rating: row.rating,
+                    review_title: row.review_title,
+                    review_text: row.review_text,
+                    review_img: row.review_img ? row.review_img.split(',') : [], // Xử lý trường hợp null hoặc undefined
+                    created_at: row.created_at,
+                    updated_at: row.updated_at
+                };
+                acc.push(review); // Thêm vào mảng
+            }
+
+            return acc; // Trả về accumulator
+        }, []); // Khởi tạo acc là mảng rỗng
     } catch (error) {
-        console.log(error);
+        console.error(error); // Log lỗi nếu xảy ra
     }
-}
+};
+
 
 let getReviewLike = async (reviewId) => {
     try {
@@ -83,17 +133,23 @@ let handleReviewLike = async (reviewId, userId) => {
         console.error("Error delete review like:", error);
     }
 }
-let addReview = async (itemId, userId, colorName, size, rating,reviewTitle, reviewText) => {
+let addReview = async (itemId, userId, colorName, size, rating, reviewTitle, reviewText, reviewImg) => {
     try {
-        await pool.query('INSERT INTO reviews(item_id,user_id,color_name,size,rating,review_title,review_text) VALUES(?,?,?,?,?,?,?) ', [itemId, userId, colorName, size, rating,reviewTitle, reviewText]);
+        const query = `
+            INSERT INTO reviews 
+            (item_id, user_id, color_name, size, rating, review_title, review_text, review_img, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+        `;
+        await pool.execute(query, [itemId, userId, colorName, size, rating, reviewTitle, reviewText, reviewImg]);
+    } catch (error) {
+        console.error('Error in modelReview.addReview:', error);
+        throw error;
     }
-    catch (error) {
-        console.error("Error delete review like:", error);
-    }
-}
-let updateReview = async (itemId, userId, colorName, size, rating,reviewTitle, reviewText) => {
+};
+
+let updateReview = async (itemId, userId, colorName, size, rating,reviewTitle, reviewText,reviewImg) => {
     try {
-        await pool.query('UPDATE reviews SET color_name = ?, size = ?, rating = ?,review_title = ?, review_text = ?, updated_at = ? WHERE user_id = ? AND item_id = ? ', [colorName, size, rating,reviewTitle, reviewText,new Date(),userId,itemId]);
+        await pool.query('UPDATE reviews SET color_name = ?, size = ?, rating = ?,review_title = ?, review_text = ?,review_img = ?, updated_at = ? WHERE user_id = ? AND item_id = ? ', [colorName, size, rating,reviewTitle, reviewText,reviewImg,new Date(),userId,itemId]);
     }
     catch (error) {
         console.error("Error delete review like:", error);

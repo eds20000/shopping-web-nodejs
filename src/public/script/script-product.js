@@ -167,7 +167,7 @@ productItemContainer.innerHTML =
                                     review.user_name === user.user_name ? `
                                         <div class="product-item-data-review_add">
                                             <div class="product-item-data-review_add--username">${user.user_name}</div>
-                                            <form action="/update-review/${productItem.id}" method="post" id="review-form">
+                                            <form action="/update-review/${productItem.id}" method="post" id="review-form" enctype="multipart/form-data">
                                                 <div class="form-group">
                                                     <label for="name">カラー - サイズ：</label>
                                                     <select name="color_name">
@@ -202,6 +202,20 @@ productItemContainer.innerHTML =
                                                     <textarea id="review_text" name="review_text" rows="4" placeholder="レビュー" style="width:100%">${review.review_text}</textarea>
                                                     <span class="form-message"></span>
                                                 </div>
+                                                <div class="review-img-box">
+                                                    <div class="review-img-list">
+                                                    ${review.review_img.map(reviewImg => {
+                                                        return `<img src="/image/review-image/${reviewImg}" alt="Review Image">
+                                                        <input type="text" name="review-img" value="${reviewImg}" hidden>`;
+                                                    }).join('')
+                                                    }
+                                                    </div>
+                                                    <input type="file" id="review-img" name="review-img" multiple accept="image/*" hidden>
+                                                    ${review.review_img.length > 0 ? `<div class="delete-btn">削除</div>`:
+                                                   `<label for="review-img" class="image-upload-label" >
+                                                        <span class="material-symbols-rounded">画像アップロード</span>
+                                                    </label>`}
+                                                </div>
                                                 <div class="action-btn">
                                                     <button type="submit" class="primary-btn review-submit-btn">レビューを変更</button>
                                                     <a class="primary-btn review-delete-btn" href ="/delete-review/${review.id}">レビューを削除</a>
@@ -214,7 +228,7 @@ productItemContainer.innerHTML =
                                 `
                                 <div class="product-item-data-review_add">
                                     <div class="product-item-data-review_add--username">${user.user_name}</div>
-                                    <form action="/add-review/${productItem.id}" method="post" id="review-form">
+                                    <form action="/add-review/${productItem.id}" method="post" id="review-form" enctype="multipart/form-data">
                                         <div class="form-group">
                                             <label for="name">カラー - サイズ：</label>
                                             <select name="color_name">
@@ -233,18 +247,25 @@ productItemContainer.innerHTML =
                                                     `<input type="radio" name="rating" id="rating-${rating}" value="${rating}">
                                                      <label for="rating-${rating}"></label>`
                                                 ).join('')}
+                                               
                                             </div>
                                             <span class="form-message"></span>
                                         </div>
                                         <div class ="form-group">
                                             <label for="review_title">タイトル</label>
-                                            <input type="text" name="review_title" id="review_title" class"review_title" value="">
+                                            <input type="text" name="review_title" id="review_title" class="review_title" value="">
                                             <span class="form-message"></span>
                                         </div>
                                         <div class="form-group">
                                             <label for="review_text">内容</label>
                                             <textarea id="review_text" name="review_text" rows="4" placeholder="レビュー" style="width:100%"></textarea>
                                             <span class="form-message"></span>
+                                        </div>
+                                        <div class="review-img-box">
+                                            <label for="review-img" class="image-upload-label" >
+                                                <span class="material-symbols-rounded">画像アップロード</span>
+                                            </label>
+                                            <input type="file" id="review-img" name="review-img" multiple accept="image/*" hidden>
                                         </div>
                                         <button type="submit" class="primary-btn review-submit-btn">レビューを書く</button>
                                     </form>
@@ -258,6 +279,95 @@ productItemContainer.innerHTML =
             </div>
         </div>
     </div>`;
+    let imageInput = document.getElementById('review-img');
+let reviewImgBox = document.querySelector('.review-img-box');
+if(reviewImgBox){
+    var deleteButton = reviewImgBox.querySelector('.delete-btn')
+    var reviewImgList = reviewImgBox.querySelector('.review-img-list')
+}
+if(deleteButton){
+    deleteButton.onclick = function () {
+        reviewImgList.remove();
+        deleteButton.remove();
+    
+        // Hiển thị lại nhãn tải lên
+        if (!reviewImgBox.querySelector('.image-upload-label')) {
+            const uploadLabel = document.createElement('label');
+            uploadLabel.className = "image-upload-label";
+            uploadLabel.setAttribute('for', 'review-img');
+            uploadLabel.innerHTML = `
+                <span class="material-symbols-rounded">画像アップロード</span>
+            `;
+            reviewImgBox.appendChild(uploadLabel);
+        }
+    };
+}
+// Lắng nghe sự kiện thay đổi trên input
+if(imageInput){
+    imageInput.addEventListener('change', async (event) => {
+        let files = event.target.files;
+    
+        // Xóa các ảnh cũ và reset lại danh sách
+        let reviewImgList = reviewImgBox.querySelector('.review-img-list');
+        if (reviewImgList) {
+            reviewImgList.remove();
+        }
+    
+        // Tạo container mới cho các ảnh
+        reviewImgList = document.createElement('div');
+        reviewImgList.className = "review-img-list";
+        reviewImgBox.appendChild(reviewImgList);
+    
+        // Đọc file và hiển thị ảnh
+        const fileReaders = Array.from(files).map(file => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const newImg = document.createElement('img');
+                    newImg.alt = "review-img";
+                    newImg.className = "review-img";
+                    newImg.src = reader.result;
+                    reviewImgList.appendChild(newImg);
+                    resolve();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    
+        // Đợi tất cả ảnh được đọc xong
+        await Promise.all(fileReaders);
+    
+        // Thêm nút xóa
+        const deleteButton = document.createElement('div');
+        deleteButton.className = "delete-btn";
+        deleteButton.textContent = "削除";
+        reviewImgBox.appendChild(deleteButton);
+    
+        // Thêm sự kiện xóa
+        deleteButton.onclick = function () {
+            reviewImgList.remove();
+            deleteButton.remove();
+    
+            // Hiển thị lại nhãn tải lên
+            if (!reviewImgBox.querySelector('.image-upload-label')) {
+                const uploadLabel = document.createElement('label');
+                uploadLabel.className = "image-upload-label";
+                uploadLabel.setAttribute('for', 'review-img');
+                uploadLabel.innerHTML = `
+                    <span class="material-symbols-rounded">画像アップロード</span>
+                `;
+                reviewImgBox.appendChild(uploadLabel);
+            }
+        };
+    
+        // Xóa nhãn tải lên khi có ảnh
+        const uploadLabel = reviewImgBox.querySelector('.image-upload-label');
+        if (uploadLabel) {
+            uploadLabel.remove();
+        }
+    });
+}
+
 Validator({
     form:'#review-form',
     formGroupSelector:'.form-group',
@@ -354,6 +464,12 @@ function reviewRender() {
                 </div>
                 <div class="product-item-data-review_content-text">
                     ${review.review_text}
+                </div>
+                <div class="review-img-box">
+                    ${review.review_img.map(reviewImg => {
+                        return `<img src="/image/review-image/${reviewImg}" alt="Review Image">`;
+                    }).join('')
+                    }
                 </div>
                 <div class="product-item-data-review_content-like">
                     ${user ?

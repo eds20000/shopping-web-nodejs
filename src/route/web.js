@@ -6,7 +6,7 @@ import profileController from '../controller/profileController';
 import cartController from '../controller/cartController';
 import orderController from '../controller/orderController';
 import categoryController from '../controller/categoryController';
-import { userImgUpload, itemImgUpload } from '../middleware/userInfor-updateimg'
+import { userImgUpload, itemImgUpload,reviewImgUpload} from '../middleware/userInfor-updateimg'
 
 const multer = require('multer');
 const upload = multer();
@@ -29,8 +29,8 @@ const initWebRoute = (app) => {
     router.get('/product/:id?scrollToElement=#reviews-section', homeController.productPage);
     router.post('/add-to-favorites', homeController.addToFavorites);
     router.get('/review-like/:reviewId', homeController.handleReviewLike);
-    router.post('/add-review/:itemId', homeController.addReview)
-    router.post('/update-review/:itemId', homeController.updateReview)
+    router.post('/add-review/:itemId', reviewImgUpload.array('review-img',10), homeController.addReview)
+    router.post('/update-review/:itemId',reviewImgUpload.array('review-img',10), homeController.updateReview)
     router.get('/delete-review/:reviewId',homeController.deleteReview)
 
     //admin-page

@@ -262,7 +262,6 @@ function addColor() {
 
         imageInput.addEventListener('change', async (event) => {
             let files = event.target.files;
-            console.log(files);
 
             // Tìm phần tử cha item-color-list
             let imgBox = event.target.closest('.item-colorImg-box');

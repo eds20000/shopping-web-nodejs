@@ -458,7 +458,26 @@ ul{
     width: 100px;
     margin: 0 auto;
 }
-
+.review-img-box img{
+    width: 100px;
+    margin: 5px;
+}
+.review-img-box .material-symbols-rounded{
+    background-color: rgb(0, 115, 255);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.review-img-box .material-symbols-rounded:hover{
+    background-color:rgb(78, 158, 255);
+}
+.review-img-box{
+    margin: 20px 0 40px;
+}
+.review-img-list{
+    margin: 10px 0;
+}
 /* Tablet */
 @media(min-width :740px) and (max-width :1023px){
     .product-item-image_list{

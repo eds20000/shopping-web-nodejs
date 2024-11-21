@@ -7,10 +7,10 @@ let getCategoryPage = async (req, res) => {
     const items = await models.getItems()
     let myCart = []
 
-    const category = req.params.category
+    const category = req.params.category ? req.params.category:null;
+    const brand = req.query.brand ? req.query.brand :null;
     const categoriesNow = req.body.categoriesNow ? req.body.categoriesNow : "all"
     const categoriesItemid =  await modelCourse.getCategoriesItem(categoriesNow)
-    console.log(categoriesItemid)
     const colorList = await modelCourse.getColor()
     const brandList = await modelCourse.getBrand()
     const sizeList = await modelCourse.getSize()
@@ -49,10 +49,10 @@ let getCategoryPage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        res.render('category', { items, user: req.session.user, myCart: fullCartItems, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList});
+        res.render('category', { items, user: req.session.user, myCart: fullCartItems, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList,brand});
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('category', { items, user: null, myCart: myCart, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList });
+        res.render('category', { items, user: null, myCart: myCart, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList,brand });
     }
 
 }

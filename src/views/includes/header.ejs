@@ -62,39 +62,39 @@
             
             <div class="swiper tab">  
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide <%= categoriesNow ==='all'?'tab__list-start' :'' %>"><a href="/category/<%=category%>">すべて</a></div>
+                    <div class="swiper-slide <%= categoriesNow ==='all'?'tab__list-start' :'' %>"><a href="/category<%=category ? '/'+category : ''%>">すべて</a></div>
                     <div class="swiper-slide  <%=categoriesNow ==='recommended'?'tab__list-start' :'' %>">
-                        <form action="/category/<%=category%>" method="post">
+                        <form action="/category<%=category ? '/'+category : ''%>" method="post">
                             <input name="categoriesNow" type="text" value="recommended" hidden>
                             <button type="submit" style="all:unset; width: 100%; display: block;">おすすめ</button>
                         </form>
                     </div>
                     <div class="swiper-slide <%=categoriesNow ==='new_arrivals' ? 'tab__list-start' :'' %> ">
-                        <form action="/category/<%=category%>" method="post">
+                        <form action="/category<%=category ? '/'+category : ''%>" method="post">
                             <input name="categoriesNow" type="text" value="new_arrivals" hidden>
                             <button type="submit" style="all:unset; width: 100%; display: block;">新着</button>
                         </form>
                     </div>
                     <div class="swiper-slide <%=categoriesNow ==='best_sellers'?'tab__list-start' :'' %> ">
-                        <form action="/category/<%=category%>" method="post">
+                        <form action="/category<%=category ? '/'+category : ''%>" method="post">
                             <input name="categoriesNow" type="text" value="best_sellers" hidden>
                             <button type="submit" style="all:unset; width: 100%; display: block;">ベストセラ</button>
                         </form>
                     </div>
                     <div class="swiper-slide <%=categoriesNow ==='mens'?'tab__list-start' :'' %> ">
-                        <form action="/category/<%=category%>" method="post">
+                        <form action="/category<%=category ? '/'+category : ''%>" method="post">
                             <input name="categoriesNow" type="text" value="mens" hidden>
                             <button type="submit" style="all:unset; width: 100%; display: block;">メンズ</button>
                         </form>
                     </div>
                     <div class="swiper-slide <%=categoriesNow ==='womens'?'tab__list-start' :'' %> ">
-                        <form action="/category/<%=category%>" method="post">
+                        <form action="/category<%=category ? '/'+category : ''%>" method="post">
                             <input name="categoriesNow" type="text" value="womens" hidden>
                             <button type="submit" style="all:unset; width: 100%; display: block;">レディース</button>
                         </form>
                     </div>
                     <div class="swiper-slide <%=categoriesNow ==='cosmetics' ? 'tab__list-start' :'' %> ">
-                        <form action="/category/<%=category%>" method="post">
+                        <form action="/category<%=category ? '/'+category : ''%>" method="post">
                             <input name="categoriesNow" type="text" value="cosmetics" hidden>
                             <button type="submit" style="all:unset; width: 100%; display: block;">コスメ</button>
                         </form>

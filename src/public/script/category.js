@@ -1,11 +1,16 @@
 let category_item = [];
 let filterItem = []
-list_item.forEach(item => {
-    if(item.category === category) {
-        category_item.push(item)
-        // Tạo phần tử div cho sản phẩm
-    }
-})
+if(category != null){
+    list_item.forEach(item => {
+        if(item.category === category) {
+            category_item.push(item)
+            // Tạo phần tử div cho sản phẩm
+        }
+    })
+}else{
+    category_item = list_item
+    console.log(category_item)
+}
 category_item = category_item.filter(item => categoriesItemid.includes(item.id))
 
 
@@ -103,7 +108,7 @@ function renderPageNumber(itemList) {
     }
 
 }
-if (category) {
+if (category_item.length >0) {
     getItem(category_item)
     CreatItemSelectBox();
     filterSort (category_item)
@@ -247,4 +252,8 @@ function runFilter (){
 
     filterSort (filterItem)
     getItem(filterItem)
+}
+
+if(brand){
+    filterItemsByBrand(brand)
 }

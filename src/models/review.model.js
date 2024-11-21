@@ -1,4 +1,7 @@
 import pool from '../configs/connectDB';
+const fs = require('fs').promises;
+const path = require('path'); // Nếu cần xử lý đường dẫn
+
 
 let getReview = async () => {
     try{
@@ -157,6 +160,16 @@ let updateReview = async (itemId, userId, colorName, size, rating,reviewTitle, r
 }
 let deleteReview = async (reviewId) =>{
     try {
+        const [rows] = await pool.query('SELECT review_img FROM reviews WHERE id = ?', [reviewId]);
+        const reviewImg = rows.map(reviewImg => reviewImg.review_img)
+        for (const imgName of reviewImg) {
+            try {
+                const imgPath = path.join(__dirname, '../public/image/review-image', imgName); 
+                await fs.unlink(imgPath); // Xóa file
+            } catch (err) {
+                console.error(`Failed to delete file: ${imgName}`, err);
+            }
+        }
         await pool.query('DELETE FROM reviews WHERE id = ?', [reviewId]);
     } catch (error) {
         console.error("Error fetching review like:", error);

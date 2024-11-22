@@ -648,33 +648,14 @@ function productRedirect() {
 
 // --------------SEARCH-ITEM-BAR-------------START
 function searchItemIp() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const itemSearch = urlParams.get('word');
     var searchItemInput = $('.header__search-input');
     var searchItemBox = $('.header__search-box');
     var searchItemBtn = $('.header__search-button');
-    var searchItemList = [];
-    let path = window.location.pathname;
-
-    // Tách chuỗi path bằng dấu "/"
-    let parts = path.split('/');
-
-    // Lấy phần tử cuối cùng trong mảng parts
-    let lastSegment = parts[parts.length - 1];
-    if (lastSegment === 'category.html' && itemSearch.trim() != "") {
-        searchItemInput.value = itemSearch;
-        searchItemList = list_item.filter(value => {
-            return value.name.toLowerCase().includes(searchItemInput.value.toLowerCase())
-        }
-        )
-        performSearch();
+    let searchItemList =[]
+    searchItemList = list_item.filter(value => {
+        return value.name.toLowerCase().includes(searchItemInput.value.toLowerCase())
     }
-    else {
-
-        if ($('.sort__item-list')) {
-            performSearch();
-        }
-    }
+    )
     searchItemInput.oninput = function searchInput() {
         if (searchItemInput.value !== '') {
             searchItemBox.style.display = 'block';
@@ -718,69 +699,14 @@ function searchItemIp() {
         }
     }
 
-    function performSearch() {
-        if (searchItemList.length > 0) {
-            $('.sort__item-list').innerHTML = '';
-            searchItemList.forEach(item => {
-                $('.sort__item-list').innerHTML +=
-                    `<div class="col l-2-4 c-4 m-3">
-            <div class="sort__item" item-index = "${item.id}">
-                <a class="sort__item-link" data-id="${item.id}" >
-                    <div class="sort__item-img">
-                        <img src="/image/item-image/${item.color_img[0].img[0]}" alt="">
-                    </div>
-                    <div class="sort__item-brand">${item.brand}</div>
-                    <div class="sort__item-text">${item.name}</div>
-                </a>
-                <div class="sort__item-img_btn sort__item-img_btn-left"><i class="fa-solid fa-angle-left"></i></div>
-                <div class="sort__item-img_btn sort__item-img_btn-right"><i class="fa-solid fa-angle-right"></i></div>
-                <div class="sort__item-content">
-                    <div class="sort__item-title">
-                        <div class="sort__item-price">￥${item.price}</div>
-                        <div class="sort__item-takeit">
-                            <button type="button" class="sort__item-favorite sort__item-takecart-disable" onclick="favoritebutton(this)"></button>
-                            <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="sort__item-star">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <div class="sort__item-star-number">
-                            (<p>0</p>)
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>`
-            }
-            )
-            changeImage();
-            takeCart();
-            productRedirect();
-        }
-        else {
-            $('.content__title-sort').style.display = 'none';
-            $('.sort__item-list').innerHTML = `
-                <div class='search__item-empty'>
-                <img src="/image/item-search-empty.jpg">
-                No results found for "${searchItemInput.value}"
-                </div>`
-                ;
-        }
-    }
+   
 
     // Enter key press event
     searchItemInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
-            performSearch();
+            window.location.href = `/category?word=${encodeURIComponent(searchItemInput.value.trim())}`;
         }
-    }
-    );
-
+    })
 }
 function setCartCookie(target) {
     if (!user) {

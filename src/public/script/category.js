@@ -7,13 +7,34 @@ if(category != null){
             // Tạo phần tử div cho sản phẩm
         }
     })
+
 }else{
     category_item = list_item
     console.log(category_item)
 }
 category_item = category_item.filter(item => categoriesItemid.includes(item.id))
 
+if(wordSearch){
+    category_item = category_item.filter(item => item.name.toLowerCase().includes(wordSearch))
+}
 
+function changeCategory(a,element){
+    category_item = [];
+    list_item.forEach(item => {
+        if(item.category === a) {
+            category_item.push(item)
+        }
+    })
+    $$('.category_list-item').forEach(a => a.classList.contains('available') ? a.classList.remove('available') :'')
+    element.classList.add('available')
+    if(wordSearch){
+        category_item = category_item.filter(item => item.name.toLowerCase().includes(wordSearch))
+    }
+    else{
+        $('.searchWord-title').remove()
+    }
+    runFilter(); 
+}
 function renderItembyCategory(perItem) {
     const itemListContainer = document.querySelector('.category__item-list');
     itemListContainer.innerHTML = ''; 
@@ -108,11 +129,9 @@ function renderPageNumber(itemList) {
     }
 
 }
-if (category_item.length >0) {
-    getItem(category_item)
-    CreatItemSelectBox();
-    filterSort (category_item)
-}
+getItem(category_item)
+CreatItemSelectBox();
+filterSort (category_item)
 // Lắng nghe sự kiện DOMContentLoaded để thêm sự kiện click vào các tab
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.sort__tab-list').forEach(function (tab) {

@@ -501,9 +501,10 @@ body.over{
     background-color: var(--hover-color);
 }
 
-.category_list-item a{
+.category_list-item {
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .category__list-item i{

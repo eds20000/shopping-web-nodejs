@@ -7,7 +7,8 @@ let getCategoryPage = async (req, res) => {
     const items = await models.getItems()
     let myCart = []
 
-    const category = req.params.category ? req.params.category:null;
+    const wordSearch = req.body.word ? req.body.word : null;
+    const category = req.body.category ? req.body.category : null;
     const brand = req.query.brand ? req.query.brand :null;
     const categoriesNow = req.body.categoriesNow ? req.body.categoriesNow : "all"
     const categoriesItemid =  await modelCourse.getCategoriesItem(categoriesNow)
@@ -49,10 +50,10 @@ let getCategoryPage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        res.render('category', { items, user: req.session.user, myCart: fullCartItems, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList,brand});
+        res.render('category', { items, user: req.session.user, myCart: fullCartItems, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList,brand,wordSearch});
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('category', { items, user: null, myCart: myCart, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList,brand });
+        res.render('category', { items, user: null, myCart: myCart, category,categoriesNow,categoriesItemid,colorList,brandList,sizeList,brand,wordSearch });
     }
 
 }

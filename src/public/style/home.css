@@ -97,6 +97,9 @@
     margin-top: 30px;
     gap: 0;
 }
+.category__list-img button{
+    all:unset;
+}
 .category-item{
     padding:30px;
     position: relative;
@@ -112,6 +115,7 @@
     font-size: var(--font-size);
     font-weight: 600;
     overflow: hidden;
+    cursor: pointer;
 }
 .category-item img{
     width: 81px;
@@ -120,6 +124,9 @@
 .category-item-title{
     position: absolute;
     bottom: 0;
+    width: 100%;
+    text-align: center;
+    white-space:nowrap;
 }
 .category-item-title .available{
     background-color: var(--hover-color);

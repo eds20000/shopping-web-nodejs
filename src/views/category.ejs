@@ -33,12 +33,8 @@
         const categoriesNow = JSON.parse('<%- JSON.stringify(categoriesNow) %>');
         const categoriesItemid = JSON.parse('<%- JSON.stringify(categoriesItemid) %>');
         const brand = JSON.parse('<%- JSON.stringify(brand) %>');
-        
-        console.log(myCart)
-        console.log(list_item)
-        console.log(colorList)
-        console.log(categoriesItemid)
-        console.log(categoriesNow)
+        const wordSearch = JSON.parse('<%- JSON.stringify(wordSearch) %>');
+        console.log(wordSearch)
     </script>
 </head>
 <body>
@@ -54,24 +50,34 @@
                 <div class="row">
                     <ul class="category__list col l-2">
                         <p class="category_header">カテゴリー</p>
-                        <li class="category_list-item <%=category == 'トップス' ? 'available' : '' %>"><a href="/category/トップス"><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'ジャケット・アウター' ? 'available' : '' %>"><a href="/category/ジャケット・アウター"><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'パンツ' ? 'available' : '' %>"><a href="/category/パンツ"><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'スカート' ? 'available' : '' %>"><a href="/category/スカート"><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'ワンピース/ドレス' ? 'available' : '' %>"><a href="/category/ワンピース・ドレス"><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == '小物' ? 'available' : '' %>"><a href="/category/小物"><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'バッグ' ? 'available' : '' %>"><a href="/category/バッグ"><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'シューズ' ? 'available' : '' %>"><a href="/category/シューズ"><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'ファッション雑貨' ? 'available' : '' %>"><a href="/category/ファッション雑貨"><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == '帽子' ? 'available' : '' %>"><a href="/category/帽子"><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == '腕時計' ? 'available' : '' %>"><a href="/category/腕時計"><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'アクセサリー' ? 'available' : '' %>"><a href="/category/アクセサリー"><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                        <li class="category_list-item <%=category == 'その他' ? 'available' : '' %>"><a href="/category/その他"><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></a></li>
+                        <li class="category_list-item <%=category == 'トップス' ? 'available' : '' %>" onclick="changeCategory('トップス',this)"><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'ジャケット・アウター' ? 'available' : '' %>" onclick="changeCategory('ジャケット・アウター',this)"><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'パンツ' ? 'available' : '' %>" onclick="changeCategory('パンツ',this)"><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'スカート' ? 'available' : '' %>" onclick="changeCategory('スカート',this)"><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'ワンピース/ドレス' ? 'available' : '' %>" onclick="changeCategory('ワンピース/ドレス',this)"><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == '小物' ? 'available' : '' %>" onclick="changeCategory('小物',this)"><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'バッグ' ? 'available' : '' %>" onclick="changeCategory('バッグー',this)"><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'シューズ' ? 'available' : '' %>" onclick="changeCategory('シューズ',this)"><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'ファッション雑貨' ? 'available' : '' %>" onclick="changeCategory('ファッション雑貨',this)"><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == '帽子' ? 'available' : '' %>" onclick="changeCategory('帽子',this)"><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == '腕時計' ? 'available' : '' %>" onclick="changeCategory('腕時計',this)"><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'アクセサリー' ? 'available' : '' %>" onclick="changeCategory('アクセサリー',this)"><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'その他' ? 'available' : '' %>" onclick="changeCategory('その他',this)"><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></li>
                     </ul>
                     <div class="content_body col l-10">
                         <div class="row">
                             <div class="content__title">
-                                <div class="content__title-text">すべてのアイテム</div>
+                                <div class="content__title-text"><%= 
+                                    categoriesNow === 'all' ? 'すべて' : 
+                                    categoriesNow === 'recommended' ? 'おすすめ' : 
+                                    categoriesNow === 'new_arrivals' ? '新着' : 
+                                    categoriesNow === 'best_sellers' ? 'ベストセラ' : 
+                                    categoriesNow === 'mens' ? 'メンズ' : 
+                                    categoriesNow === 'womens' ? 'レディース' : 
+                                    categoriesNow === 'cosmetics' ? 'コスメ' : 
+                                    categoriesNow === 'sports' ? 'スポーツ' : 
+                                    'その他' // Giá trị mặc định nếu không khớp
+                                  %>のアイテム</div>
                                 <div class="content__title-filter">
                                     <div class="content__title-filter--title">絞り込み：</div>
                                     
@@ -143,6 +149,9 @@
                                 </div>
                             </div>
                         </div>
+                        <% if(wordSearch != null){ %>
+                            <div class="searchWord-title" style ="font-size: 2rem; margin-left: 20px;">Search results for <strong>“<%=wordSearch %>”</strong></div>
+                        <%} %>
                         <div class="row category__item-list">
                            
                         </div>

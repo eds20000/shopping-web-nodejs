@@ -31,7 +31,7 @@ function changeCategory(a,element){
         category_item = category_item.filter(item => item.name.toLowerCase().includes(wordSearch))
     }
     else{
-        $('.searchWord-title').remove()
+        $('.searchWord-title') ? $('.searchWord-title').remove():''
     }
     runFilter(); 
 }

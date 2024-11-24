@@ -14,10 +14,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
     <script>
+        const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
         const userAddress = JSON.parse('<%- JSON.stringify(userAddress) %>');
-        console.log(userAddress)
     </script>
     <title>カート-TS-shop</title>
 </head>

@@ -53,10 +53,10 @@ let getCartPage = async (req, res) => {
             return null;
         }).filter(item => item !== null);
         req.session.logoutBack = req.originalUrl;
-        res.render('cart.ejs', { user: req.session.user, myCart: fullCartItems, userAddress });
+        res.render('cart.ejs', { items,user: req.session.user, myCart: fullCartItems, userAddress });
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('cart.ejs', { user: null, myCart,userAddress });
+        res.render('cart.ejs', { items,user: null, myCart,userAddress });
     }
 };
 

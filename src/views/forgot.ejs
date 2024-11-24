@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/base.css">
+    <link rel="stylesheet" href="./style/grid.css">
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="stylesheet" href="./style/login-signup-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./style/responsive.css">
+    <title>【パスワードの再設定】メールアドレス-TS-shop</title>
+</head>
+<body>
+    <header class="header header-only">
+        <div class="grid wide">
+            <a href="/" class="header__logo"><img src="/image/logo.png" alt="logo" class="logo-img"></a>
+        </div> 
+    </header>
+
+    <div class="container">
+        <div class="grid wide">
+            <div class="forgot-container">
+                <div class="forgot-form">
+                    <%if(sendEmail == true){ %>
+                        <div class="row">  
+                            <p class="forgot-form-title">変更確認メールを送りました</p>
+                        </div>
+                        <a href="mailto:<%=userEmail %>" style="color: var(--primary-color);"><%=userEmail %></a>
+                        <p style="line-height: 2.5rem;">宛に変更確認メールを送信しました。</p>
+                        <p style="line-height: 2.5rem;">メールに記載されたURLをクリックして、通知先メールアドレス</p>
+                        <p style="line-height: 2.5rem;">の変更手続きを完了させてください。</p>
+                        <p style="margin: 20px 0; font-size: 1.3rem;">※まだ変更手続きは完了しておりません。24時間以内に完了しない場合、URLは無効になりますのでご注意ください。</p>
+
+                        <div class="request-form" style="display: flex;justify-content: center;">
+                            <form action="/forgot-password" method="post" id="forgot-form">
+                                <input type="text" class="forgot-form-input forgot-form-input_userid" name="user_name" id="forgot-id" value="<%=userName%>" hidden>
+                                <input type="mail" id="forgot-mail"class="forgot-form-input forgot-form-input_email" name="user_mail" value="<%=userEmail%>" hidden>
+                                <button type="submit"class="primary-btn">変更確認メールを再送する</a>
+                            </form>
+                        </div>
+
+                    <%}else{%>
+                    <form action="/forgot-password" method="post" id="forgot-form">
+                        <div class="row">  
+                            <p class="forgot-form-title">パスワードを忘れた方</p>
+                        </div>
+                        <p style="margin-bottom: 40px;">登録しているメールアドレスを入力してください。<br>
+                            パスワード再設定のため認証メールを送信します。</p>
+                        <div class="forgot-container-main">
+                            <div class="forgot-id-box input-group">
+                                <label for="forgot-id" class="forgot-id">ユーザー名</label>
+                                <input type="text" class="forgot-form-input forgot-form-input_userid" name="user_name" id="forgot-id">
+                                <span class="form-message"></span>
+                            </div>
+                            
+                            <div class="forgot-mail-box input-group">
+                                <label for="forgot-mail" class="forgot-mail">メールアドレス</label>
+                                <input type="mail" id="forgot-mail"class="forgot-form-input forgot-form-input_email" name="user_mail">
+                                <span class="form-message"></span>
+                            </div>
+                            <div class="forgot-form-error">
+                                <%= error_msg.length > 0 ? error_msg :''%>
+                            </div>
+                            <div class="forgot-form-button-box">
+                                <button class="forgot-form-button primary-btn" type="submit">認証メールを送信する</button>
+                            </div>
+                        </div>
+                    </form>               
+                    <%}%>
+                </div>
+    
+            </div>
+
+        </div>
+    </div>
+
+<!-- Footer Start -->
+<%- include('./includes/footer.ejs') %>
+<!-- Footer End -->
+<script>
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
+
+    var input_userid = $('.forgot-form-input_userid')
+    var input_email = $('.forgot-form-input_email')
+
+    const ID_label = $('.forgot-id')
+    const Mail_label = $('.forgot-mail')
+
+    document.body.onload = function(){
+        if (input_email.value !== '') {
+            Mail_label.classList.add('labelMove_focus');
+            Mail_label.classList.remove('labelMove_blur');
+        }
+        if (input_userid.value !== '') {
+            ID_label.classList.add('labelMove_focus');
+            ID_label.classList.remove('labelMove_blur');
+        } 
+    }
+
+    var labelid_focus = function(){
+        ID_label.classList.add('labelMove_focus')
+        ID_label.classList.remove('labelMove_blur')
+    }
+
+    var labelid_blur = function(){
+    if (input_userid.value === '') {
+        ID_label.classList.remove('labelMove_focus');
+        ID_label.classList.add('labelMove_blur');
+    }
+    }
+
+    var labelpass_focus = function(){
+        Mail_label.classList.add('labelMove_focus')
+        Mail_label.classList.remove('labelMove_blur')
+    }
+
+    var labelpass_blur = function(){
+    if (input_email.value === '') {
+        Mail_label.classList.remove('labelMove_focus');
+        Mail_label.classList.add('labelMove_blur');
+    }
+    }
+    input_userid.onchange = labelid_focus
+    input_userid.onfocus = labelid_focus
+    input_userid.onblur = labelid_blur
+
+    input_email.onchange = labelpass_focus
+    input_email.onfocus = labelpass_focus
+    input_email.onblur = labelpass_blur
+</script>
+</body>
+</html>

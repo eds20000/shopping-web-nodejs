@@ -40,12 +40,12 @@
                                     <div class="col l-8 c-8">
                                         <div class="signup-sex-content">
                                             <div class="signup-form">
-                                                <input type="radio" name="user_sex" id="male" value="male">
-                                                <label for="male">女性</label>
+                                                <input type="radio" name="user_sex" id="female" value="female">
+                                                <label for="female">女性</label>
                                             </div>
                                             <div class="signup-form">
-                                                <input type="radio" name="user_sex" id="female" value="female">
-                                                <label for="female">男性</label>
+                                                <input type="radio" name="user_sex" id="male" value="male">
+                                                <label for="male">男性</label>
                                             </div>
                                         </div>
                                         <span class="form-message"></span>
@@ -134,23 +134,23 @@
                                     </div>
                                     
                                 </div>
-                                
-                                <div class="signup-agreement-box">
-                                    <label for="signup-agreement" class="signup-agreement-content-input">
-                                        <input type="checkbox" name="signup-agreement-check" id="signup-agreement">
-                                        <div class="signup-agreement-content-input-box">
-                                            <div class="signup-agreement-content-input-boxcheck"></div>
-                                            <i class="fa-solid fa-check"></i>
-                                        </div>
+                                <div class="form-group row" style="justify-content: center; border-bottom:none;">
+                                    <div class="signup-agreement-box">
+                                        <label for="signup-agreement" class="signup-agreement-content-input">
+                                            <input type="checkbox" name="signup-agreement-check" id="signup-agreement">
+                                            <div class="signup-agreement-content-input-box">
+                                                <div class="signup-agreement-content-input-boxcheck"></div>
+                                                <i class="fa-solid fa-check"></i>
+                                            </div>
+                                            
+                                        </label>
                                         
-                                    </label>
-                                    
-                                    <div class="signup-agreement-input-box">
-                                        <a class="agreement">利用規約</a>と<a class="privacy">プライバシーポリシー</a>に同意する
+                                        <div class="signup-agreement-input-box">
+                                            <a class="agreement">利用規約</a>と<a class="privacy">プライバシーポリシー</a>に同意する
+                                        </div>
                                     </div>
-                                    
+                                    <p class="form-message signup-agreement-errorcontent"></p>
                                 </div>
-                                <p class="signup-agreement-errorcontent">規約を確認し同意するにチェックしてください</p>
                                 <div class="login-form-button-box">
                                     <button class="login-form-button" type="submit">この内容で新規会員登録する</button>
                                 </div>
@@ -163,7 +163,7 @@
 
             <div class="regist-container">
                 <div class="regist-container_text">すでに会員の方</div>
-                <a href="./login.html" class="regist-container_button">ログイン</a>
+                <a href="/login" class="regist-container_button">ログイン</a>
             </div>
         </div>
     </div>
@@ -171,6 +171,23 @@
 <!-- Footer Start -->
 <%- include('./includes/footer.ejs') %>
 <!-- Footer End -->
+<div class="agreement-container">
+    <div class="agreement-container-content">
+        <div class="agreement-title">
+            <h1>利用規約</h1>
+            <div class="agreement-container-close"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+    </div>
+</div>
+
+<div class="privacy-container">
+    <div class="privacy-container-content">
+        <div class="privacy-title">
+            <h1>プライバシーポリシー</h1>
+            <div class="privacy-container-close"><i class="fa-solid fa-xmark"></i></div>
+        </div>
+    </div>
+</div>
 <script src="./script/script-signup.js"></script>
 <!-- <script src="./script/valida.js"></script> -->
 <script>
@@ -198,7 +215,10 @@
             Validator.isConfirmed('#signup-password_confi',
             function (){
                 return document.querySelector('#signup-form #signup-password').value;
-            },'確認パスワードが一致しません。')
+            },'確認パスワードが一致しません。'),
+
+            Validator.isRequired('#signup-agreement','利用規約とプライバシーポリシーに同意してください。')
+
         ],
         // onSubmit: function(data) {
         //     console.log(data);

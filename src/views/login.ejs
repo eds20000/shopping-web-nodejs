@@ -14,6 +14,7 @@
     <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./style/responsive.css">
     <title>ログイン-TS-shop</title>
+    
 </head>
 <body>
     <header class="header header-only">
@@ -29,6 +30,9 @@
                     <form action="/login/user-check" method="post" id="login-form">
                         <div class="row">  
                             <p class="login-form-title">ログイン</p>
+                            <% if (success_msg && success_msg.length > 0) { %>
+                                <div class="alert alert-success" style="padding: 0 40px;"><%= success_msg %></div>
+                            <% } %>
                         </div>
                         <div class="row">
                             <div class="col l-6 c-12 m-6 login-container-main">
@@ -45,7 +49,7 @@
                                     <span class="form-message"></span>
                                 </div>
                                 <div class="pass-loss-box">
-                                <a href="#" class="pass-lose">パスワードを忘れた方（再設定）</a>                                   
+                                <a href="/forgot" class="pass-lose">パスワードを忘れた方（再設定）</a>                                   
                                 </div>   
                                 <% if (error_msg.length > 0){ %>
                                     <span class="error-msg" style="color:var(--primary-color)"><%=error_msg %></span>

@@ -8,7 +8,7 @@ body{
 /* --------------Header End-------------- */
 
 /* --------------Forn Start---------------- */
-.login-container,.forgot-container{
+.login-container,.forgot-container,.reset-container{
     box-shadow: var(--box-shadow);
     height: auto;
     max-width: 760px;
@@ -24,13 +24,13 @@ body{
 
 }
 
-.login-form,.forgot-form{
+.login-form,.forgot-form,.reset-form{
     width: 100%;
 }
-.forgot-form{
+.forgot-form,.reset-form{
     text-align: center;
 }
-.login-form-title,.forgot-form-title{
+.login-form-title,.forgot-form-title,.reset-form-title{
     width: 100%;
     text-align: center;
     font-size: large;
@@ -94,7 +94,7 @@ body{
     }
 }
 
-.login-form-input,.forgot-form-input{
+.login-form-input,.forgot-form-input,.reset-form-input{
     width: 100%;
     height: 50px;
     border-radius: 10px;
@@ -105,7 +105,7 @@ body{
         
     }
 }
-.forgot-form-input{
+.forgot-form-input,.reset-form-input{
     max-width: 300px;
     height: 50px;
     border-radius: 10px;
@@ -116,23 +116,23 @@ body{
         
     }
 }
-.forgot-container-main .input-group{
+.forgot-container-main .input-group,.reset-container-main .input-group{
     max-width: 300px;
     margin: 0 auto 30px;
     position: relative;
 }
-.forgot-container-main label{
+.forgot-container-main label,.reset-container-main label{
     position: absolute;
     top: 15px;
     left: 12px;
     color: var(--border-color);
 }
-.forgot-form-button{
+.forgot-form-button,.reset-form-button{
     width: auto;
     margin: 0 auto;
     padding: 0 20px;
 }
-.forgot-form-error{
+.forgot-form-error,.reset-form-error{
     padding: 0 0 20px;
     color: var(--error-color);
 }

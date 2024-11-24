@@ -13,8 +13,8 @@ document.body.onload = function(){
         Pass_label.classList.remove('labelMove_blur');
     }
     if (input_userid.value !== '') {
-        ID_label_label.classList.add('labelMove_focus');
-        ID_label_label.classList.remove('labelMove_blur');
+        ID_label.classList.add('labelMove_focus');
+        ID_label.classList.remove('labelMove_blur');
     } 
 }
 $('.pass-hide').onclick = function () {

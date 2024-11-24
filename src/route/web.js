@@ -1,6 +1,7 @@
 import express from "express";
 import homeController from '../controller/homeController';
 import loginController from '../controller/loginController';
+import forgotController from '../controller/forgotController'
 import adminPageController from '../controller/adminPageController';
 import profileController from '../controller/profileController';
 import cartController from '../controller/cartController';
@@ -24,6 +25,12 @@ const initWebRoute = (app) => {
 
     router.get('/signup', homeController.signupPage);
     router.post('/signup/user', loginController.userCreate)
+
+    router.get('/forgot',(req, res) => { return res.render('forgot.ejs',{sendEmail:false})})
+    router.post('/forgot-password',forgotController.forgotPasswordCheck)
+    router.get('/reset-password/:token',forgotController.resetPassword)
+    router.post('/reset-password/:userid',forgotController.resetPasswordForm)
+
     //product-page
     router.get('/product/:id', homeController.productPage);
     router.get('/product/:id?scrollToElement=#reviews-section', homeController.productPage);

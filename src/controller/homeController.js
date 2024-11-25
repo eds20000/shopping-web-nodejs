@@ -70,9 +70,7 @@ let getHomepage = async (req, res) => {
         res.render('index', { items, user: null, myCart: myCart,reviews,categories });
     }
 }
-let signupPage = async (req, res) => {
-    return res.render('signup.ejs')
-}
+
 let productPage = async (req, res) => {
     const items = await models.getItems();
     const itemId = req.params.id;
@@ -238,5 +236,5 @@ let deleteReview = async (req,res) =>{
 
 
 module.exports = {
-    getHomepage, signupPage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview
+    getHomepage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview
 }

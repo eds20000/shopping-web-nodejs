@@ -22,7 +22,7 @@ let forgotPasswordCheck = async(req,res)  =>{
         // Cập nhật thông tin vào cơ sở dữ liệu
         await modelForgot.updateTokenUser(resetToken,resetPasswordExpire,userEmail)
 
-        await handlerEmail.handlerSendEmail(resetToken,userEmail)
+        await handlerEmail.handlerResetPassSendEmail(resetToken,userEmail)
         return res.render('forgot.ejs',{sendEmail:true,userEmail,userName})
     }
     else{

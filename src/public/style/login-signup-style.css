@@ -485,7 +485,16 @@ body.overlay-open_privacy
    padding: 10px 20px;
    width: auto;
 }
+.email-varial-send p{
+    line-height: 2.5rem; 
+    width: 100%;
+    text-align: center;
+}
 
+.email-varial-send .login-form-title{
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 30px;
+}
 /*  */
 
 /* --------------Form End------------------*/

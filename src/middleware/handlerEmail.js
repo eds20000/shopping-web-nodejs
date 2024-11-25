@@ -1,14 +1,14 @@
 const nodemailer = require('nodemailer');
 
-const handlerSendEmail = async (resetToken,userEmail) =>{
+const handlerResetPassSendEmail = async (resetToken,userEmail) =>{
 
     const pageAdd = process.env.ADDRESS_PAGE
     try {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'nthanhsonn@gmail.com',
-                pass: 'eeaa wvus yimn bort',
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
             },
         });
     
@@ -25,7 +25,7 @@ const handlerSendEmail = async (resetToken,userEmail) =>{
                     <p>以下のリンクからパスワード再設定画面が開きます。（リンクの有効期間は申請が受付けられてから1時間です。）</p>
                     <p><a href="${resetURL}">${resetURL}</a></p>
                     
-                    <hr />
+                    <hr/>
                     <p>TS-Shop ホームページURL</p>
                     <p><a href="${pageAdd}">${pageAdd}</a></p>
                     <p>なお、当メールの送信アドレスは送信専用となっております。返信メールでのお問い合わせは承りかねますのでご了承ください。</p>
@@ -35,6 +35,39 @@ const handlerSendEmail = async (resetToken,userEmail) =>{
         console.error(err);
     }}
 
+const handlerVerificaSendEmail = async (verificationCode,userEmail) =>{
+    const pageAdd = process.env.ADDRESS_PAGE
+    try {
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            },
+        });
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: userEmail,
+            subject: 'メールアドレスの確認',
+            html: `
+                <h1>メールアドレスの確認</h1>
+                <p>ご登録いただきありがとうございます。以下のリンクをクリックして、メールアドレスを確認してください。</p>
+                <a href="${pageAdd}/verify-email?code=${verificationCode}">メールを確認する</a>
+                <hr/>
+
+                <p>TS-Shop ホームページURL</p>
+                <p><a href="${pageAdd}">${pageAdd}</a></p>
+                <p>なお、当メールの送信アドレスは送信専用となっております。返信メールでのお問い合わせは承りかねますのでご了承ください。</p>
+            `,
+        };
+
+        await transporter.sendMail(mailOptions);
+
+    } catch (error) {
+        console.error(error);
+    }}
+
 module.exports = {
-    handlerSendEmail
+    handlerResetPassSendEmail,handlerVerificaSendEmail
 }

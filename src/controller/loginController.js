@@ -1,6 +1,10 @@
 import pool from '../configs/connectDB';
 import bcrypt from 'bcryptjs';
 import modelCourse from '../models/course'
+import handlerEmail from '../middleware/handlerEmail'
+
+const crypto = require('crypto');
+
 
 // password hashing
 const salt = bcrypt.genSaltSync(10);
@@ -74,24 +78,64 @@ let userCreate = async (req, res) => {
     try {
         const hashPassword = bcrypt.hashSync(req.body.user_password, salt);
         const userBirth = `${req.body.user_birth_year}/${req.body.user_birth_month}/${req.body.user_birth_day}`;
-        const [row] = await pool.execute(
-            'INSERT INTO users (user_name,user_password,user_email,user_img,user_sex,user_birth,user_role) VALUES (?,?,?,?,?,?,?)',
-            [
-                req.body.user_name,
-                hashPassword,
-                req.body.user_email,
-                'default.jpg',
-                req.body.user_sex,
-                userBirth,
-                'customer'
-            ]
-        );
-        res.render('register-success.ejs')
+        const [emailEtrixt] = await pool.query('SELECT * FROM users WHERE user_email = ?', [req.body.user_email]);
+        const [userName] = await pool.query('SELECT * FROM users WHERE user_name = ?', [req.body.user_name]);
+
+        // Kiểm tra nếu tên người dùng đã tồn tại
+        if (userName.length > 0) {
+            return res.status(400).json({ message: 'ユーザー名はすでに使用されています。' });  // Trả về thông báo lỗi JSON
+        } 
+        // Kiểm tra nếu email đã tồn tại
+        else if (emailEtrixt.length > 0) {
+            return res.status(400).json({ message: 'メールアドレスはすでに使用されています。' });  // Trả về thông báo lỗi JSON
+        } 
+        else {
+            const verificationCode = crypto.randomBytes(16).toString('hex');
+
+            // Thêm người dùng mới vào cơ sở dữ liệu
+            await pool.execute(
+                'INSERT INTO users (user_name, user_password, user_email, user_img, user_sex, user_birth, user_role, verification_code, is_verified) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [
+                    req.body.user_name,
+                    hashPassword,
+                    req.body.user_email,
+                    'default.jpg',  // hình ảnh mặc định
+                    req.body.user_sex,
+                    userBirth,
+                    'customer',  // Vai trò là khách hàng
+                    verificationCode,
+                    0,  // Chưa xác minh
+                ]
+            );
+
+            await handlerEmail.handlerVerificaSendEmail(verificationCode, req.body.user_email)
+
+            // Trả về thông báo thành công khi đăng ký thành công
+            return res.status(200).json({ message: 'メール送信成功' });
+        }
+    } catch (error) {
+        console.error('ユーザー登録中にエラーが発生しました:', error); // Log lỗi
+        return res.status(500).json({ message: '登録中にエラーが発生しました。' });  // Trả về thông báo lỗi JSON
     }
-    catch (error) {
-        // Xử lý lỗi
+};
+
+
+let userCreateChecked = async(req,res) => {
+    const { code } = req.query;
+    try {
+        const [user] = await pool.execute('SELECT * FROM users WHERE verification_code = ?', [code]);
+
+        if (user.length === 0) {
+            req.flash('error_msg', '確認コードが無効です。');
+            return res.redirect('/signup');
+        }
+
+        await pool.execute('UPDATE users SET is_verified = 1, verification_code = NULL WHERE verification_code = ?', [code]);
+
+        res.render('register-success.ejs');
+    } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'An error occurred during login' });
     }
 }
-module.exports = { userCheck, userLogout, userCreate };
+
+module.exports = { userCheck, userLogout, userCreate,userCreateChecked };

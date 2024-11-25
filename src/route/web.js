@@ -23,8 +23,9 @@ const initWebRoute = (app) => {
     router.post('/login/user-check', loginController.userCheck);
     router.get('/logout', loginController.userLogout);
 
-    router.get('/signup', homeController.signupPage);
+    router.get('/signup',(req, res) => { return res.render('signup.ejs') });
     router.post('/signup/user', loginController.userCreate)
+    router.get('/verify-email',loginController.userCreateChecked)
 
     router.get('/forgot',(req, res) => { return res.render('forgot.ejs',{sendEmail:false})})
     router.post('/forgot-password',forgotController.forgotPasswordCheck)

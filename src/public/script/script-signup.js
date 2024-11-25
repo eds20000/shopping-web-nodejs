@@ -56,11 +56,6 @@ var Agreement_input_error = $('.signup-agreement-errorcontent')
 
 Agreement_input_box.onclick = function () {
     Agreement_input_box.classList.toggle('checked')
-    if (Agreement_input_box.classList.contains('checked')) {
-
-        Agreement_input_error.style.opacity = "0";
-
-    }
 }
 
 
@@ -284,3 +279,5 @@ Validator.isConfirmed = function (selector, getCofirmValue, message) {
         }
     }
 }
+
+  

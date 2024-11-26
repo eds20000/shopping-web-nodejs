@@ -24,18 +24,23 @@ let userCheck = async (req, res) => {
             // So sánh mật khẩu băm
             const isMatch = bcrypt.compareSync(req.body.user_password, user.user_password);
             if (isMatch) {
+                if(user.is_verified === 1){
+                    req.session.user = user;
+                    const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id)
+                    const cartItems = await modelCourse.getCartItems(req.session.user.user_id)
+                    req.session.user.favorItems = favorItems
+                    req.session.user.cartItems = cartItems
+                    if (req.session.loginBack) {
+                        return res.redirect(req.session.loginBack);
+                    }
+                    else {
+                        return res.redirect('/')
+                    }
+                }else{
+                    req.flash('error_msg', 'アカウントのメールアドレスが確認されていません');
+                    return res.redirect('/login');
+                }
                 // Lưu thông tin người dùng vào session và chuyển hướng
-                req.session.user = user;
-                const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id)
-                const cartItems = await modelCourse.getCartItems(req.session.user.user_id)
-                req.session.user.favorItems = favorItems
-                req.session.user.cartItems = cartItems
-                if (req.session.loginBack) {
-                    return res.redirect(req.session.loginBack);
-                }
-                else {
-                    return res.redirect('/')
-                }
             } else {
                 // Phản hồi nếu mật khẩu không đúng
                 req.flash('error_msg', 'ユーザー名またはパスワードが間違っています');

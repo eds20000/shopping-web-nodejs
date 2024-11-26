@@ -114,6 +114,9 @@ const initWebRoute = (app) => {
     router.post('/category', categoryController.getCategoryPage)
 
 
+    //Chat support
+
+    router.get('/chat-box',(req,res)=>{ return res.render('chat.ejs')})
     return app.use('/', router)
 }
 

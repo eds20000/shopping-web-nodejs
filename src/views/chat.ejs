@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px; margin-bottom: 5px; background-color: #f1f1f1; }
+        input[type="text"] { width: 80%; padding: 8px; margin-right: 5px; }
+        button { padding: 8px; background-color: #4CAF50; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <h2>Chat App</h2>
+    <ul id="messages"></ul>
+    <input id="m" type="text" placeholder="Type a message..." autocomplete="off">
+    <button onclick="sendMessage()">Send</button>
+
+    <!-- Ensure this script is loaded before your own script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io(); // Kết nối tới server
+
+        // Lắng nghe sự kiện 'chat message' từ server và hiển thị tin nhắn
+        socket.on('chat message', (msg) => {
+            const li = document.createElement('li');
+            li.textContent = msg;
+            document.getElementById('messages').appendChild(li);
+        });
+
+        // Gửi tin nhắn tới server khi người dùng nhấn nút "Send"
+        function sendMessage() {
+            const msg = document.getElementById('m').value;
+            if (msg) {
+                socket.emit('chat message', msg); // Gửi tin nhắn lên server
+                document.getElementById('m').value = ''; // Xóa input
+            }
+        }
+    </script>
+</body>
+</html>

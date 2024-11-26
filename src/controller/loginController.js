@@ -38,7 +38,8 @@ let userCheck = async (req, res) => {
                 }
             } else {
                 // Phản hồi nếu mật khẩu không đúng
-                res.status(401).json({ message: 'Invalid credentials' });
+                req.flash('error_msg', 'ユーザー名またはパスワードが間違っています');
+                return res.redirect('/login');
             }
         } else {
             req.flash('error_msg', 'ユーザー名またはパスワードが間違っています');

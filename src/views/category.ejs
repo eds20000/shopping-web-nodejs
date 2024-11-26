@@ -23,7 +23,7 @@
     
     <title>TS-shop</title>
     <script>
-        const list_item = JSON.parse('<%- JSON.stringify(items) %>');
+        let list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
         const category = JSON.parse('<%- JSON.stringify(category) %>');
@@ -31,10 +31,9 @@
         const brandList = JSON.parse('<%- JSON.stringify(brandList) %>');
         const sizeList = JSON.parse('<%- JSON.stringify(sizeList) %>');
         const categoriesNow = JSON.parse('<%- JSON.stringify(categoriesNow) %>');
-        const categoriesItemid = JSON.parse('<%- JSON.stringify(categoriesItemid) %>');
+        let categories = JSON.parse('<%- JSON.stringify(categories) %>');
         const brand = JSON.parse('<%- JSON.stringify(brand) %>');
         const wordSearch = JSON.parse('<%- JSON.stringify(wordSearch) %>');
-        console.log(wordSearch)
     </script>
 </head>
 <body>
@@ -105,49 +104,13 @@
             
             <div class="swiper tab">  
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide <%= categoriesNow ==='all'?'tab__list-start' :'' %>"><a href="/category">すべて</a></div>
-                    <div class="swiper-slide  <%=categoriesNow ==='recommended'?'tab__list-start' :'' %>">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="recommended" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">おすすめ</button>
-                        </form>
-                    </div>
-                    <div class="swiper-slide <%=categoriesNow ==='new_arrivals' ? 'tab__list-start' :'' %> ">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="new_arrivals" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">新着</button>
-                        </form>
-                    </div>
-                    <div class="swiper-slide <%=categoriesNow ==='best_sellers'?'tab__list-start' :'' %> ">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="best_sellers" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">ベストセラ</button>
-                        </form>
-                    </div>
-                    <div class="swiper-slide <%=categoriesNow ==='mens'?'tab__list-start' :'' %> ">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="mens" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">メンズ</button>
-                        </form>
-                    </div>
-                    <div class="swiper-slide <%=categoriesNow ==='womens'?'tab__list-start' :'' %> ">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="womens" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">レディース</button>
-                        </form>
-                    </div>
-                    <div class="swiper-slide <%=categoriesNow ==='cosmetics' ? 'tab__list-start' :'' %> ">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="cosmetics" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">コスメ</button>
-                        </form>
-                    </div>
+                    <div class="swiper-slide tab__list-start" onclick="categoriesAvailable(this),runFilter()" data-value="all">すべて</div>
+                    <div class="swiper-slide" onclick="categoriesAvailable(this),runFilter()" data-value="recommended">おすすめ</div>
+                    <div class="swiper-slide" onclick="categoriesAvailable(this),runFilter()" data-value="new_arrivals">新着</div>
+                    <div class="swiper-slide" onclick="categoriesAvailable(this),runFilter()" data-value="best_sellers">ベストセラ</div>
+                    <div class="swiper-slide" onclick="categoriesAvailable(this),runFilter()" data-value="mens">メンズ</div>
+                    <div class="swiper-slide" onclick="categoriesAvailable(this),runFilter()" data-value="womens">レディース</div>
+                    <div class="swiper-slide" onclick="categoriesAvailable(this),runFilter()" data-value="cosmetics">コスメ</div>
                 </div>
             </div>
             
@@ -182,19 +145,19 @@
                 <div class="row">
                     <ul class="category__list col l-2">
                         <p class="category_header">カテゴリー</p>
-                        <li class="category_list-item <%=category == 'トップス' ? 'available' : '' %>" onclick="changeCategory('トップス',this)"><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'ジャケット・アウター' ? 'available' : '' %>" onclick="changeCategory('ジャケット・アウター',this)"><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'パンツ' ? 'available' : '' %>" onclick="changeCategory('パンツ',this)"><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'スカート' ? 'available' : '' %>" onclick="changeCategory('スカート',this)"><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'ワンピース/ドレス' ? 'available' : '' %>" onclick="changeCategory('ワンピース/ドレス',this)"><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == '小物' ? 'available' : '' %>" onclick="changeCategory('小物',this)"><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'バッグ' ? 'available' : '' %>" onclick="changeCategory('バッグー',this)"><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'シューズ' ? 'available' : '' %>" onclick="changeCategory('シューズ',this)"><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'ファッション雑貨' ? 'available' : '' %>" onclick="changeCategory('ファッション雑貨',this)"><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == '帽子' ? 'available' : '' %>" onclick="changeCategory('帽子',this)"><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == '腕時計' ? 'available' : '' %>" onclick="changeCategory('腕時計',this)"><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'アクセサリー' ? 'available' : '' %>" onclick="changeCategory('アクセサリー',this)"><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></li>
-                        <li class="category_list-item <%=category == 'その他' ? 'available' : '' %>" onclick="changeCategory('その他',this)"><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'トップス' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="トップス"><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'ジャケット・アウター' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="ジャケット・アウター"><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'パンツ' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="パンツ"><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'スカート' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="スカート"><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'ワンピース/ドレス' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="ワンピース/ドレス"><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == '小物' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="小物"><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'バッグ' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="バッグ"><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'シューズ' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="シューズ"><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'ファッション雑貨' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="ファッション雑貨"><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == '帽子' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="帽子"><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == '腕時計' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="腕時計"><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'アクセサリー' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="アクセサリー"><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></li>
+                        <li class="category_list-item <%=category == 'その他' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="その他"><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></li>
                     </ul>
                     <div class="content_body col l-10">
                         <div class="row">

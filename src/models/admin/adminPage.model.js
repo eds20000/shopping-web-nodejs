@@ -58,7 +58,7 @@ const getItems = async () => {
                     infor: row.infor
                         .replace(/\n/g, '<br>')   // Convert newlines to <br>
                         .replace(/\r/g, '')       // Remove carriage returns
-                        .replace(/\t/g, ' '),
+                        .replace(/\t/g, '&nbsp;&nbsp;'),
                     rating: row.average_rating || 0,  // Default to 0 if no rating
                     ratingCount : row.count_rating
                 };

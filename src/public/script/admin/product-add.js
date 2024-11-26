@@ -108,6 +108,10 @@ function getCookie(name) {
     return null;
 }
 
+function deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+}
+
 // Hàm khôi phục dữ liệu từ cookie vào các trường nhập liệu
 function restoreFormData() {
     const itemName = getCookie("item-name");
@@ -408,6 +412,16 @@ function handleSubmit(event) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+
+                    deleteCookie("item-name");
+                    deleteCookie("item-brand");
+                    deleteCookie("item-category");
+                    deleteCookie("item-price");
+                    deleteCookie("item-size");
+                    deleteCookie("item-zaiko");
+                    deleteCookie("item-info");
+                    deleteCookie("colorList");
+                    
                     alert('更新に成功しました。');
                     window.location.href = "/admin-page";
                 }

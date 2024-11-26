@@ -797,10 +797,10 @@ if (categoryBoxBtnClose) {
     }
 }
 
-$$('.swiper-slide').forEach(tabSlide =>{
+// $$('.swiper-slide').forEach(tabSlide =>{
     
-    tabSlide.onclick = function(){
-    $('.swiper.tab').querySelector('.swiper-slide.tab__list-start').classList.remove('tab__list-start')
-    this.classList.add('tab__list-start')
-    }
-})
+//     tabSlide.onclick = function(){
+//     $('.swiper.tab').querySelector('.swiper-slide.tab__list-start').classList.remove('tab__list-start')
+//     this.classList.add('tab__list-start')
+//     }
+// })

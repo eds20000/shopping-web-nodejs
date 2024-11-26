@@ -10,30 +10,36 @@ if(category != null){
 
 }else{
     category_item = list_item
-    console.log(category_item)
 }
-category_item = category_item.filter(item => categoriesItemid.includes(item.id))
+
 
 if(wordSearch){
     category_item = category_item.filter(item => item.name.toLowerCase().includes(wordSearch))
 }
 
-function changeCategory(a,element){
+
+function changeCategory(a){
     category_item = [];
     list_item.forEach(item => {
         if(item.category === a) {
             category_item.push(item)
         }
     })
-    $$('.category_list-item').forEach(a => a.classList.contains('available') ? a.classList.remove('available') :'')
-    element.classList.add('available')
     if(wordSearch){
         category_item = category_item.filter(item => item.name.toLowerCase().includes(wordSearch))
     }
     else{
         $('.searchWord-title') ? $('.searchWord-title').remove():''
     }
-    runFilter(); 
+}
+
+function changeCategories(categoriesName){
+    if(categoriesName != 'all'){
+        let categoriesNew = categories.filter(categories => categories.category_name == categoriesName)
+        let categoriesItemid = categoriesNew.map(categories => categories.item_id)
+        category_item = category_item.filter(item => categoriesItemid.includes(item.id))
+
+    }
 }
 function renderItembyCategory(perItem) {
     const itemListContainer = document.querySelector('.category__item-list');
@@ -92,6 +98,7 @@ function renderItembyCategory(perItem) {
 }
 
 
+
 //Pagination ------------------------------------------
 let currentPage = 1 //元のページ
 let perPage = 15 //so trang di chuyen 
@@ -115,7 +122,7 @@ function handlerPageNumber(num, element) {
 }
 
 function renderPageNumber(itemList) {
-    ('.bar-page_list').innerHTML = "";
+    $('.bar-page_list').innerHTML = "";
 
     totalPage = Math.ceil(itemList.length / perPage);
     for (let i = 1; i <= totalPage; i++) {
@@ -233,6 +240,19 @@ function filterItemsBySize(size){
 }
 
 function runFilter (){
+
+    
+    //Category filter 
+    if($('.category_list-item.available')){
+        changeCategory($('.category_list-item.available').dataset.value)
+    }else{
+        category_item = list_item
+    }
+    
+    //Categories filter
+    changeCategories($('.swiper-slide.tab__list-start').dataset.value)
+
+
     //filter price
     const filterPriceValue = $('.content__title-filter--price-box').querySelector('.content__title-filter--value');
     let filterPriceValueMin = filterPriceValue.getAttribute('data-price-min')
@@ -273,6 +293,14 @@ function runFilter (){
     getItem(filterItem)
 }
 
+function categoryAvailable(a){
+    $('.category_list-item.available') ? $('.category_list-item.available').classList.remove('available'):''
+    a.classList.add('available')
+}
+function categoriesAvailable(a){
+    $$('.tab .swiper-slide').forEach(a => a.classList.contains('tab__list-start') ? a.classList.remove('tab__list-start') :'')
+    a.classList.add('tab__list-start')
+}
 if(brand){
     filterItemsByBrand(brand)
 }

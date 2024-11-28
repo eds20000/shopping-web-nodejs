@@ -98,13 +98,6 @@
                             <button type="submit" style="all:unset; width: 100%; display: block;">レディース</button>
                         </form>
                     </div>
-                    <div class="swiper-slide <%=categoriesNow ==='cosmetics' ? 'tab__list-start' :'' %> ">
-                        <form action="/category" method="post">
-                            <input name ="category" type ="text" value="<%= category? category :null %>"hidden>
-                            <input name="categoriesNow" type="text" value="cosmetics" hidden>
-                            <button type="submit" style="all:unset; width: 100%; display: block;">コスメ</button>
-                        </form>
-                    </div>
                 </div>
             </div>
             

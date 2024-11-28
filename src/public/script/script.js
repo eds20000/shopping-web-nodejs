@@ -70,15 +70,12 @@ const handlerCartProxy = {
 };
 const proxyCart = new Proxy(myCart, handlerCartProxy);
 
-var recommendList = $('.section__recommend-list')
 var newList = $('.section__new-list')
 var bestsellersList = $('.section__best_sellers-list')
 var mensList = $('.section__mens-list')
 var womensList = $('.section__womens-list')
 var cosmeticsList = $('.section__cosmetics-list')
-if (recommendList) {
-    exportItemByCategory(recommendList,'recommended', 'l-2');
-}
+
 if (newList) {
     exportItemByCategory(newList,'new_arrivals', 'l-2');
 }
@@ -91,16 +88,55 @@ if (mensList) {
 if (womensList) {
     exportItemByCategory(womensList,'womens', 'l-2');
 }
-if (cosmeticsList) {
-    exportItemByCategory(cosmeticsList,'cosmetics', 'l-2');
+
+// Recommended Slider
+
+if($('.section__recommended')){
+    let getItemIdsByCategory = categories.filter(category => category.category_name === 'recommended').map(category => category.item_id);
+    let categoryItems = list_item.filter(item => getItemIdsByCategory.includes(item.id))
+    let recomend_list = $('.section__recommended').querySelector('.swiper-wrapper')
+    for (let i = 0; i < categoryItems.length; ++i) {
+        recomend_list.innerHTML += 
+    `<div class="swiper-slide">
+        <div class="sort__item" item-index = "${categoryItems[i].id}">
+            <a class="sort__item-link" data-id="${categoryItems[i].id}" >
+                <div class="sort__item-img">
+                    <img src="/image/item-image/${categoryItems[i].color_img[0].img[0]}" alt="">
+                </div>
+                <div class="sort__item-brand">${categoryItems[i].brand}</div>
+                <div class="sort__item-text">${categoryItems[i].name}</div>
+            </a>
+            <div class="sort__item-img_btn sort__item-img_btn-left"><i class="fa-solid fa-angle-left"></i></div>
+            <div class="sort__item-img_btn sort__item-img_btn-right"><i class="fa-solid fa-angle-right"></i></div>
+            <div class="sort__item-content">
+                <div class="sort__item-title">
+                    <div class="sort__item-price">￥${categoryItems[i].price}</div>
+                    <div class="sort__item-takeit">
+                        <a class="sort__item-favorite ${user && user.favorItems.find(favorItem => favorItem.item_id == categoryItems[i].id) ? 'sort__item-takecart-enable' : 'sort__item-takecart-disable'} " ${user ? `onclick="addToFavorites(${categoryItems[i].id},this)"` : 'href="/login"'}></a>
+                        <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>
+                    </div>
+                </div>
+                <div class="sort__item-star">
+                    <div class="stars-outer">
+                        <div class="stars-inner" style="width: ${categoryItems[i].rating > 0 ? categoryItems[i].rating / 5 * 100 : 0}%;"></div>
+                    </div>
+                    <div class="sort__item-star-number">
+                        (<p>${categoryItems[i].ratingCount}</p>)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        `
+    }
+    
+}
+
+if ($('.header__navbar-cart-box-container')) {
     CreatItemSelectBox();//ham tao ra muc takcartitembox
     changeImage();
     takeCart();
     productRedirect();
-}
-
-if ($('.header__navbar-cart-box-container')) {
-    takeCart();
 }
 
 //ham trich xuat item
@@ -161,7 +197,7 @@ function exportItemByCategory(itemList,categoryName, column){
                 <div class="sort__item-img_btn sort__item-img_btn-right"><i class="fa-solid fa-angle-right"></i></div>
                 <div class="sort__item-content">
                     <div class="sort__item-title">
-                        <div class="sort__item-price">￥${categoryItems[i].price}</div>
+                        <div class="sort__item-price">${categoryName =='best_sellers' ? `<span style="opacity:0.4;"><s>￥${(categoryItems[i].price*1.3).toFixed(0)}</s></span>￥${categoryItems[i].price}`:`￥${categoryItems[i].price}`}</div>
                         <div class="sort__item-takeit">
                             <a class="sort__item-favorite ${user && user.favorItems.find(favorItem => favorItem.item_id == categoryItems[i].id) ? 'sort__item-takecart-enable' : 'sort__item-takecart-disable'} " ${user ? `onclick="addToFavorites(${categoryItems[i].id},this)"` : 'href="/login"'}></a>
                             <button type="button" class="sort__item-takecart"><i class="fa-solid fa-cart-plus"></i></button>

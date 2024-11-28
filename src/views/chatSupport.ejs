@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style/base.css">
+    <link rel="stylesheet" href="./style/grid.css">
+    <link rel="stylesheet" href="./style/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/d72dd2144a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/style/responsive.css">
+    <link rel="stylesheet" href="/style/chatSupport.css">
+    <title>ChatSupport-TS-SHOP</title>
+    <script>
+        const list_item = JSON.parse('<%- JSON.stringify(items) %>');
+        const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+    </script>
+</head>
+<body>
+    <!-- Header start1-->
+    <%- include('./includes/header-only.ejs') %>
+    <!-- Header end -->
+    <div class="container">
+        <div class="chatapp--box">
+            <div class="chatapp--box__title">
+                Chat Support
+                <div class="support-manager">
+                    担当者 (offline)
+                </div>
+            </div>
+            <div class="chatapp--box__content">
+                <div class="messageFrom-item">
+                    <div class="message-fromUser-img"><img src="/image/user-image/default.jpg" alt=""><div class="user-status off"></div></div>
+                    <div class="message-fromUser-content">ようこそ、私はNguyenThanhSonです。何かお手伝い出来ることはありますか。</div>
+                </div>
+            </div>
+            <div class="chatapp--box__btn">
+                <input type="text" id="m" placeholder="ここにメッセージを入力してください">
+                <button onclick="sendMessage()">送信</button>
+            </div>
+        </div>
+    </div>
+<!-- Footer Start -->
+<%- include('./includes/footer.ejs') %>
+<!-- Footer End -->
+    <!-- Ensure this script is loaded before your own script -->
+    <script src="/script/script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const user = JSON.parse('<%- JSON.stringify(user) %>'); // Dữ liệu người dùng hiện tại
+        const socket = io(); // Kết nối tới server
+        console.log(user.user_role)
+        const userData = {userName:user.user_name,userImg:user.user_img}
+
+        //lang nghe su kien cua admin
+        if(user.user_role === 'admin'){
+            document.querySelector('.chatapp--box__content').innerHTML =``
+            socket.emit('adminOn',userData);
+
+            socket.on('chat message', (data) => {
+            const { senderId, msg } = data; // Giả định server gửi dữ liệu gồm senderId và msg
+            const isFromCurrentUser = senderId === user.user_id; // Kiểm tra xem tin nhắn có phải của chính bạn
+
+            // Tạo phần tử tin nhắn
+            const messItem = document.createElement('div');
+            messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+            messItem.innerHTML = `
+                <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+                    <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="">
+                </div>
+                <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">${msg}</div>
+            `;
+
+            // Thêm tin nhắn vào nội dung chat
+            document.querySelector('.chatapp--box__content').appendChild(messItem);
+
+            // Cuộn xuống cuối nội dung chat
+            document.querySelector('.chatapp--box__content').scrollTop = document.querySelector('.chatapp--box__content').scrollHeight;
+            });
+        }
+        else{
+            socket.on('chat message', (data) => {
+            
+            // Lắng nghe sự kiện 'chat message' từ server và hiển thị tin nhắn
+                const { senderId, msg } = data; // Giả định server gửi dữ liệu gồm senderId và msg
+                const isFromCurrentUser = senderId === user.user_id; // Kiểm tra xem tin nhắn có phải của chính bạn
+    
+                // Tạo phần tử tin nhắn
+                const messItem = document.createElement('div');
+                messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+                messItem.innerHTML = `
+                    <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+                        <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="">
+                        <div class="user-status on"></div>
+                    </div>
+    
+                    <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">${msg}</div>
+                `;
+    
+                // Thêm tin nhắn vào nội dung chat
+                document.querySelector('.chatapp--box__content').appendChild(messItem);
+    
+                // Cuộn xuống cuối nội dung chat
+                document.querySelector('.chatapp--box__content').scrollTop = document.querySelector('.chatapp--box__content').scrollHeight;
+            });
+        }
+        
+        socket.on('adminOn',(userData)=>{
+            document.querySelector('.support-manager').innerHTML = `担当者：${userData.userName} (online)`
+            let userStatus = document.querySelector('.user-status')
+            if(userStatus){
+                userStatus.classList.remove('off')
+                userStatus.classList.add('on')
+            }
+        })
+        socket.on('adminOff',(userData)=>{
+            document.querySelector('.support-manager').innerHTML = `担当者(offine)`
+            let userStatus = document.querySelector('.user-status')
+            if(userStatus){
+                userStatus.classList.remove('on')
+                userStatus.classList.add('off')
+            }
+        })
+
+
+        function sendMessage() {
+            const input = document.getElementById('m');
+            const msg = input.value.trim();
+
+            if (msg) {
+                // Tạo dữ liệu tin nhắn kèm theo senderId
+                const messageData = { senderId: user.user_id, msg };
+                socket.emit('chat message', messageData); // Gửi tin nhắn lên server
+                input.value = ''; // Xóa input
+            } else {
+                alert('メッセージを入力してください！');
+            }
+        }
+
+    </script>
+</body>
+</html>

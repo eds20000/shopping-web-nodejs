@@ -28,10 +28,6 @@
     font-size: var(--font-size);
     box-shadow: 0px 5px 6px -6px #999999;
 }
-.swiper .swiper-wrapper{
-    margin: 0 auto;
-    width: 90%;
-}
 .swiper.tab .swiper-slide{
     padding: 10px 0;
     text-align: center;

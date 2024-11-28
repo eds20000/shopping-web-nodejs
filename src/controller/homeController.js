@@ -232,9 +232,49 @@ let deleteReview = async (req,res) =>{
         return res.redirect('/login');
     }
 }
+let getChatSupport = async(req,res) =>{
+    if(req.session.user){       
+        const items = await models.getItems()
+        let myCart = []
+        if (req.cookies && req.cookies.myCart) {
+            myCart.forEach(async item => {
+                await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
+            })
+            res.clearCookie('myCart')
+        }
+        const favorItems = await modelCourse.getFavoriteItems(req.session.user.user_id);
+        const cartItems = await modelCourse.getCartItems(req.session.user.user_id);
+        req.session.user.favorItems = favorItems;
+        req.session.user.cartItems = cartItems;
+        const fullCartItems = cartItems.map(cartItem => {
+            const fullItem = items.find(item => item.id === cartItem.item_id);
+            if (fullItem) {
+                return {
+                    id: fullItem.id,
+                    name: fullItem.name,
+                    brand: fullItem.brand,
+                    category: fullItem.category,
+                    price: fullItem.price,
+                    color: fullItem.color_img.find(color => color.id === cartItem.color_id)?.color_name || '',
+                    colorId: fullItem.color_img.find(color => color.id === cartItem.color_id)?.id || '',
+                    size: cartItem.size,
+                    img: fullItem.color_img.find(color => color.id === cartItem.color_id)?.img || '',
+                    quantity: cartItem.quantity
+                };
+            }
+            return null;
+        }).filter(item => item !== null);
 
+        req.session.logoutBack = req.originalUrl;
+        res.render('chatSupport', {items, user: req.session.user, myCart: fullCartItems});
+    }
+    else {
+        req.session.loginBack = req.originalUrl;
+        return res.redirect('/login');
+    }
+}
 
 
 module.exports = {
-    getHomepage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview
+    getHomepage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview,getChatSupport
 }

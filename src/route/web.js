@@ -116,7 +116,7 @@ const initWebRoute = (app) => {
 
     //Chat support
 
-    router.get('/chat-box',(req,res)=>{ return res.render('chat.ejs')})
+    router.get('/chat-box',homeController.getChatSupport)
     return app.use('/', router)
 }
 

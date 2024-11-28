@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   var swiperTab = new Swiper('.tab', {
     direction: 'horizontal',
-    slidesPerView: window.innerWidth > 740 ? 8 : 3,
+    slidesPerView: window.innerWidth > 740 ? 6 : 3,
     spaceBetween: 1,
   });
 
@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   });
 
+  var swiperBrand = new Swiper('.swiper__recommended-list', {
+    direction: 'horizontal',
+    loop: true,
+    slidesPerView: window.innerWidth < 740 ? 2 : window.innerWidth < 1024 ? 3 : 5,
+    spaceBetween: 20,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+
   window.addEventListener('resize', function () {
     swiperTab.params.slidesPerView = window.innerWidth < 740 ? 3 : 8;
     swiperTab.update();
@@ -43,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
     swiperBrand.update();
   });
 });
+
+
+
 
 
 

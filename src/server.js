@@ -65,9 +65,17 @@ io.on('connection', (socket) => {
     console.log('A user connected');
 
     // Lắng nghe sự kiện 'chat message' từ client
+    socket.on('adminOn', (userData) => {
+        // Phát sự kiện 'adminOn' cho tất cả các client
+        io.emit('adminOn', userData);
+    });
+    socket.on('adminOff', (userData) => {
+        // Phát sự kiện 'adminOn' cho tất cả các client
+        io.emit('adminOff', userData);
+    });
+    
+
     socket.on('chat message', (msg) => {
-        console.log('Message: ' + msg);
-        // Phát sự kiện 'chat message' cho tất cả các client
         io.emit('chat message', msg);
     });
 

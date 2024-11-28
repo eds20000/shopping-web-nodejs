@@ -466,7 +466,7 @@ body.over{
     border-bottom: 3px solid var(--primary-color);
 }
 .container{
-    padding: calc(var(--header-height) + 40px) 0  0;
+    padding: calc(var(--header-height) + 40px) 0  40px;
     font-size: var(--font-size);
 }
 .category__list{

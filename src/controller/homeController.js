@@ -236,6 +236,7 @@ let getChatSupport = async(req,res) =>{
     if(req.session.user){       
         const items = await models.getItems()
         let myCart = []
+        let chatList =null;
         if (req.cookies && req.cookies.myCart) {
             myCart.forEach(async item => {
                 await modelCourse.addToCart(req.session.user.user_id, item.id, item.colorId, item.size)
@@ -265,8 +266,11 @@ let getChatSupport = async(req,res) =>{
             return null;
         }).filter(item => item !== null);
 
+        if(req.session.user.user_role ==='admin'){
+            chatList = await models.getChatList(req.session.user.user_name);
+        }
         req.session.logoutBack = req.originalUrl;
-        res.render('chatSupport', {items, user: req.session.user, myCart: fullCartItems});
+        res.render('chatSupport', {items, user: req.session.user, myCart: fullCartItems,chatList:chatList});
     }
     else {
         req.session.loginBack = req.originalUrl;

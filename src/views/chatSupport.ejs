@@ -17,6 +17,9 @@
     <script>
         const list_item = JSON.parse('<%- JSON.stringify(items) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
+        const chatList = JSON.parse('<%- JSON.stringify(chatList) %>');
+        const user = JSON.parse('<%- JSON.stringify(user) %>');
+        console.log(chatList)
     </script>
 </head>
 <body>
@@ -24,122 +27,235 @@
     <%- include('./includes/header-only.ejs') %>
     <!-- Header end -->
     <div class="container">
-        <div class="chatapp--box">
-            <div class="chatapp--box__title">
-                Chat Support
-                <div class="support-manager">
-                    担当者 (offline)
+        <%if(user.user_role === 'admin') { %>
+            <div class="chatList--box">
+            <%chatList.forEach(chat =>{%>
+                <div class="chatList--item" onclick ="roomChatJoin('<%=chat.room_id %>','<%=chat.sender_name %>')">
+                    <div class="chatList--item__userName"><%=chat.sender_name %></div>
+                    <div class="chatList--item__date"><%=chat.timestamp %></div>
+                </div>
+            <%})%>
+            </div>
+        <%}%>
+            <div class="chatapp--box" <%= user.user_role === 'admin' ? 'style=display:none;' : '' %>>
+                <div class="chatapp--box__title">
+                    Chat Support
+                    <div class="support-manager">
+                        <%=user.user_role === 'admin'? 'ユーザ：' :'担当者 (offline)'%><span></span>
+                    </div>
+                </div>
+                <div class="chatapp--box__content">
+                    <%if(user.user_role === 'customer'){%>
+                        <div class="messageFrom-item">
+                            <div class="message-fromUser-img"><img src="/image/user-image/default.jpg" alt=""><div class="user-status off"></div></div>
+                            <div class="message-fromUser-content">ようこそ、私はサポート担当者です。何かお手伝い出来ることはありますか。</div>
+                        </div>
+                    <%}%>
+                </div>
+                <div class="chatapp--box__btn">
+                    <input type="hidden" name="roomId">
+                    <input type="text" id="m" placeholder="ここにメッセージを入力してください">
+                    <button onclick="sendMessage()">送信</button>
                 </div>
             </div>
-            <div class="chatapp--box__content">
-                <div class="messageFrom-item">
-                    <div class="message-fromUser-img"><img src="/image/user-image/default.jpg" alt=""><div class="user-status off"></div></div>
-                    <div class="message-fromUser-content">ようこそ、私はNguyenThanhSonです。何かお手伝い出来ることはありますか。</div>
-                </div>
-            </div>
-            <div class="chatapp--box__btn">
-                <input type="text" id="m" placeholder="ここにメッセージを入力してください">
-                <button onclick="sendMessage()">送信</button>
-            </div>
-        </div>
     </div>
 <!-- Footer Start -->
 <%- include('./includes/footer.ejs') %>
 <!-- Footer End -->
     <!-- Ensure this script is loaded before your own script -->
-    <script src="/script/script.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const user = JSON.parse('<%- JSON.stringify(user) %>'); // Dữ liệu người dùng hiện tại
-        const socket = io(); // Kết nối tới server
-        console.log(user.user_role)
-        const userData = {userName:user.user_name,userImg:user.user_img}
+<script src="/script/script.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const socket = io(); // Kết nối tới server
 
-        //lang nghe su kien cua admin
-        if(user.user_role === 'admin'){
-            document.querySelector('.chatapp--box__content').innerHTML =``
-            socket.emit('adminOn',userData);
+async function roomChatJoin(roomId,senderName){
+    document.querySelector('.chatapp--box').style.display = 'block'
+    document.querySelector('.chatList--box').style.display = 'none'
+    document.querySelector('.support-manager span').textContent = senderName
+    document.querySelector('input[name="roomId"]').value = roomId
+    
+    // Tạo roomId để đảm bảo mỗi người dùng có phòng riêng với admin
+    // Dữ liệu người dùng để gửi đến server
+    const userData = { 
+        userName: user.user_name, 
+        userImg: user.user_img, 
+        userId: user.user_id,
+        userRole:user.user_role,
+        roomId: roomId // Thêm roomId
+    };
+    
+    // Khi người dùng tham gia phòng chat
+    socket.emit('adminJoinRoom', userData);
+    
+    // Admin kích hoạt trạng thái online
+    // Gửi sự kiện admin online
+    socket.emit('adminOn', userData);
 
-            socket.on('chat message', (data) => {
-            const { senderId, msg } = data; // Giả định server gửi dữ liệu gồm senderId và msg
-            const isFromCurrentUser = senderId === user.user_id; // Kiểm tra xem tin nhắn có phải của chính bạn
-
-            // Tạo phần tử tin nhắn
-            const messItem = document.createElement('div');
-            messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
-            messItem.innerHTML = `
-                <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
-                    <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="">
-                </div>
-                <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">${msg}</div>
-            `;
-
-            // Thêm tin nhắn vào nội dung chat
-            document.querySelector('.chatapp--box__content').appendChild(messItem);
-
-            // Cuộn xuống cuối nội dung chat
-            document.querySelector('.chatapp--box__content').scrollTop = document.querySelector('.chatapp--box__content').scrollHeight;
-            });
+    // Xử lý tin nhắn cho admin
+    socket.on('chat message', (data) => {
+        console.log(data)
+        if (data.roomId === roomId) { // Chỉ xử lý tin nhắn trong phòng hiện tại
+            renderMessage(data, data.senderId === user.user_id);
         }
-        else{
-            socket.on('chat message', (data) => {
-            
-            // Lắng nghe sự kiện 'chat message' từ server và hiển thị tin nhắn
-                const { senderId, msg } = data; // Giả định server gửi dữ liệu gồm senderId và msg
-                const isFromCurrentUser = senderId === user.user_id; // Kiểm tra xem tin nhắn có phải của chính bạn
+    });
+
     
-                // Tạo phần tử tin nhắn
-                const messItem = document.createElement('div');
-                messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
-                messItem.innerHTML = `
-                    <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
-                        <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="">
-                        <div class="user-status on"></div>
-                    </div>
+    // Tải lịch sử chat
+    socket.on('loadChatHistory', (chatHistory) => {
+        const chatBox = document.querySelector('.chatapp--box__content');
+        chatHistory.forEach((messageData) => {
+            if (messageData.room_id === roomId) { // Chỉ tải lịch sử chat cho phòng hiện tại
+                const isFromCurrentUser = messageData.sender_id === user.user_id;
+                renderMessage(messageData, isFromCurrentUser);
+            }
+        });
     
-                    <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">${msg}</div>
-                `;
+        scrollToBottom();
+    });
     
-                // Thêm tin nhắn vào nội dung chat
-                document.querySelector('.chatapp--box__content').appendChild(messItem);
+        // Hàm render tin nhắn
+    function renderMessage(data, isFromCurrentUser) {
+        const chatBox = document.querySelector('.chatapp--box__content');
+        const messItem = document.createElement('div');
+        messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+        messItem.innerHTML = `
+            <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+                <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
+                <div class="message-userName">${data.sender_name}</div>
+            </div>
+            <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
+                <p>${data.message}</p>
+            </div>
+            <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
+        `;
+
+        chatBox.appendChild(messItem);
+        scrollToBottom();
+    }
+   
+}
+if(user.user_role ==='customer'){
+// Tạo roomId để đảm bảo mỗi người dùng có phòng riêng với admin
+    const roomId = `room-${user.user_id}`;
+    document.querySelector('input[name="roomId"]').value = roomId
     
-                // Cuộn xuống cuối nội dung chat
-                document.querySelector('.chatapp--box__content').scrollTop = document.querySelector('.chatapp--box__content').scrollHeight;
-            });
+    // Dữ liệu người dùng để gửi đến server
+    const userData = { 
+        userName: user.user_name, 
+        userImg: user.user_img, 
+        userId: user.user_id,
+        userRole:user.user_role,
+        roomId: roomId // Thêm roomId
+    };
+    
+    // Khi người dùng tham gia phòng chat
+    socket.emit('joinRoom', userData);
+   
+    // Xử lý tin nhắn cho người dùng
+    socket.on('chat message', (data) => {
+        if (data.roomId === roomId) { // Chỉ xử lý tin nhắn trong phòng hiện tại
+            renderMessage(data, data.senderId === user.user_id);
         }
+    });
+
+    
+    // Lắng nghe sự kiện admin online
+    socket.on('adminOn', (adminData) => {
+        if(adminData.roomId === roomId){
+            document.querySelector('.support-manager').innerHTML = `担当者：${adminData.userName} (online)`;
+            let userStatus = document.querySelectorAll('.user-status');
         
-        socket.on('adminOn',(userData)=>{
-            document.querySelector('.support-manager').innerHTML = `担当者：${userData.userName} (online)`
-            let userStatus = document.querySelector('.user-status')
-            if(userStatus){
-                userStatus.classList.remove('off')
-                userStatus.classList.add('on')
-            }
-        })
-        socket.on('adminOff',(userData)=>{
-            document.querySelector('.support-manager').innerHTML = `担当者(offine)`
-            let userStatus = document.querySelector('.user-status')
-            if(userStatus){
-                userStatus.classList.remove('on')
-                userStatus.classList.add('off')
-            }
-        })
-
-
-        function sendMessage() {
-            const input = document.getElementById('m');
-            const msg = input.value.trim();
-
-            if (msg) {
-                // Tạo dữ liệu tin nhắn kèm theo senderId
-                const messageData = { senderId: user.user_id, msg };
-                socket.emit('chat message', messageData); // Gửi tin nhắn lên server
-                input.value = ''; // Xóa input
-            } else {
-                alert('メッセージを入力してください！');
+            if (userStatus) {
+                userStatus.forEach((status) => {
+                    status.classList.remove('off');
+                    status.classList.add('on');
+                });
             }
         }
+    });
+    
+    // Lắng nghe sự kiện admin offline
+    socket.on('adminOff', () => {
+        document.querySelector('.support-manager').innerHTML = `担当者 (offline)`;
+        let userStatus = document.querySelectorAll('.user-status');
+        if (userStatus) {
+            userStatus.forEach((status) => {
+                status.classList.remove('on');
+                status.classList.add('off');
+            });
+        }
+    });
+    
+    // Tải lịch sử chat
+    socket.on('loadChatHistory', (chatHistory) => {
+        const chatBox = document.querySelector('.chatapp--box__content');
+        chatHistory.forEach((messageData) => {
+            if (messageData.room_id === roomId) { // Chỉ tải lịch sử chat cho phòng hiện tại
+                const isFromCurrentUser = messageData.sender_id === user.user_id;
+                renderMessage(messageData, isFromCurrentUser);
+            }
+        });
+    
+        scrollToBottom();
+    });
+    // Hàm render tin nhắn
+    function renderMessage(data, isFromCurrentUser) {
+        const chatBox = document.querySelector('.chatapp--box__content');
+        const messItem = document.createElement('div');
+        messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+        messItem.innerHTML = `
+            <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+                <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
+                <div class="message-userName">${data.sender_name}</div>
+                ${!isFromCurrentUser ?'<div class="user-status on"></div>':''}
+            </div>
+            <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
+                <p>${data.message}</p>
+            </div>
+            <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
+        `;
 
-    </script>
+        chatBox.appendChild(messItem);
+        scrollToBottom();
+    }
+}    
+// Hàm gửi tin nhắn
+function sendMessage() {
+    const input = document.getElementById('m');
+    const msg = input.value.trim();
+    const roomId  = document.querySelector('input[name="roomId"]').value 
+
+    if (msg) {
+        const timestamp = new Date().toISOString();
+
+        const messageData = {
+            sender_name: user.user_name,
+            senderId: user.user_id,
+            senderRole: user.user_role,
+            message: msg,
+            timestamp: timestamp,
+            roomId: roomId // Gửi roomId để đảm bảo gửi tin nhắn đúng phòng
+        };
+
+        // Gửi tin nhắn lên server
+        socket.emit('chat message', messageData);
+
+        // Xóa input
+        input.value = '';
+    } else {
+        alert('メッセージを入力してください！');
+    }
+}
+
+
+
+// Cuộn xuống cuối nội dung chat
+function scrollToBottom() {
+    const chatBox = document.querySelector('.chatapp--box__content');
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+</script>
+
 </body>
 </html>

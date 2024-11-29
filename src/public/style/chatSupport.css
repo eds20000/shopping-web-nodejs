@@ -24,10 +24,15 @@ button {
     justify-content: space-between;
 }
 .chatapp--box__content{
-    min-height: 300px;
+    height: 300px;
+    max-height: 500px;
+    overflow: scroll;
 }
 .support-manager{
     font-size: 2rem;
+}
+.timestamp{
+    font-size: 1.4rem;
 }
 /* Messenger from */
 .messageFrom-item{
@@ -36,8 +41,9 @@ button {
     gap: 5px;
     margin: 20px 10px 20px 10px;
 }
-.message-fromUser-img {
+.message-fromUser-img,.message-ToUser-img {
     position: relative;
+    text-align: center;
 }
 .message-fromUser-img img{
     width: 40px;

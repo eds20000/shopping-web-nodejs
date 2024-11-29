@@ -390,6 +390,14 @@ const addItem = async (name, brand, category, price, zaiko, infor, size, color_i
         connection.release();
     }
 };
+const getChatList = async (userName) =>{
+    try{
+        const [rows] = await pool.query('SELECT * FROM `chat_history` WHERE sender_name != ? GROUP BY room_id',[userName]);
+        return rows
+    }catch(error){
+        console.error(error)
+    }
+}
 
 
 
@@ -398,5 +406,4 @@ const addItem = async (name, brand, category, price, zaiko, infor, size, color_i
 
 
 
-
-module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById,addItem }
+module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById,addItem,getChatList }

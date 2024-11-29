@@ -136,6 +136,12 @@ body{
     padding: 0 0 20px;
     color: var(--error-color);
 }
+.pass-hide{
+    position: absolute;
+    top: 16px;
+    right: 9px;
+    cursor: pointer;
+}
 .pass-loss-box{
     display: flex;
     justify-content: flex-end;
@@ -511,7 +517,7 @@ body.overlay-open_privacy
     }
 
 }
-/* Mobile */
+/*reseMobile */
 @media (max-width:739px){
     .container{
         padding-top: var(--header-height);

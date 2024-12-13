@@ -29,12 +29,24 @@
     <div class="container">
         <%if(user.user_role === 'admin') { %>
             <div class="chatList--box">
-            <%chatList.forEach(chat =>{%>
-                <div class="chatList--item" onclick ="roomChatJoin('<%=chat.room_id %>','<%=chat.sender_name %>')">
-                    <div class="chatList--item__userName"><%=chat.sender_name %></div>
-                    <div class="chatList--item__date"><%=chat.timestamp %></div>
-                </div>
-            <%})%>
+            <%if(chatList.length === 0){ %>
+                <p>No message</p>
+                <%}else{%>
+                <%chatList.forEach(chat =>{%>
+                    <div class="chatList--item" data-room-id="<%= chat.room_id %>">
+                        <img class="chatList--item__userImg" src="/image/user-image/<%=users.find(user=>user.user_id === chat.sender_id).user_img %>"></img>
+                        <div class="chatList--item__userName"><%=chat.sender_name %></div>
+                        <div class="chatList--item__date"><%=chat.timestamp %></div>
+                        <div class="chatList--item__length"><%=chat.megSum %></div>
+                        <div class="enter-room-btn" onclick="roomChatJoin('<%=chat.room_id %>','<%=chat.sender_name %>')">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </div>
+                        <a href="/chatbox-roomDelete/<%=chat.room_id %>" class="message-delete-btn" style="font-size: 2rem; cursor: pointer;padding: 10px;">
+                            <i class="fa-solid fa-delete-left"></i>
+                        </a>
+                    </div>
+                <%})%>
+                <% } %>
             </div>
         <%}%>
             <div class="chatapp--box" <%= user.user_role === 'admin' ? 'style=display:none;' : '' %>>
@@ -185,40 +197,36 @@ if(user.user_role ==='customer'){
             });
         }
     });
-    
-    // Tải lịch sử chat
-    socket.on('loadChatHistory', (chatHistory) => {
-        const chatBox = document.querySelector('.chatapp--box__content');
-        chatHistory.forEach((messageData) => {
-            if (messageData.room_id === roomId) { // Chỉ tải lịch sử chat cho phòng hiện tại
-                const isFromCurrentUser = messageData.sender_id === user.user_id;
-                renderMessage(messageData, isFromCurrentUser);
-            }
-        });
-    
-        scrollToBottom();
-    });
-    // Hàm render tin nhắn
-    function renderMessage(data, isFromCurrentUser) {
-        const chatBox = document.querySelector('.chatapp--box__content');
-        const messItem = document.createElement('div');
-        messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
-        messItem.innerHTML = `
-            <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
-                <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
-                <div class="message-userName">${data.sender_name}</div>
-                ${!isFromCurrentUser ?'<div class="user-status on"></div>':''}
-            </div>
-            <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
-                <p>${data.message}</p>
-            </div>
-            <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
-        `;
 
-        chatBox.appendChild(messItem);
-        scrollToBottom();
-    }
+// Hàm render tin nhắn
 }    
+function renderMessage(data, isFromCurrentUser, adminOnline) {
+    const chatBox = document.querySelector('.chatapp--box__content');
+    const messItem = document.createElement('div');
+    messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+    messItem.innerHTML = `
+        <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+            <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
+            <div class="message-userName">${data.sender_name}</div>
+            ${!isFromCurrentUser ? `<div class="user-status ${adminOnline ? 'on' : 'off'}"></div>` : ''}
+        </div>
+        <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
+            <p>${data.message}</p>
+        </div>
+        <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
+    `;
+
+    chatBox.appendChild(messItem);
+    scrollToBottom();
+
+    if (!isFromCurrentUser) {
+        const chatListItem = document.querySelector(`.chatList--item[data-room-id="${data.roomId}"] .chatList--item__length`);
+        if (chatListItem) {
+            const currentLength = Number(chatListItem.textContent.trim()) || 0;
+            chatListItem.textContent = currentLength + 1;
+        }
+    }
+}
 // Hàm gửi tin nhắn
 function sendMessage() {
     const input = document.getElementById('m');
@@ -239,7 +247,6 @@ function sendMessage() {
 
         // Gửi tin nhắn lên server
         socket.emit('chat message', messageData);
-
         // Xóa input
         input.value = '';
     } else {

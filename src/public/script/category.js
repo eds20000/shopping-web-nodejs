@@ -1,5 +1,6 @@
 let category_item = [];
 let filterItem = []
+
 if(category != null){
     list_item.forEach(item => {
         if(item.category === category) {
@@ -137,7 +138,6 @@ function renderPageNumber(itemList) {
 
 }
 getItem(category_item)
-CreatItemSelectBox();
 filterSort (category_item)
 // Lắng nghe sự kiện DOMContentLoaded để thêm sự kiện click vào các tab
 document.addEventListener("DOMContentLoaded", function() {

@@ -1,6 +1,8 @@
 import models from '../models/admin/adminPage.model'
 import modelCourse from '../models/course'
 import modelReview from '../models/review.model'
+import usersEdit from '../models/admin/userEdit.model'
+
 
 let addToFavorites = async (req, res) => {
     const { itemId } = req.body;
@@ -233,6 +235,7 @@ let deleteReview = async (req,res) =>{
     }
 }
 let getChatSupport = async(req,res) =>{
+    const users = await usersEdit.getUsers()
     if(req.session.user){       
         const items = await models.getItems()
         let myCart = []
@@ -270,7 +273,7 @@ let getChatSupport = async(req,res) =>{
             chatList = await models.getChatList(req.session.user.user_name);
         }
         req.session.logoutBack = req.originalUrl;
-        res.render('chatSupport', {items, user: req.session.user, myCart: fullCartItems,chatList:chatList});
+        res.render('chatSupport', {items,users, user: req.session.user, myCart: fullCartItems,chatList});
     }
     else {
         req.session.loginBack = req.originalUrl;
@@ -280,5 +283,4 @@ let getChatSupport = async(req,res) =>{
 
 
 module.exports = {
-    getHomepage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview,getChatSupport
-}
+    getHomepage, productPage, addToFavorites, handleReviewLike, addReview,updateReview,deleteReview,getChatSupport}

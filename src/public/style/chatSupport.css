@@ -11,7 +11,6 @@ button {
     max-width: 760px;
     margin: 0 auto;
     border-radius: 20px;
-    padding: 0 0 20px;
     background-color: var(--hover-color);
 }
 .chatapp--box__title{
@@ -118,4 +117,30 @@ button {
 }
 .chatapp--box__btn button:hover{
     background-color: var(--primary-color-hover);
+}
+
+.chatList--box{
+    max-width: 760px;
+    margin: 0 auto;
+}
+.chatList--item{
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+}
+.enter-room-btn{
+    padding: 10px;
+    font-size: 2rem;
+    cursor: pointer;
+}
+.chatList--item__userImg{
+    width: 50px;
+}
+.chatList--item__length{
+    padding: 5px 10px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-radius: 50%;
 }

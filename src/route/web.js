@@ -9,6 +9,9 @@ import orderController from '../controller/orderController';
 import categoryController from '../controller/categoryController';
 import { userImgUpload, itemImgUpload,reviewImgUpload} from '../middleware/userInfor-updateimg'
 
+import models from '../models/admin/adminPage.model'
+
+
 const multer = require('multer');
 const upload = multer();
 
@@ -117,6 +120,7 @@ const initWebRoute = (app) => {
     //Chat support
 
     router.get('/chat-box',homeController.getChatSupport)
+    router.get('/chatbox-roomDelete/:roomId',models.chatRoomDelete)
     return app.use('/', router)
 }
 

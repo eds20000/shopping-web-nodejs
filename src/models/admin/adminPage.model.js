@@ -392,8 +392,16 @@ const addItem = async (name, brand, category, price, zaiko, infor, size, color_i
 };
 const getChatList = async (userName) =>{
     try{
-        const [rows] = await pool.query('SELECT * FROM `chat_history` WHERE sender_name != ? GROUP BY room_id',[userName]);
+        const [rows] = await pool.query('SELECT * ,COUNT(room_id) AS megSum FROM `chat_history` WHERE sender_name != ? GROUP BY room_id',[userName]);
         return rows
+    }catch(error){
+        console.error(error)
+    }
+}
+const chatRoomDelete = async(req,res) =>{
+    try{
+        const [rows] = await pool.query('DELETE FROM chat_history WHERE room_id =?',[req.params.roomId]);
+        return res.redirect('/chat-box');
     }catch(error){
         console.error(error)
     }
@@ -405,5 +413,4 @@ const getChatList = async (userName) =>{
 
 
 
-
-module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById,addItem,getChatList }
+module.exports = { getItems, getItemById, deleteItemById, deleteItemByColorsize, updateItemById,addItem,getChatList,chatRoomDelete}

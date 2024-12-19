@@ -79,30 +79,43 @@ io.on('connection', (socket) => {
 
     // Xử lý người dùng tham gia phòng chat
     socket.on('joinRoom', async (userData) => {
-        const roomId = `room-${userData.userId}`;
-        socket.join(roomId);
-        console.log(`${userData.userName} joined room: ${roomId}`);
+        try {
+            const roomId = `room-${userData.userId}`;
+            socket.join(roomId);
+            console.log(`${userData.userName} joined room: ${roomId}`);
 
-        // Tải lịch sử tin nhắn từ cơ sở dữ liệu
-        const [chatHistory] = await pool.query(
-            'SELECT * FROM chat_history WHERE room_id = ? ORDER BY timestamp ASC',
-            [roomId]
-        );
-        socket.emit('loadChatHistory', chatHistory);
+            // Tải lịch sử tin nhắn từ cơ sở dữ liệu
+            const [chatHistory] = await pool.query(
+                'SELECT * FROM chat_history WHERE room_id = ? ORDER BY timestamp ASC LIMIT 50',
+                [roomId]
+            );
+            socket.emit('loadChatHistory', chatHistory);
+
+            // Phát sự kiện người dùng online tới admin
+            io.to(roomId).emit('userOn', { userId: userData.userId, userName: userData.userName, roomId });
+        } catch (error) {
+            console.error('Error loading chat history:', error);
+        }
     });
 
     socket.on('adminJoinRoom', async (userData) => {
-        const roomId = userData.roomId;
-        socket.join(roomId);
-        console.log(`admin ${userData.userName} joined room: ${roomId}`);
+        try {
+            const roomId = userData.roomId;
+            socket.join(roomId);
+            console.log(`admin ${userData.userName} joined room: ${roomId}`);
 
-        // Tải lịch sử tin nhắn từ cơ sở dữ liệu
-        const [chatHistory] = await pool.query(
-            'SELECT * FROM chat_history WHERE room_id = ? ORDER BY timestamp ASC',
-            [roomId]
-        );
+            // Tải lịch sử tin nhắn từ cơ sở dữ liệu
+            const [chatHistory] = await pool.query(
+                'SELECT * FROM chat_history WHERE room_id = ? ORDER BY timestamp ASC LIMIT 50',
+                [roomId]
+            );
+            socket.emit('loadChatHistory', chatHistory);
 
-        socket.emit('loadChatHistory', chatHistory);
+            // Phát sự kiện admin online tới người dùng
+            io.to(roomId).emit('adminOn', { userName: userData.userName, roomId });
+        } catch (error) {
+            console.error('Error loading chat history:', error);
+        }
     });
 
     // Xử lý admin online
@@ -120,52 +133,71 @@ io.on('connection', (socket) => {
 
     // Xử lý admin gửi tin nhắn tới người dùng
     socket.on('adminMessage', async (messageData) => {
-        const { roomId, senderName, senderId, senderRole, message, timestamp } = messageData;
+        try {
+            const { roomId, senderName, senderId, senderRole, message, timestamp } = messageData;
 
-        // Lưu tin nhắn vào cơ sở dữ liệu
-        await pool.query(
-            'INSERT INTO chat_history (room_id, sender_name, sender_id, sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-            [roomId, senderName, senderId, senderRole, message, timestamp]
-        );
+            // Lưu tin nhắn vào cơ sở dữ liệu
+            await pool.query(
+                'INSERT INTO chat_history (room_id, sender_name, sender_id, sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+                [roomId, senderName, senderId, senderRole, message, timestamp]
+            );
 
-        // Gửi tin nhắn tới phòng cụ thể
-        io.to(roomId).emit('chat message', {
-            senderName,
-            senderId,
-            senderRole,
-            message,
-            timestamp,
-        });
+            // Gửi tin nhắn tới phòng cụ thể
+            io.to(roomId).emit('chat message', {
+                senderName,
+                senderId,
+                senderRole,
+                message,
+                timestamp,
+            });
+        } catch (error) {
+            console.error('Error sending admin message:', error);
+        }
     });
 
     // Xử lý người dùng gửi tin nhắn tới admin
     socket.on('chat message', async (messageData) => {
-        const { roomId, sender_name, senderId, senderRole, message, timestamp } = messageData;
+        try {
+            const { roomId, sender_name, senderId, senderRole, message, timestamp } = messageData;
 
-        // Lưu tin nhắn vào cơ sở dữ liệu
-        await pool.query(
-            'INSERT INTO chat_history (room_id, sender_name, sender_id, sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-            [roomId, sender_name, senderId, senderRole, message, timestamp]
-        );
+            // Lưu tin nhắn vào cơ sở dữ liệu
+            await pool.query(
+                'INSERT INTO chat_history (room_id, sender_name, sender_id, sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+                [roomId, sender_name, senderId, senderRole, message, timestamp]
+            );
 
-        // Gửi tin nhắn tới phòng cụ thể
-        io.to(roomId).emit('chat message', {
-            roomId,
-            sender_name,
-            senderId,
-            senderRole,
-            message,
-            timestamp,
-        });
+            // Gửi tin nhắn tới phòng cụ thể
+            io.to(roomId).emit('chat message', {
+                roomId,
+                sender_name,
+                senderId,
+                senderRole,
+                message,
+                timestamp,
+            });
+
+            // Phát sự kiện người dùng online nếu chưa có
+            io.emit('userOn', { userId: senderId, userName: sender_name, roomId });
+        } catch (error) {
+            console.error('Error sending user message:', error);
+        }
     });
 
     // Xử lý khi admin hoặc người dùng ngắt kết nối
     socket.on('disconnect', () => {
-        if (socket.admin) {
-            console.log('Admin disconnected:', socket.id);
-            io.emit('adminOff');
-        } else {
-            console.log('A user disconnected:', socket.id);
+        try {
+            if (socket.admin) {
+                console.log('Admin disconnected:', socket.id);
+                io.emit('adminOff');
+            } else {
+                console.log('A user disconnected:', socket.id);
+                io.emit('userOff', { socketId: socket.id }); // Phát sự kiện người dùng offline
+            }
+
+            // Optionally remove the user from the room explicitly
+            socket.leave(socket.roomId);
+        } catch (error) {
+            console.error('Error during disconnect:', error);
         }
     });
 });

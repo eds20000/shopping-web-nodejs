@@ -80,130 +80,91 @@
 <script>
 const socket = io(); // Kết nối tới server
 
-async function roomChatJoin(roomId,senderName){
-    document.querySelector('.chatapp--box').style.display = 'block'
-    document.querySelector('.chatList--box').style.display = 'none'
-    document.querySelector('.support-manager span').textContent = senderName
-    document.querySelector('input[name="roomId"]').value = roomId
-    
-    // Tạo roomId để đảm bảo mỗi người dùng có phòng riêng với admin
-    // Dữ liệu người dùng để gửi đến server
-    const userData = { 
-        userName: user.user_name, 
-        userImg: user.user_img, 
+async function roomChatJoin(roomId, senderName) {
+    const chatBox = document.querySelector('.chatapp--box');
+    const chatListBox = document.querySelector('.chatList--box');
+    const supportManager = document.querySelector('.support-manager span');
+    const roomIdInput = document.querySelector('input[name="roomId"]');
+
+    chatBox.style.display = 'block';
+    chatListBox.style.display = 'none';
+    supportManager.textContent = senderName;
+    roomIdInput.value = roomId;
+
+    const userData = {
+        userName: user.user_name,
+        userImg: user.user_img,
         userId: user.user_id,
-        userRole:user.user_role,
-        roomId: roomId // Thêm roomId
+        userRole: user.user_role,
+        roomId: roomId
     };
-    
-    // Khi người dùng tham gia phòng chat
+
     socket.emit('adminJoinRoom', userData);
-    
-    // Admin kích hoạt trạng thái online
-    // Gửi sự kiện admin online
     socket.emit('adminOn', userData);
 
-    // Xử lý tin nhắn cho admin
     socket.on('chat message', (data) => {
-        console.log(data)
-        if (data.roomId === roomId) { // Chỉ xử lý tin nhắn trong phòng hiện tại
-            renderMessage(data, data.senderId === user.user_id);
+        if (data.roomId === roomId) {
+            renderMessage(data, data.senderId === user.user_id, true);
         }
     });
 
-    
-    // Tải lịch sử chat
     socket.on('loadChatHistory', (chatHistory) => {
-        const chatBox = document.querySelector('.chatapp--box__content');
-        chatHistory.forEach((messageData) => {
-            if (messageData.room_id === roomId) { // Chỉ tải lịch sử chat cho phòng hiện tại
-                const isFromCurrentUser = messageData.sender_id === user.user_id;
-                renderMessage(messageData, isFromCurrentUser);
-            }
+        chatHistory.filter(msg => msg.room_id === roomId).forEach((messageData) => {
+            const isFromCurrentUser = messageData.sender_id === user.user_id;
+            renderMessage(messageData, isFromCurrentUser, true);
         });
-    
         scrollToBottom();
     });
-    
-        // Hàm render tin nhắn
-    function renderMessage(data, isFromCurrentUser) {
-        const chatBox = document.querySelector('.chatapp--box__content');
-        const messItem = document.createElement('div');
-        messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
-        messItem.innerHTML = `
-            <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
-                <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
-                <div class="message-userName">${data.sender_name}</div>
-            </div>
-            <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
-                <p>${data.message}</p>
-            </div>
-            <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
-        `;
 
-        chatBox.appendChild(messItem);
-        scrollToBottom();
-    }
-   
+    socket.on('userOn', (userData) => {
+        if (userData.roomId === roomId) {
+            updateUserStatus(userData.userName, true);
+        }
+    });
 }
-if(user.user_role ==='customer'){
-// Tạo roomId để đảm bảo mỗi người dùng có phòng riêng với admin
+
+if (user.user_role === 'customer') {
     const roomId = `room-${user.user_id}`;
-    document.querySelector('input[name="roomId"]').value = roomId
-    
-    // Dữ liệu người dùng để gửi đến server
-    const userData = { 
-        userName: user.user_name, 
-        userImg: user.user_img, 
+    document.querySelector('input[name="roomId"]').value = roomId;
+
+    const userData = {
+        userName: user.user_name,
+        userImg: user.user_img,
         userId: user.user_id,
-        userRole:user.user_role,
-        roomId: roomId // Thêm roomId
+        userRole: user.user_role,
+        roomId: roomId
     };
-    
-    // Khi người dùng tham gia phòng chat
+
     socket.emit('joinRoom', userData);
-   
-    // Xử lý tin nhắn cho người dùng
+
     socket.on('chat message', (data) => {
-        if (data.roomId === roomId) { // Chỉ xử lý tin nhắn trong phòng hiện tại
-            renderMessage(data, data.senderId === user.user_id);
+        if (data.roomId === roomId) {
+            renderMessage(data, data.senderId === user.user_id, true);
         }
     });
 
-    
-    // Lắng nghe sự kiện admin online
     socket.on('adminOn', (adminData) => {
-        if(adminData.roomId === roomId){
-            document.querySelector('.support-manager').innerHTML = `担当者：${adminData.userName} (online)`;
-            let userStatus = document.querySelectorAll('.user-status');
-        
-            if (userStatus) {
-                userStatus.forEach((status) => {
-                    status.classList.remove('off');
-                    status.classList.add('on');
-                });
-            }
-        }
-    });
-    
-    // Lắng nghe sự kiện admin offline
-    socket.on('adminOff', () => {
-        document.querySelector('.support-manager').innerHTML = `担当者 (offline)`;
-        let userStatus = document.querySelectorAll('.user-status');
-        if (userStatus) {
-            userStatus.forEach((status) => {
-                status.classList.remove('on');
-                status.classList.add('off');
-            });
+        if (adminData.roomId === roomId) {
+            updateAdminStatus(adminData.userName, true);
         }
     });
 
-// Hàm render tin nhắn
-}    
-function renderMessage(data, isFromCurrentUser, adminOnline) {
+    socket.on('adminOff', () => {
+        updateAdminStatus('担当者', false);
+    });
+
+    socket.on('userOn', (userData) => {
+        if (userData.roomId === roomId) {
+            updateUserStatus(userData.userName, true);
+        }
+    });
+}
+
+function renderMessage(data, isFromCurrentUser, adminOnline = false) {
     const chatBox = document.querySelector('.chatapp--box__content');
     const messItem = document.createElement('div');
     messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+    
     messItem.innerHTML = `
         <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
             <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
@@ -215,53 +176,75 @@ function renderMessage(data, isFromCurrentUser, adminOnline) {
         </div>
         <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
     `;
-
-    chatBox.appendChild(messItem);
-    scrollToBottom();
-
-    if (!isFromCurrentUser) {
-        const chatListItem = document.querySelector(`.chatList--item[data-room-id="${data.roomId}"] .chatList--item__length`);
-        if (chatListItem) {
-            const currentLength = Number(chatListItem.textContent.trim()) || 0;
-            chatListItem.textContent = currentLength + 1;
-        }
+    
+    // Append only if it's not already rendered
+    if (!chatBox.querySelector(`[data-message-id="${data.timestamp}"]`)) {
+        messItem.setAttribute('data-message-id', data.timestamp);
+        chatBox.appendChild(messItem);
+        scrollToBottom();
     }
 }
-// Hàm gửi tin nhắn
+
+function updateAdminStatus(adminName, isOnline) {
+    const supportManager = document.querySelector('.support-manager');
+    supportManager.innerHTML = `担当者：${adminName} (${isOnline ? 'online' : 'offline'})`;
+
+    const userStatus = document.querySelectorAll('.user-status');
+    userStatus.forEach((status) => {
+        status.classList.toggle('on', isOnline);
+        status.classList.toggle('off', !isOnline);
+    });
+}
+
+function updateUserStatus(userName, isOnline) {
+    const messages = document.querySelectorAll('.messageFrom-item');
+    messages.forEach((message) => {
+        const userNameElement = message.querySelector('.message-userName');
+        if (userNameElement && userNameElement.textContent === userName) {
+            const status = message.querySelector('.user-status');
+            if (status) {
+                status.classList.toggle('on', isOnline);
+                status.classList.toggle('off', !isOnline);
+            }
+        }
+    });
+}
+
 function sendMessage() {
     const input = document.getElementById('m');
     const msg = input.value.trim();
-    const roomId  = document.querySelector('input[name="roomId"]').value 
 
     if (msg) {
-        const timestamp = new Date().toISOString();
-
+        const sanitizedMessage = msg.replace(/</g, "&lt;").replace(/>/g, "&gt;");  // Simple sanitization
         const messageData = {
             sender_name: user.user_name,
             senderId: user.user_id,
             senderRole: user.user_role,
-            message: msg,
-            timestamp: timestamp,
-            roomId: roomId // Gửi roomId để đảm bảo gửi tin nhắn đúng phòng
+            message: sanitizedMessage,
+            timestamp: new Date().toISOString(),
+            roomId: document.querySelector('input[name="roomId"]').value
         };
 
-        // Gửi tin nhắn lên server
-        socket.emit('chat message', messageData);
-        // Xóa input
-        input.value = '';
+        socket.emit('chat message', messageData);  // Emit the message to the server
+        input.value = '';  // Clear the input field after sending
     } else {
-        alert('メッセージを入力してください！');
+        alert('メッセージを入力してください！');  // Show alert if the message is empty
     }
 }
 
+// Add an event listener to the input field for the Enter key
+document.getElementById('m').addEventListener('keydown', function(event) {
+    // Check if the Enter key (keyCode 13) is pressed
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default action (e.g., form submission)
+        sendMessage(); // Call the sendMessage function to send the message
+    }
+});
 
-
-// Cuộn xuống cuối nội dung chat
 function scrollToBottom() {
     const chatBox = document.querySelector('.chatapp--box__content');
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-
 </script>
 
 </body>

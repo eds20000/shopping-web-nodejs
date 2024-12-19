@@ -1,5 +1,8 @@
 import multer from "multer";
 import path from 'path';
+const { v4: uuidv4 } = require('uuid');
+
+
 
 const storageUserImg = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -11,12 +14,14 @@ const storageUserImg = multer.diskStorage({
 });
 
 const storageItemImg = multer.diskStorage({
-
     destination: function (req, file, cb) {
+        // Đảm bảo đường dẫn lưu trữ chính xác
         cb(null, path.join(__dirname, '../public/image/item-image'));
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        // Tạo tên tệp duy nhất với UUID
+        const uniqueName = `${file.fieldname}-${uuidv4()}${path.extname(file.originalname)}`;
+        cb(null, uniqueName);
     }
 });
 

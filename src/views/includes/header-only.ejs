@@ -17,7 +17,7 @@
                 <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
                 <!-- ログインしたとき -->
                 <% } else{ %>
-                <a href="/user-profile"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                <img class="user-image" src="/image/user-image/<%=user.user_img %>" alt="">
                 <div class="user_navbar">
                     <div class="dropdown-username"><%= user.user_name %></div>
                     <% if(user.user_role === 'admin'){ %>
@@ -42,10 +42,8 @@
             </li>
             <div class="navbar-cart">
                 <li class="header__navbar-cart icon-center">
-                    <a href="/getCartPage">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <div class="header__navbar-cart-count"></div>
-                    </a>
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <div class="header__navbar-cart-count"></div>
                 </li>
             </div>
             <li class="header__navbar-support"><a href="/chat-box"><i class="fa-solid fa-headset"></i><span>サポート</span></a></li>
@@ -59,3 +57,100 @@
         </ul>
     </div>   
 </header>
+<div class="category-box">
+    <ul class="category__list">
+        <p class="category_header">カテゴリー</p>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="トップス" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">トップス</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="ジャケット・アウター" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">ジャケット/アウター</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="パンツ" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">パンツ</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="スカート" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">スカート</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="ワンピース/ドレス" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">ワンピース/ドレス</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="小物" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">小物</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="バッグ" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">バッグ</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="シューズ" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">シューズ</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="ファッション雑貨" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">ファッション雑貨</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="帽子" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">帽子</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="腕時計" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">腕時計</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <form action="/category" method ="post" class="category_list-item">
+            <input type="text" value="アクセサリー" name="category"hidden>
+            <button type="submit">
+                <div class="category_list-item-text">アクセサリー</div>
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </form>
+        <div class="category_list-item">
+            <a href="/chat-box" class="category_list-item-text tab-suport">
+                サポート
+                <i class="fa-solid fa-headset"></i>
+            </a>
+        </div>    
+    </ul>
+    <div class="category-box-closeBtn"><i class="fa-solid fa-xmark"></i></div>
+</div>
+<div class="tab__list-close"></div>

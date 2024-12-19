@@ -54,6 +54,7 @@
 }
 .cart-empty-box{
     width: 100%;
+    min-height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -454,17 +455,8 @@ input[type="radio"]{
 @media (max-width:1023px){
     .cart-heading {
         margin-bottom: 0;
+        display: block;
     }
-
-}
-/* Tablet */
-
-@media(min-width :740px) and (max-width :1023px){
-
-}
-
-/* Mobile */
-@media(max-width :739px){
     .cart-content{
         gap:20px;
     }
@@ -538,5 +530,20 @@ input[type="radio"]{
         border-right: 15px solid transparent;
         border-top: 18px solid var(--primary-color-hover);
         border-bottom: 18px solid transparent;
+    }
+
+}
+/* Tablet */
+
+@media(min-width :740px) and (max-width :1023px){
+
+}
+
+/* Mobile */
+@media(max-width :739px){
+    
+
+    .user-address__box--title{
+        font-size: 2rem;
     }
 }

@@ -29,7 +29,6 @@
     margin: 10px 0 40px;
 }
 .profile__content--label{
-    font-size: 2rem;
     font-weight: 600;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -52,20 +51,16 @@
     color:white;
     cursor: pointer;
     border-radius: 30px;
-    margin-left: 20px;
     border: none;
-    font-size: 2rem;
 }
 .user-profile__content--value-reset:hover{
     background-color: var(--primary-color-hover);
 }
 input,select{
     padding:10px;
-    font-size: 2rem;
 }
 .profile__content--value{
     padding: 10px;
-    font-size: 2rem;
 }
 .user-address__addBtn{
     width: 80px;
@@ -124,7 +119,6 @@ input,select{
     top: 0;
     right: 0;
     padding: 10px 15px;
-    font-size: 2rem;
 }
 .address-boxClose-btn:hover{
     cursor: pointer;
@@ -398,7 +392,6 @@ table{
 
 
 .order-list__item--data{
-    display: inline-flex;
     border:none;
 }
 .order-item--data{
@@ -633,4 +626,60 @@ table{
 }
 .order-item--review:not(:last-child){
     margin-bottom: 150px;
+}
+
+/* Mobile and Tablet */
+@media (max-width:1023px){
+}
+
+/* Tablet */
+@media(min-width :740px) and (max-width :1023px){
+}
+
+/* Mobile */
+@media(max-width :739px){
+    .container{
+        padding-top: 60px;
+    }
+    .user-profile__category li a{
+        white-space: nowrap;
+    }
+    .user-profile__category{
+        font-size: 1.5rem;
+    }
+    .user-profile__content--profile,
+    .user-profile__content--favorite{
+        font-size: 1.5rem;
+    }
+    .user-profile__content--title,
+    .user-profile__content--title{
+        margin: 10px 0 10px;
+        font-size: 2.5rem;
+    }
+    .user-profile__content--profile .col>div{
+        padding: 0;
+    }
+    .user-profile__content{
+        padding-left: 0;
+    }
+    .favorite__item--image
+    ,.cart__item--image{
+        padding: 10px 0;
+        
+    }
+    .cart__item--info-price{
+        margin-bottom: 10px;
+    }
+    .cart__item--info-number{
+        display: block;
+    }
+    .user-profile__order-tracking--icon{
+        display: block;
+    }
+    .user-profile__order-tracking--icon div{
+        margin-bottom: 10px;
+    }
+    .icon-chain{
+        display: none;
+    }
 }

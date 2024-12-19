@@ -165,7 +165,7 @@ function TakeCartInfor() {
                         </div>
                     ${userAddress.length > 0 ? 
                         userAddress.map(Address => `
-                            <div class="user-address col l-4">
+                            <div class="user-address col l-4 m-4 c-6">
                                 <a class="user-address__box--delete" href="user-address-delete/${Address.id}">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
@@ -732,12 +732,6 @@ if (window.location.pathname === '/getCartPage-reset') {
     TakeCartInfor();
 }
 
-
-if (window.innerWidth < 1023) {
-    $$('.cart-heading-list').forEach(headinglist => {
-        headinglist.innerHTML = '.';
-    });
-}
 // payment-CloseBtn---------------------------------------------Start
 
 

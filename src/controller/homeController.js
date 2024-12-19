@@ -99,6 +99,7 @@ let productPage = async (req, res) => {
     if (req.cookies && req.cookies.myCart) {
         myCart = req.cookies.myCart;
     }
+    const favorItemsLength = await modelCourse.getfavorItemsLength(itemId)
 
     if (req.session.user) {
         if (req.cookies && req.cookies.myCart) {
@@ -134,10 +135,10 @@ let productPage = async (req, res) => {
         }).filter(item => item !== null);
 
         req.session.logoutBack = req.originalUrl;
-        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId, reviewsList ,scrollToElement: req.query.scrollToElement || null });
+        res.render('product.ejs', { items, item, user: req.session.user, myCart: fullCartItems, itemId, reviewsList ,scrollToElement: req.query.scrollToElement || null,favorItemsLength });
     } else {
         req.session.loginBack = req.originalUrl;
-        res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId, reviewsList ,scrollToElement: req.query.scrollToElement || null });
+        res.render('product.ejs', { items, item, user: null, myCart: myCart, itemId, reviewsList ,scrollToElement: req.query.scrollToElement || null,favorItemsLength });
     }
 };
 

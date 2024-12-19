@@ -210,6 +210,7 @@
         width: 100%;
     }
     
+    
 }
 /*  mobile */
 @media (max-width: 739px) {
@@ -243,5 +244,29 @@
     }
     .sort__tab{
         z-index: 2;
+    }
+
+    .content__title-filter{
+        margin: 0 0 10px;
+        display: block;
+    }
+    .content__title-filter div{
+        font-size: 1.5rem;
+
+    }
+    .content__title-filter--price, .content__title-filter--color, .content__title-filter--brand, .content__title-filter--size{
+        padding: 5px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .category_list-item{
+        justify-content: space-between;
+    }
+    .empty-item-found img{
+        width: 100%;
+    }
+    .tab-suport{
+        margin: 10px auto;
     }
 }

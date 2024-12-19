@@ -20,7 +20,8 @@
         const user = JSON.parse('<%- JSON.stringify(user) %>');
         const myCart = JSON.parse('<%- JSON.stringify(myCart) %>');
         const reviews = JSON.parse('<%- JSON.stringify(reviewsList) %>')
-        console.log(reviews)
+        const favorItemsLength = JSON.parse('<%- JSON.stringify(favorItemsLength) %>')
+        console.log(favorItemsLength)
     </script>
     <title>ログイン-TS-shop</title>
 </head>
@@ -55,6 +56,15 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    let favorElement = document.querySelector('.product-item-data-title-favornum');
+                if(event.classList.contains('favor-btn-available')){
+                    let favorNum = parseInt(favorElement.textContent)
+                    favorElement.textContent = favorNum - 1
+                }
+                else{
+                    let favorNum = parseInt(favorElement.textContent)
+                    favorElement.textContent = favorNum + 1
+                }
                 event.classList.toggle('favor-btn-available');
                 event.classList.toggle('favor-btn-disable');
                 const favorQualityElement = document.querySelector('.header__navbar--favor-quality');
@@ -63,6 +73,7 @@
                     favorQualityElement.textContent = data.favorCount;
                     favorQualityElement.style.display = data.favorCount > 0 ? 'block' : 'none';
                 }
+                
             } else {
                 alert('Failed to add item to favorites. Please try again.');
             }

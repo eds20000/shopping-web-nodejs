@@ -60,7 +60,7 @@
                         <a href="/login"><i class="fa-regular fa-user"></i><span>ログイン</span></a>
                         <!-- ログインしたとき -->
                         <% } else{ %>
-                        <a href="/user-profile"><img class="user-image" src="/image/user-image/<%=user.user_img %>" alt=""></a>
+                        <img class="user-image" src="/image/user-image/<%=user.user_img %>" alt="">
                         <div class="user_navbar">
                             <div class="dropdown-username"><%= user.user_name %></div>
                             <% if(user.user_role === 'admin'){ %>
@@ -85,9 +85,7 @@
                     </li>
                     <div class="navbar-cart">
                         <li class="header__navbar-cart icon-center">
-                            <a href="/getCartPage" >
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </a>
+                            <i class="fa-solid fa-cart-shopping"></i>
                             <div class="header__navbar-cart-count"></div>
                         </li>
                     </div>
@@ -118,19 +116,25 @@
         <div class="category-box">
             <ul class="category__list">
                 <p class="category_header">カテゴリー</p>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></a></li>
-                <li class="category_list-item"><a href=""><div class="category_list-item-text tab-suport">サポート<i class="fa-solid fa-headset"></i></a></li>    
+                <li class="category_list-item <%=category == 'トップス' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="トップス"><div class="category_list-item-text">トップス</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'ジャケット・アウター' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="ジャケット・アウター"><div class="category_list-item-text">ジャケット/アウター</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'パンツ' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="パンツ"><div class="category_list-item-text">パンツ</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'スカート' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="スカート"><div class="category_list-item-text">スカート</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'ワンピース/ドレス' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="ワンピース/ドレス"><div class="category_list-item-text">ワンピース/ドレス</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == '小物' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="小物"><div class="category_list-item-text">小物</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'バッグ' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="バッグ"><div class="category_list-item-text">バッグ</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'シューズ' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="シューズ"><div class="category_list-item-text">シューズ</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'ファッション雑貨' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="ファッション雑貨"><div class="category_list-item-text">ファッション雑貨</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == '帽子' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="帽子"><div class="category_list-item-text">帽子</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == '腕時計' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="腕時計"><div class="category_list-item-text">腕時計</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'アクセサリー' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="アクセサリー"><div class="category_list-item-text">アクセサリー</div><i class="fa-solid fa-chevron-right"></i></li>
+                <li class="category_list-item <%=category == 'その他' ? 'available' : '' %>" onclick="categoryAvailable(this),runFilter()" data-value="その他"><div class="category_list-item-text">その他</div><i class="fa-solid fa-chevron-right"></i></li>
+                <div class="category_list-item">
+                    <a href="/chat-box" class="category_list-item-text tab-suport">
+                        サポート
+                        <i class="fa-solid fa-headset"></i>
+                    </a>
+                </div>    
             </ul>
             <div class="category-box-closeBtn"><i class="fa-solid fa-xmark"></i></div>
         </div>
@@ -177,8 +181,10 @@
                                     
                                     <div class="content__title-filter--price-box">
                                         <div class="content__title-filter--price" onclick="showFilterBox(this)">
-                                            <span>価格帯</span>
-                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div>
+                                                <span>価格帯</span>
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </div>
                                             <div class="content__title-filter--value" data-price-min="0" data-price-max="Infinity">すべて</div>
                                         </div>
                                         <div class="content__title-filter--box">
@@ -191,8 +197,10 @@
                                     </div>
                                     <div class="content__title-filter--color-box ">
                                         <div class="content__title-filter--color" onclick="showFilterBox(this)">
-                                            <span>カラー</span>
-                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div>
+                                                <span>カラー</span>
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </div>
                                             <div class="content__title-filter--value" data-colorname="full" data-colorengname >すべて</div>
                                         </div>
                                         <div class="content__title-filter--box">
@@ -206,8 +214,10 @@
                                     </div>
                                     <div class="content__title-filter--brand-box">
                                         <div class="content__title-filter--brand" onclick="showFilterBox(this)">
-                                            <span>ブランド</span>
-                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div>
+                                                <span>ブランド</span>
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </div>
                                             <div class="content__title-filter--value" data-brand = "full">すべて</div>
                                         </div>
                                         <div class="content__title-filter--box" style="width: 100%;">
@@ -219,8 +229,10 @@
                                     </div>
                                     <div class="content__title-filter--size-box">
                                         <div class="content__title-filter--size" onclick="showFilterBox(this)">
-                                            <span>サイズ</span>
-                                            <i class="fa-solid fa-chevron-down"></i>
+                                            <div>
+                                                <span>サイズ</span>
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </div>
                                             <div class="content__title-filter--value" data-size = "full">すべて</div>
                                         </div>
                                         <div class="content__title-filter--box" style="width: 100%;">

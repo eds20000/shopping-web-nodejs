@@ -150,8 +150,13 @@ ul{
 }
 .product-item-data-title-favornum{
     position: absolute;
-    right: 2px;
+    right: -1px;
     bottom: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    width: 30px;
+    padding: 5px;
 }
 
 .product-item-data-brand{

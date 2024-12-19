@@ -300,6 +300,16 @@
 
     .section__new-list{
         margin-left: 4px;
-        margin-right: 4px
+        margin-right: 4px;
+        padding: 0;
     }
+    .section__new-list>div,
+    .section__best_sellers-list>div,
+    .section__mens-list>div,
+    .section__womens-list>div,
+    .section__cosmetics-list>div{
+     margin-bottom: 10px;
+    
+    }
+    
 }

@@ -230,9 +230,9 @@ function CreatItemSelectBox() {
                 <div class="select-cart-box-close"><i class="fa-solid fa-xmark"></i></div>
                 <div class="select-cart-box-content">
                     <div class="row">
-                        <ul class="item-checklist-imglist col l-1 c-6"></ul>
-                        <div class="item-checklist-img-main col l-5 c-6"></div>
-                        <div class="item-checklist-content col l-6 c-12">
+                        <ul class="item-checklist-imglist col l-1 c-6 m-1"></ul>
+                        <div class="item-checklist-img-main col l-5 c-6 m-5"></div>
+                        <div class="item-checklist-content col l-6 c-12 m-6">
                             <div class="item-checklist-name"></div>
                             <div class="item-checklist-brand"></div>
                             <div class="item-checklist-price">￥<span></span></div>
@@ -790,12 +790,15 @@ if (window.innerWidth < 1024) {
     TakeCartBoxHide()
 }
 else {
-    $('.header__navbar-cart').addEventListener('mouseenter', function () {
+    $('.navbar-cart').addEventListener('mouseenter', function () {
+        $(' .header__navbar-cart-box-container').style.display = 'block';
+    });
+    $('.navbar-cart').addEventListener('onclick', function () {
         $(' .header__navbar-cart-box-container').style.display = 'block';
     });
 
     // Gán sự kiện mouseleave để thay đổi màu nền khi di chuột ra
-    $('.header__navbar-cart').addEventListener('mouseleave', function () {
+    $('.navbar-cart').addEventListener('mouseleave', function () {
         $(' .header__navbar-cart-box-container').style.display = 'none';
 
     });

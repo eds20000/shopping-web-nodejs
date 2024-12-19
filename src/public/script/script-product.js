@@ -121,7 +121,7 @@ productItemContainer.innerHTML =
                 <div class="product-item-data-title">
                     <div class="product-item-data-title_name" data-value = "${productItem.name}">${productItem.name}</div>
                     <a ${user ? `onclick="addToFavorites(${productItem.id},this)"` : 'href="/login"'} class="product-item-data-title_favor favor-btn ${user && user.favorItems.find(item => item.item_id === productItem.id) ? 'favor-btn-available' : 'favor-btn-disable'}" "></a>
-                    <div class="product-item-data-title-favornum">900</div>
+                    <div class="product-item-data-title-favornum">${favorItemsLength.length}</div>
                 </div>
                 <div class="product-item-data-brand" data-value ="${productItem.brand}">
                     ${productItem.brand}

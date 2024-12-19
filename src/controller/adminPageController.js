@@ -7,9 +7,16 @@ import modelReview from '../models/review.model'
 
 
 let getadminPage = async (req, res) => {
-    const users = await usersEdit.getUsers()
-    const items = await models.getItems();
-    return res.render('admin/category_admin.ejs', { items, users })
+    if (req.session.user && req.session.user.user_role =="admin") {
+        const users = await usersEdit.getUsers()
+        const items = await models.getItems();
+        const colorList = await modelCourse.getColor()
+        const brandList = await modelCourse.getBrand()
+        const sizeList = await modelCourse.getSize()
+        return res.render('admin/category_admin.ejs', { items, users, colorList, brandList, sizeList })
+    }else{
+        return res.redirect('/login')
+    }
 }
 
 let productEdit = async (req, res) => {

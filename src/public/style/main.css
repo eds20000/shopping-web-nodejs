@@ -682,22 +682,25 @@ body.over{
     overflow: hidden;
 }
 
+.sort__item-brand,
+.sort__item-text,
 .sort__item-content{
-    width: 100%;
+    padding: 0 5px;
+}
+
+.sort__item-content{
     margin:8px 0;
 }
 
 .sort__item-title{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 5px;
 }
 
 .sort__item-takeit{
     display: flex;
     align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+    padding: 0 5px;
 }
 
 .sort__item-favorite{
@@ -739,6 +742,7 @@ body.over{
 
 .sort__item-star{
     display: flex;
+    padding-bottom: 5px;
 }
 
 .sort__item-star-number{

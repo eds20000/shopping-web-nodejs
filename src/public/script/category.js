@@ -1,5 +1,7 @@
+// const e = require("connect-flash");
+
 let category_item = [];
-let filterItem = []
+
 
 if(category != null){
     list_item.forEach(item => {
@@ -105,9 +107,9 @@ let currentPage = 1 //元のページ
 let perPage = 15 //so trang di chuyen 
 let totalPage = 0// ページの数
 var perItem = [] //アイテムが表示される
+let filterItem = category_item
 function getItem(itemList) {
     perItem = itemList.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage,)
-    renderPageNumber(itemList)
     renderItembyCategory(perItem)
 }
 function handlerPageNumber(num, element) {
@@ -118,7 +120,7 @@ function handlerPageNumber(num, element) {
     // Thêm class 'page-checked' vào trang hiện tại
     element.classList.add('page-checked');
     currentPage = num
-    perItem = category_item.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage,)
+    perItem = filterItem.slice((currentPage - 1) * perPage, (currentPage - 1) * perPage + perPage,)
     renderItembyCategory(perItem)
 }
 
@@ -139,6 +141,7 @@ function renderPageNumber(itemList) {
 }
 getItem(category_item)
 filterSort (category_item)
+renderPageNumber(category_item)
 // Lắng nghe sự kiện DOMContentLoaded để thêm sự kiện click vào các tab
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.sort__tab-list').forEach(function (tab) {
@@ -146,15 +149,7 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector('.content__title-sort-selected').value = this.innerHTML;
             document.querySelector('.sort__tab-list.selected').classList.remove('selected');
             this.classList.add('selected');
-    
-            if (this.innerHTML.includes("価格が安い順")) {
-                perItem.sort((a, b) => a.price - b.price);
-            } else if (this.innerHTML.includes("価格が高い順")) {
-                perItem.sort((a, b) => b.price - a.price);
-            }else if(this.innerHTML.includes("高評価商品")){
-                perItem.sort((a, b) => b.rating - a.rating);
-            }
-            renderItembyCategory(perItem); 
+            filterSort (filterItem)
         }
     });
 });
@@ -167,8 +162,11 @@ function filterSort (categoryItem){
         categoryItem.sort((a, b) => b.price - a.price);
     }else if(sortValue == "高評価商品"){
         categoryItem.sort((a, b) => b.rating - a.rating);
+    }else if(sortValue == "低評価商品"){
+        categoryItem.sort((a, b) => a.rating - b.rating);
     }
     getItem(categoryItem)
+
 }
 
 function showFilterBox(thisElement) {
@@ -240,7 +238,6 @@ function filterItemsBySize(size){
 }
 
 function runFilter (){
-
     
     //Category filter 
     if($('.category_list-item.available')){
@@ -291,10 +288,11 @@ function runFilter (){
 
     filterSort (filterItem)
     getItem(filterItem)
+    renderPageNumber(filterItem)
 }
 
 function categoryAvailable(a){
-    $('.category_list-item.available') ? $('.category_list-item.available').classList.remove('available'):''
+    $$('.category_list-item').forEach(a => a.classList.contains('available') ? a.classList.remove('available') :'')
     a.classList.add('available')
 }
 function categoriesAvailable(a){

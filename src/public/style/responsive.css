@@ -261,7 +261,8 @@
         width: 30px;
     }
     .user_navbar{
-        width: 130px;
+        width: auto;
+        white-space: nowrap;
         right: -120%;
     }
     .header__navbar-user .user_navbar a{

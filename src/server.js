@@ -8,12 +8,11 @@ import flash from 'connect-flash';
 import socketIo from 'socket.io';  // Sử dụng `import` thay vì `require` nếu bạn dùng ES6 modules
 import http from 'http';
 import pool from './configs/connectDB';
-
 require('dotenv').config();
-var morgan = require('morgan');
+import morgan from 'morgan';
 
 const app = express();
-const port = process.env.PORT || 8080; // connect file env
+const port = process.env.PORT || 3001; // Đảm bảo rằng ứng dụng chạy trên cổng đúng khi chạy trên Heroku
 
 // Tạo server HTTP trước rồi kết nối với Socket.io
 const server = http.createServer(app);
@@ -30,6 +29,7 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Cấu hình session
 app.use(session({
     secret: 'user',
     resave: false,
@@ -48,30 +48,32 @@ app.use((req, res, next) => {
     next();
 });
 
-// setup view engine
+// Setup view engine
 configViewEngine(app);
 
-//init web route
+// Initialize web routes
 initWebRoute(app);
 
-// init api route
+// Initialize API routes
 initAPIRoute(app);
 
-//handle 404 not found
+// Handle 404 not found
 app.use((req, res) => {
     return res.render('404.ejs');
 });
-// Bắt đầu lắng nghe server
+
+// Khởi động server
 try {
-    server.listen(3001, () => {
-        console.log('Server is running at ' + process.env.PORT);
+    // Sử dụng cổng từ Heroku hoặc cổng mặc định là 3001
+    server.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
     });
 } catch (err) {
     console.error('Failed to start server:', err);
-    process.exit(1); // Dừng ứng dụng nếu gặp l
+    process.exit(1); // Dừng ứng dụng nếu gặp lỗi
 }
-// Khởi tạo sự kiện Socket.io
 
+// Khởi tạo sự kiện Socket.io
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
@@ -88,6 +90,7 @@ io.on('connection', (socket) => {
         );
         socket.emit('loadChatHistory', chatHistory);
     });
+
     socket.on('adminJoinRoom', async (userData) => {
         const roomId = userData.roomId;
         socket.join(roomId);
@@ -117,12 +120,12 @@ io.on('connection', (socket) => {
 
     // Xử lý admin gửi tin nhắn tới người dùng
     socket.on('adminMessage', async (messageData) => {
-        const { roomId, senderName, senderId,senderRole, message, timestamp } = messageData;
+        const { roomId, senderName, senderId, senderRole, message, timestamp } = messageData;
 
         // Lưu tin nhắn vào cơ sở dữ liệu
         await pool.query(
-            'INSERT INTO chat_history (room_id, sender_name, sender_id,sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-            [roomId, senderName, senderId,senderRole, message, timestamp]
+            'INSERT INTO chat_history (room_id, sender_name, sender_id, sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
+            [roomId, senderName, senderId, senderRole, message, timestamp]
         );
 
         // Gửi tin nhắn tới phòng cụ thể
@@ -137,12 +140,12 @@ io.on('connection', (socket) => {
 
     // Xử lý người dùng gửi tin nhắn tới admin
     socket.on('chat message', async (messageData) => {
-        const { roomId, sender_name, senderId,senderRole, message, timestamp } = messageData;
+        const { roomId, sender_name, senderId, senderRole, message, timestamp } = messageData;
 
         // Lưu tin nhắn vào cơ sở dữ liệu
         await pool.query(
             'INSERT INTO chat_history (room_id, sender_name, sender_id, sender_role, message, timestamp) VALUES (?, ?, ?, ?, ?, ?)',
-            [roomId, sender_name, senderId,senderRole, message, timestamp]
+            [roomId, sender_name, senderId, senderRole, message, timestamp]
         );
 
         // Gửi tin nhắn tới phòng cụ thể
@@ -166,7 +169,3 @@ io.on('connection', (socket) => {
         }
     });
 });
-
-
-
-

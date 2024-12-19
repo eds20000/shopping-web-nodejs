@@ -64,7 +64,7 @@ app.use((req, res) => {
 // Bắt đầu lắng nghe server
 try {
     server.listen(3001, () => {
-        console.log('Server is running at http://localhost:3001');
+        console.log('Server is running at ' + process.env.PORT);
     });
 } catch (err) {
     console.error('Failed to start server:', err);

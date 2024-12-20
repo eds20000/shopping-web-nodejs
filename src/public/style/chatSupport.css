@@ -144,3 +144,20 @@ button {
     color: var(--white-color);
     border-radius: 50%;
 }
+
+/* Mobile */
+@media(max-width :739px){
+    .chatapp--box__content{
+        font-size: 1.4rem;
+    }
+    .message-ToUser-content,.message-fromUser-content{
+        padding: 7px;
+    }
+    .message-fromUser-content,.message-ToUser-content{
+        margin: 10px 5px 10px 5px;
+    }
+    .chatList--item{
+        padding: 20px 5px;
+        gap: 5px;
+    }
+}

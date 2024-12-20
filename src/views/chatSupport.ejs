@@ -158,32 +158,65 @@ if (user.user_role === 'customer') {
             updateUserStatus(userData.userName, true);
         }
     });
-}
-
-function renderMessage(data, isFromCurrentUser, adminOnline = false) {
-    const chatBox = document.querySelector('.chatapp--box__content');
-    const messItem = document.createElement('div');
-    messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
-    
-    messItem.innerHTML = `
-        <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
-            <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
-            <div class="message-userName">${data.sender_name}</div>
-            ${!isFromCurrentUser ? `<div class="user-status ${adminOnline ? 'on' : 'off'}"></div>` : ''}
-        </div>
-        <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
-            <p>${data.message}</p>
-        </div>
-        <span class="timestamp">${new Date(data.timestamp).toLocaleString()}</span>
-    `;
-    
-    // Append only if it's not already rendered
-    if (!chatBox.querySelector(`[data-message-id="${data.timestamp}"]`)) {
-        messItem.setAttribute('data-message-id', data.timestamp);
-        chatBox.appendChild(messItem);
+    socket.on('loadChatHistory', (chatHistory) => {
+        chatHistory.filter(msg => msg.room_id === roomId).forEach((messageData) => {
+            const isFromCurrentUser = messageData.sender_id === user.user_id;
+            renderMessage(messageData, isFromCurrentUser, true);
+        });
         scrollToBottom();
+    });
+
+    function renderMessage(data, isFromCurrentUser, adminOnline = false) {
+        const chatBox = document.querySelector('.chatapp--box__content');
+        const messItem = document.createElement('div');
+        messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+        
+        messItem.innerHTML = `
+            <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+                <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
+                <div class="message-userName">${data.sender_name}</div>
+                ${!isFromCurrentUser ? `<div class="user-status ${adminOnline ? 'on' : 'off'}"></div>` : ''}
+            </div>
+            <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
+                <p>${data.message}</p>
+            </div>
+            <span class="timestamp">${new Date(data.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</span>
+        `;
+        
+        // Append only if it's not already rendered
+        if (!chatBox.querySelector(`[data-message-id="${data.timestamp}"]`)) {
+            messItem.setAttribute('data-message-id', data.timestamp);
+            chatBox.appendChild(messItem);
+            scrollToBottom();
+        }
+    }
+}else{
+    function renderMessage(data, isFromCurrentUser, adminOnline = false) {
+        const chatBox = document.querySelector('.chatapp--box__content');
+        const messItem = document.createElement('div');
+        messItem.classList.add(isFromCurrentUser ? 'messageTo-item' : 'messageFrom-item');
+        
+        messItem.innerHTML = `
+            <div class="${isFromCurrentUser ? 'message-ToUser-img' : 'message-fromUser-img'}">
+                <img src="/image/user-image/${isFromCurrentUser ? user.user_img : 'default.jpg'}" alt="User Image">
+                <div class="message-userName">${data.sender_name}</div>
+            </div>
+            <div class="${isFromCurrentUser ? 'message-ToUser-content' : 'message-fromUser-content'}">
+                <p>${data.message}</p>
+            </div>
+            <span class="timestamp">${new Date(data.timestamp).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</span>
+        `;
+        
+        // Append only if it's not already rendered
+        if (!chatBox.querySelector(`[data-message-id="${data.timestamp}"]`)) {
+            messItem.setAttribute('data-message-id', data.timestamp);
+            chatBox.appendChild(messItem);
+            scrollToBottom();
+        }
     }
 }
+
+
 
 function updateAdminStatus(adminName, isOnline) {
     const supportManager = document.querySelector('.support-manager');
@@ -221,7 +254,7 @@ function sendMessage() {
             senderId: user.user_id,
             senderRole: user.user_role,
             message: sanitizedMessage,
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
             roomId: document.querySelector('input[name="roomId"]').value
         };
 

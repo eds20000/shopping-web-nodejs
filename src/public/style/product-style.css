@@ -150,8 +150,8 @@ ul{
 }
 .product-item-data-title-favornum{
     position: absolute;
-    right: -1px;
-    bottom: 0;
+    right: 0;
+    bottom: -5px;
     font-size: 2rem;
     font-weight: 600;
     text-align: center;
@@ -504,5 +504,9 @@ ul{
     }
     .product-item-data-price{
         font-size: 2rem;
+    }
+    .product-item-data-title-favornum{
+        font-size: 1.5rem;
+        bottom: -2px;
     }
 }

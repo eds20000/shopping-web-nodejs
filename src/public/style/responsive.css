@@ -183,9 +183,7 @@
         margin-left: 10px;
         padding: 0;
     }
-    .header__navbar{
-        margin-right: 10px;
-    }
+    
     .navbar-cart{
         margin-left: 5px ;
     }
@@ -197,6 +195,9 @@
     .checklist-color-name,
     .checklist-size-name{
         font-size: var(--font-size);
+    }
+    .header__navbar{
+        margin-right: 10px;
     }
      /* Footer */
      .footer .grid.wide{
@@ -251,8 +252,8 @@
     .header__navbar-cart-count{
         font-size: 1rem;
         padding: 0px 5px;
-        top:-12px;
-        right: 8px;
+        top:-3px;
+        right: 17px;
     }
     .navbar-cart::after{
         display: none;

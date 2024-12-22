@@ -181,7 +181,6 @@ body.over{
     color: var(--white-color);
 }
 .navbar-cart:hover{
-    padding: 10px;
     transform: scale(1.1);
     background-color: var(--primary-color);
     color: var(--white-color);
@@ -198,21 +197,10 @@ body.over{
     justify-content: center;
     cursor: pointer;
     height: auto;
+    padding: 10px;
+    transition: transform 0.3s ease;
 }
 
-
-
-.navbar-cart::after{
-    content: "";
-    width: 200%;
-    height: 20px;
-    display: block;
-    position: absolute;
-    left: -50%;
-    background-color: black;
-    opacity: 0;
-    
-}
 .header__navbar-user-image{
     cursor: pointer;
 }
@@ -275,8 +263,8 @@ body.over{
     color: var(--white-color);
     border-radius: 50%;
     position: absolute;
-    top: -19px;
-    right: -8px;
+    top: -9px;
+    right: -1px;
     font-size: var(--font-size);
     /* display: none; */
 }

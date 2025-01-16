@@ -15,7 +15,7 @@ let takeOrder = async (data, myCart, orderNumber, userId) => {
         for (let i = 0; i < myCart.length; i++) {
             await pool.query(`
                 INSERT INTO order_details (
-                order_id, item_id,item_name, quantity, price,size, color, colorId, brand, category, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                order_id, item_id,item_name, quantity, price,size, color, colorId, brand, category, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             `, [rows.insertId, myCart[i].id, myCart[i].name, myCart[i].quantity, myCart[i].price, myCart[i].size, myCart[i].color, myCart[i].colorId, myCart[i].brand, myCart[i].category, JSON.stringify(myCart[i].img)])
         }
         await pool.query(`

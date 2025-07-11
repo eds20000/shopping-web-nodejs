@@ -361,67 +361,6 @@ function filterItemsBySize(size){
     runFilter()
 }
 
-function filterItemsByPrice(minPrice, maxPrice) {
-    const filterValue = $('.content__title-filter--price-box').querySelector('.content__title-filter--value');
-    filterValue.innerHTML =
-    `
-    ${minPrice == 0 && maxPrice == 'Infinity' ? 'すべて' : `${minPrice} ~ ${maxPrice == 'Infinity' ? '' : maxPrice}`}
-    ` 
-    filterValue.setAttribute('data-price-min', minPrice.toString());
-    filterValue.setAttribute('data-price-max', maxPrice.toString());
-
-    runFilter();
-
-}
-function filterItemsByColor(colorName,colorEngname){
-
-    const filterValue = $('.content__title-filter--color-box').querySelector('.content__title-filter--value');
-
-    if(colorName != 'full'){
-        $('.content__title-filter--color-box').querySelector('.content__title-filter--value').innerHTML =
-        `
-        <div class="filter-color" style="padding:0; margin: 0 auto; border-radius: 50%; width: 20px; height: 20px; background-color:${colorEngname};"></div>
-        <div class="filter-colorName">${colorName}</div>
-        ` 
-        filterValue.setAttribute('data-colorName', colorName);
-        filterValue.setAttribute('data-colorEngName', colorEngname);
-
-    }
-    else{
-        filterValue.innerHTML = 'すべて'
-        filterValue.setAttribute('data-colorName', colorName);
-        filterValue.setAttribute('data-colorengname', '');
-    }
-
-    runFilter ()
-}
-
-function filterItemsByBrand(brandName){
-    const filterValue = $('.content__title-filter--brand-box').querySelector('.content__title-filter--value');
-    if(brandName != 'full'){
-        filterValue.innerHTML = brandName
-        filterValue.setAttribute('data-brand',brandName)
-    }
-    else{
-        filterValue.innerHTML = 'すべて'
-        filterValue.setAttribute('data-brand','full')
-    }
-    runFilter()
-}
-
-function filterItemsBySize(size){
-    const filterValue = $('.content__title-filter--size-box').querySelector('.content__title-filter--value');
-    if(size != 'full'){
-        filterValue.innerHTML = size
-        filterValue.setAttribute('data-size',size)
-    }
-    else{
-        filterValue.innerHTML = 'すべて'
-        filterValue.setAttribute('data-size','full')
-    }
-    runFilter()
-}
-
 function runFilter (){
     //filter price
     const filterPriceValue = $('.content__title-filter--price-box').querySelector('.content__title-filter--value');

@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies & build
         run: |
           npm install
-          npx babel src --out-dir dist
+          npx run build
 
       - name: Zip source bundle
         run: |

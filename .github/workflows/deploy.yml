@@ -23,7 +23,8 @@ jobs:
           npx babel src --out-dir dist
 
       - name: Zip source bundle
-        run: zip -r app.zip . -x "*.git*"
+        run: |
+          zip -r app.zip * .[^.]* -x "*.git*" ".github*" "node_modules*"
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v20

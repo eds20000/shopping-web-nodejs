@@ -66,7 +66,7 @@ app.use((req, res) => {
 try {
     // Sử dụng cổng từ Heroku hoặc cổng mặc định là 3001
     server.listen(port, () => {
-        console.log(`Server is running at http://localhost:${port}`);
+        console.log(`Server is running on port ${port}`);
     });
 } catch (err) {
     console.error('Failed to start server:', err);
